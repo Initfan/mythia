@@ -27,7 +27,9 @@ const Navigation = () => {
 					<Search />
 				</Button>
 				<Button>Publish</Button>
-				<Button variant={"outline"}>Log In</Button>
+				<Link href={"signin"}>
+					<Button variant={"outline"}>Log In</Button>
+				</Link>
 			</div>
 		</nav>
 	);
