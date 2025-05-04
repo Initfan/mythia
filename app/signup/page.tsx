@@ -116,7 +116,7 @@ const Login = () => {
 						</form>
 					</Form>
 					<span>
-						Doesn`t have account?{" "}
+						Already have account?{" "}
 						<Link
 							href={"signin"}
 							className="text-blue-500 hover:underline"
