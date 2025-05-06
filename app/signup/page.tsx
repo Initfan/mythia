@@ -41,8 +41,14 @@ const Login = () => {
 		},
 	});
 
-	const onSubmit = (values: z.infer<typeof formSchema>) => {
-		console.log(values);
+	const onSubmit = async (values: z.infer<typeof formSchema>) => {
+		const req = await fetch("/api/auth", {
+			method: "POST",
+			body: JSON.stringify(values),
+		});
+
+		const res = await req.json();
+		console.log(res);
 	};
 
 	return (
