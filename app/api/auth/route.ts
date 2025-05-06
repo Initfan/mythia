@@ -6,10 +6,13 @@ export async function POST(req: Request) {
 		const user = await prisma.user.create({
 			data: res,
 		});
-		return Response.json({
-			data: user,
-			message: "User register success",
-		});
+		return Response.json(
+			{
+				data: user,
+				message: "User register success",
+			},
+			{ status: 201 }
+		);
 	} catch (error) {
 		console.log(error);
 	}

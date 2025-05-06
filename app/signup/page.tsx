@@ -6,7 +6,7 @@ import logo from "@/assets/mythia-logo.png";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Loader2Icon } from "lucide-react";
+import { Loader2Icon, LogIn } from "lucide-react";
 import dynamic from "next/dynamic";
 import {
 	Form,
@@ -19,6 +19,8 @@ import {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { toast } from "sonner";
+import { redirect } from "next/navigation";
 
 const AuthBackground = dynamic(
 	() => import("@/components/auth/auth-background"),
@@ -42,13 +44,24 @@ const Login = () => {
 	});
 
 	const onSubmit = async (values: z.infer<typeof formSchema>) => {
-		const req = await fetch("/api/auth", {
-			method: "POST",
-			body: JSON.stringify(values),
-		});
+		try {
+			const req = await fetch("/api/auth", {
+				method: "POST",
+				body: JSON.stringify(values),
+			});
 
-		const res = await req.json();
-		console.log(res);
+			await req.json();
+			if (req.status == 201)
+				toast("Akun berhasil dibuat", {
+					description: "Login untuk lanjut membaca.",
+					action: {
+						label: <LogIn />,
+						onClick: () => redirect("../signin"),
+					},
+				});
+		} catch {
+			return toast("Server bermasalah, coba lagi nanti.");
+		}
 	};
 
 	return (
@@ -59,7 +72,7 @@ const Login = () => {
 				</div>
 				<div className="flex flex-col items-center justify-center h-full space-y-2 w-2/3 mx-auto">
 					<Image src={logo} alt="mythia logo" width={75} />
-					<h2 className="text-2xl font-semibold">Sign Up</h2>
+					<h2 className="text-2xl font-semibold">Daftar</h2>
 					<p className="text-sm text-center">
 						Daftar dan nikmati kesuruan membaca novel di mythia.
 					</p>
@@ -73,7 +86,7 @@ const Login = () => {
 								name="username"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Username</FormLabel>
+										<FormLabel>Nama</FormLabel>
 										<FormControl>
 											<Input {...field} />
 										</FormControl>
@@ -107,9 +120,6 @@ const Login = () => {
 									</FormItem>
 								)}
 							/>
-							<div className="text-end">
-								<Link href="">Forgot password</Link>
-							</div>
 							<Button
 								className="w-full"
 								disabled={form.formState.isSubmitting}
@@ -122,12 +132,12 @@ const Login = () => {
 						</form>
 					</Form>
 					<span>
-						Already have account?{" "}
+						Sudah memiliki akun?{" "}
 						<Link
 							href={"signin"}
 							className="text-blue-500 hover:underline"
 						>
-							Sign In
+							Log In
 						</Link>
 					</span>
 				</div>
