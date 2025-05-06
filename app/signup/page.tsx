@@ -44,24 +44,21 @@ const Login = () => {
 	});
 
 	const onSubmit = async (values: z.infer<typeof formSchema>) => {
-		try {
-			const req = await fetch("/api/auth", {
-				method: "POST",
-				body: JSON.stringify(values),
-			});
+		const req = await fetch("/api/auth/register", {
+			method: "POST",
+			body: JSON.stringify(values),
+		});
 
-			await req.json();
-			if (req.status == 201)
-				toast("Akun berhasil dibuat", {
-					description: "Login untuk lanjut membaca.",
-					action: {
-						label: <LogIn />,
-						onClick: () => redirect("../signin"),
-					},
-				});
-		} catch {
-			return toast("Server bermasalah, coba lagi nanti.");
-		}
+		await req.json();
+		if (req.status == 201)
+			toast("Akun berhasil dibuat", {
+				description: "Login untuk lanjut membaca.",
+				action: {
+					label: <LogIn />,
+					onClick: () => redirect("../signin"),
+				},
+			});
+		else toast("Server bermasalah, coba lagi nanti.");
 	};
 
 	return (
