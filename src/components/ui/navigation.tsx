@@ -3,9 +3,12 @@ import React from "react";
 import MythiaLogo from "@/assets/mythia-logo.png";
 import Link from "next/link";
 import { Button } from "./button";
-import { Search } from "lucide-react";
+import { Search, User2 } from "lucide-react";
+import { verifySession } from "@/lib/dal";
 
-const Navigation = () => {
+const Navigation = async () => {
+	const session = await verifySession();
+
 	return (
 		<nav className="flex items-center justify-between py-5 absolute inset-x-0 w-[90%] m-auto">
 			<div className="flex items-center space-x-2">
@@ -26,10 +29,18 @@ const Navigation = () => {
 				<Button variant={"ghost"}>
 					<Search />
 				</Button>
-				<Button>Publish</Button>
-				<Link href={"signin"}>
-					<Button variant={"outline"}>Log In</Button>
-				</Link>
+				{session.isAuth && <Button>Publish</Button>}
+				{!session.isAuth && (
+					<Link href={"signin"}>
+						<Button variant={"outline"}>Log In</Button>
+					</Link>
+				)}
+				{session.isAuth && (
+					<Button variant={"link"}>
+						<User2 />
+						Profile
+					</Button>
+				)}
 			</div>
 		</nav>
 	);
