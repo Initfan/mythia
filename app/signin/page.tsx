@@ -19,6 +19,7 @@ import {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { toast } from "sonner";
 
 const AuthBackground = dynamic(
 	() => import("@/components/auth/auth-background"),
@@ -26,7 +27,6 @@ const AuthBackground = dynamic(
 );
 
 const formSchema = z.object({
-	username: z.string().min(3),
 	email: z.string().email(),
 	password: z.string().min(6),
 });
@@ -35,14 +35,19 @@ const Login = () => {
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
-			username: "",
 			email: "",
 			password: "",
 		},
 	});
 
-	const onSubmit = (values: z.infer<typeof formSchema>) => {
-		console.log(values);
+	const onSubmit = async (values: z.infer<typeof formSchema>) => {
+		const req = await fetch("/api/auth/login", {
+			method: "POST",
+			body: JSON.stringify(values),
+		});
+
+		await req.json();
+		if (req.status == 404) return toast("User not found.");
 	};
 
 	return (
@@ -53,28 +58,16 @@ const Login = () => {
 				</div>
 				<div className="flex flex-col items-center justify-center h-full space-y-2 w-2/3 mx-auto">
 					<Image src={logo} alt="mythia logo" width={75} />
-					<h2 className="text-2xl font-semibold">Sign Up</h2>
+					<h2 className="text-2xl font-semibold">Log In</h2>
 					<p className="text-sm text-center">
-						Daftar dan nikmati kesuruan membaca novel di mythia.
+						Masuk dan rasakan pengalaman membaca novel dengan nyaman
+						di mythia.
 					</p>
 					<Form {...form}>
 						<form
 							className="py-4 w-full space-y-4"
 							onSubmit={form.handleSubmit(onSubmit)}
 						>
-							<FormField
-								control={form.control}
-								name="username"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Username</FormLabel>
-										<FormControl>
-											<Input {...field} />
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
 							<FormField
 								control={form.control}
 								name="email"
@@ -101,9 +94,6 @@ const Login = () => {
 									</FormItem>
 								)}
 							/>
-							<div className="text-end">
-								<Link href="">Forgot password</Link>
-							</div>
 							<Button
 								className="w-full"
 								disabled={form.formState.isSubmitting}
@@ -116,12 +106,12 @@ const Login = () => {
 						</form>
 					</Form>
 					<span>
-						Doesn`t have account?{" "}
+						Belum memiliki akun?{" "}
 						<Link
-							href={"signin"}
+							href={"signup"}
 							className="text-blue-500 hover:underline"
 						>
-							Sign In
+							Daftar
 						</Link>
 					</span>
 				</div>
