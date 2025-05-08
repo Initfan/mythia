@@ -5,9 +5,12 @@ const page = () => {
 	return (
 		<>
 			<Navigation />
-			<div className="pt-24">
+			<main className="pt-24 space-y-4">
 				<div className="h-96 rounded p-4 w-[95%] mx-auto bg-zinc-900/50"></div>
-			</div>
+				<section className="w-[90%] mx-auto">
+					<h1 className="text-3xl font-semibold">Trending</h1>
+				</section>
+			</main>
 		</>
 	);
 };
