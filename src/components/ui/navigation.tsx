@@ -42,7 +42,7 @@ const Navigation = async ({ children, noLink = false }: props) => {
 							</Link>
 						)}
 						{!session.isAuth && (
-							<Link href={"signin"}>
+							<Link href={"auth/signin"}>
 								<Button variant={"outline"}>Log In</Button>
 							</Link>
 						)}

@@ -18,6 +18,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
+import { redirect } from "next/navigation";
 
 const formSchema = z.object({
 	email: z.string().email(),
@@ -41,6 +42,7 @@ const Login = () => {
 
 		await req.json();
 		if (req.status == 404) return toast("User not found.");
+		return redirect("/");
 	};
 
 	return (
