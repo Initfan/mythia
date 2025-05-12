@@ -23,7 +23,6 @@ const page = () => {
 						<h1 className="text-2xl font-semibold">Cover novel</h1>
 						<div className="flex-1">
 							<FileUploadThing />
-							{/* <Home /> */}
 						</div>
 					</div>
 					<div className="w-1/3 space-y-4">
