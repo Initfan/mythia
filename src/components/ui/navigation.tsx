@@ -13,6 +13,7 @@ interface props {
 
 const Navigation = async ({ children, noLink = false }: props) => {
 	const session = await verifySession();
+	console.log(session);
 
 	return (
 		<nav className="flex items-center justify-between py-5 absolute inset-x-0 w-[90%] m-auto">
@@ -37,20 +38,22 @@ const Navigation = async ({ children, noLink = false }: props) => {
 							<Search />
 						</Button>
 						{session.isAuth && (
-							<Link href={"publish"}>
+							<Link href={"/publish"}>
 								<Button>Publish</Button>
 							</Link>
 						)}
 						{!session.isAuth && (
-							<Link href={"auth/signin"}>
+							<Link href={"/auth/signin"}>
 								<Button variant={"outline"}>Log In</Button>
 							</Link>
 						)}
 						{session.isAuth && (
-							<Button variant={"link"}>
-								<User2 />
-								Profile
-							</Button>
+							<Link href={`/profile/${session.user?.username}`}>
+								<Button variant={"link"}>
+									<User2 />
+									Profile
+								</Button>
+							</Link>
 						)}
 					</div>
 				</>

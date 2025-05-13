@@ -3,6 +3,7 @@ import "server-only";
 import { cookies } from "next/headers";
 import { decrypt } from "@/lib/session";
 import { cache } from "react";
+import prisma from "./prisma";
 
 export const verifySession = cache(async () => {
 	const cookie = (await cookies()).get("session")?.value;
@@ -12,5 +13,9 @@ export const verifySession = cache(async () => {
 		return { isAuth: false };
 	}
 
-	return { isAuth: true, userId: session.aud };
+	const user = await prisma.user.findUnique({
+		where: { id: parseInt(session.aud as string) },
+	});
+
+	return { isAuth: true, userId: session.aud, user };
 });
