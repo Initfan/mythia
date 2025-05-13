@@ -13,10 +13,9 @@ interface props {
 
 const Navigation = async ({ children, noLink = false }: props) => {
 	const session = await verifySession();
-	console.log(session);
 
 	return (
-		<nav className="flex items-center justify-between py-5 absolute inset-x-0 w-[90%] m-auto">
+		<nav className="flex items-center justify-between py-5 absolute px-[5%] w-full m-auto shadow-md">
 			<Link href={"/"} className="flex items-center space-x-2">
 				<Image
 					src={MythiaLogo}
@@ -38,8 +37,8 @@ const Navigation = async ({ children, noLink = false }: props) => {
 							<Search />
 						</Button>
 						{session.isAuth && (
-							<Link href={"/publish"}>
-								<Button>Publish</Button>
+							<Link href={"/write"}>
+								<Button>Tulis</Button>
 							</Link>
 						)}
 						{!session.isAuth && (
