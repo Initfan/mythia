@@ -15,6 +15,7 @@ export const verifySession = cache(async () => {
 
 	const user = await prisma.user.findUnique({
 		where: { id: parseInt(session.aud as string) },
+		include: { author: true },
 	});
 
 	return { isAuth: true, userId: session.aud, user };

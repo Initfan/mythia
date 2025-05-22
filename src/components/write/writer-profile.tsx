@@ -19,7 +19,7 @@ import { Checkbox } from "../ui/checkbox";
 import Link from "next/link";
 import { FileUploadThing } from "./file-upload";
 import { uploadFiles } from "@/lib/uploadthing";
-import { userContext } from "../user-context";
+import { userContext } from "@/context/user-context";
 
 const schema = z.object({
 	pen_name: z.string().min(4),

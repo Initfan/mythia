@@ -1,6 +1,7 @@
 generator client {
   provider = "prisma-client-js"
   output   = "../src/generated/prisma"
+  previewFeatures = ["relationJoins"]
 }
 
 datasource db {
@@ -9,18 +10,17 @@ datasource db {
 }
 
 model user {
-  id       Int      @id @default(autoincrement())
-  email    String   @unique
+  id       Int     @id @default(autoincrement())
+  email    String  @unique
   username String
   password String
-  role     String   @default("reader")
-  author   author[]
-  novels   novel[]
+  role     String  @default("reader")
+  author   author?
 }
 
 model author {
   id       Int     @id @default(autoincrement())
-  userId   Int
+  userId   Int     @unique
   image    String?
   pen_name String  @unique
   gender   String
@@ -31,16 +31,22 @@ model author {
 }
 
 model novel {
-  id              Int        @id @default(autoincrement())
+  id              Int         @id @default(autoincrement())
   title           String
   genre           String
   synopsis        String
   target_audience GenderType
   content_rating  String
   authorId        Int
-  userId          Int?
-  author          author     @relation(fields: [authorId], references: [id])
-  user            user?      @relation(fields: [userId], references: [id])
+  author          author      @relation(fields: [authorId], references: [id])
+  tag             tag_novel[]
+}
+
+model tag_novel {
+  id      Int    @id @default(autoincrement())
+  tag     String
+  novelId Int
+  novel   novel  @relation(fields: [novelId], references: [id])
 }
 
 model genre {
