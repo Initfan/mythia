@@ -10,12 +10,13 @@ datasource db {
 }
 
 model user {
-  id       Int     @id @default(autoincrement())
-  email    String  @unique
-  username String
-  password String
-  role     String  @default("reader")
-  author   author?
+  id              Int               @id @default(autoincrement())
+  email           String            @unique
+  username        String
+  password        String
+  role            String            @default("reader")
+  author          author?
+  chapter_comment chapter_comment[]
 }
 
 model author {
@@ -31,7 +32,7 @@ model author {
 }
 
 model novel {
-  id              Int         @id @default(autoincrement())
+  id              Int             @id @default(autoincrement())
   cover           String
   title           String
   genre           String
@@ -39,8 +40,30 @@ model novel {
   target_audience String
   content_rating  String
   authorId        Int
-  author          author      @relation(fields: [authorId], references: [id])
+  author          author          @relation(fields: [authorId], references: [id])
   tag             tag_novel[]
+  chapter         novel_chapter[]
+}
+
+model novel_chapter {
+  id      Int               @id @default(autoincrement())
+  title   String
+  content String
+  novelId Int
+  novel   novel             @relation(fields: [novelId], references: [id])
+  likes   Int               @default(0)
+  comment chapter_comment[]
+  share   Int               @default(0)
+}
+
+model chapter_comment {
+  id        Int           @id @default(autoincrement())
+  comment   String
+  likes     Int
+  chapterId Int
+  chapter   novel_chapter @relation(fields: [chapterId], references: [id])
+  userId    Int
+  user      user          @relation(fields: [userId], references: [id])
 }
 
 model tag_novel {
