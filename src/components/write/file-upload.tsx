@@ -21,13 +21,6 @@ export function FileUploadThing({
 	const coverChangeHandler = (file: File) => {
 		setCover(file);
 		onUpload(file);
-		toast.success("Uploaded files:", {
-			description: (
-				<pre className="mt-2 w-80 rounded-md bg-accent/30 p-4 text-accent-foreground">
-					<code>{JSON.stringify(`${file.name}...`, null, 2)}</code>
-				</pre>
-			),
-		});
 	};
 
 	const onFileReject = React.useCallback((file: File, message: string) => {
@@ -44,6 +37,7 @@ export function FileUploadThing({
 		<div className="flex flex-col gap-6 h-full">
 			<FileUpload
 				accept="image/*"
+				maxSize={4 * 1024 * 1024}
 				onFileAccept={coverChangeHandler}
 				onFileReject={onFileReject}
 				className="flex-1"
