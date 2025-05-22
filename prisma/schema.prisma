@@ -1,6 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
+  provider        = "prisma-client-js"
+  output          = "../src/generated/prisma"
   previewFeatures = ["relationJoins"]
 }
 
@@ -32,10 +32,11 @@ model author {
 
 model novel {
   id              Int         @id @default(autoincrement())
+  cover           String
   title           String
   genre           String
   synopsis        String
-  target_audience GenderType
+  target_audience String
   content_rating  String
   authorId        Int
   author          author      @relation(fields: [authorId], references: [id])
