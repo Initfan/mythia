@@ -4,9 +4,10 @@ import { useState } from "react";
 import StepWrite from "@/components/write/step-write";
 import WriterProfile from "@/components/write/writer-profile";
 import WriteNovel from "@/components/write/write-novel";
+import WriteChapter from "@/components/write/write-chapter";
 
 const page = () => {
-	const [active, setActive] = useState<number>(3);
+	const [active, setActive] = useState<number>(1);
 
 	const setActivePage = (id: number) => setActive(id);
 
@@ -19,7 +20,7 @@ const page = () => {
 			<main className="space-x-8 flex w-1/2 mx-auto">
 				{active == 1 && <WriterProfile activePage={setActivePage} />}
 				{active == 2 && <WriteNovel activePage={setActivePage} />}
-				{active == 3 && <p>test</p>}
+				{active == 3 && <WriteChapter />}
 			</main>
 		</>
 	);
