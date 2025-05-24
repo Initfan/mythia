@@ -2,7 +2,7 @@ import { FileUploadThing } from "@/components/write/file-upload";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import {
@@ -14,11 +14,12 @@ import {
 	SelectValue,
 } from "../ui/select";
 import { uploadFiles } from "@/lib/uploadthing";
-import { genre } from "@/generated/prisma";
+import { author, genre } from "@/generated/prisma";
 import { userContext } from "../../context/user-context";
 import { Textarea } from "../ui/textarea";
 import { Loader2Icon, Send } from "lucide-react";
 import { Button } from "../ui/button";
+import { toast } from "sonner";
 
 const schema = z.object({
 	title: z.string().min(4),
@@ -31,6 +32,7 @@ const schema = z.object({
 const WriteNovel = ({ activePage }: { activePage: (id: number) => void }) => {
 	const user = useContext(userContext);
 	const tagRef = useRef<HTMLInputElement>(null);
+	const [author, setAuthor] = useState<author>();
 	const [tag, setTag] = useState<string[]>([]);
 	const [genre, setGenre] = useState<genre[]>();
 	const [files, setFile] = useState<File[]>([]);
@@ -46,22 +48,28 @@ const WriteNovel = ({ activePage }: { activePage: (id: number) => void }) => {
 	});
 
 	const onSubmit = async (values: z.infer<typeof schema>) => {
-		const image = await uploadFiles("imageUploader", {
-			files,
-		});
-		const author = await fetch("api/novel", {
-			method: "POST",
-			body: JSON.stringify({
-				...values,
-				cover: image[0].ufsUrl,
-				authorId: user!.author!.id,
-				tag_novel: tag,
-			}),
-		});
+		try {
+			console.log(user);
+			const image = await uploadFiles("imageUploader", {
+				files,
+			});
+			const novel = await fetch("api/novel", {
+				method: "POST",
+				body: JSON.stringify({
+					...values,
+					cover: image[0].ufsUrl,
+					authorId: user!.author ? user?.author.id : author?.id,
+					tag_novel: tag,
+				}),
+			});
 
-		const res = await author.json();
-		if (res.status == 201) {
-			activePage(3);
+			await novel.json();
+			if (novel.status == 201) activePage(3);
+		} catch (err) {
+			console.log(err);
+			toast("Gagal membuat novel, coba lagi", {
+				className: "bg-red-500",
+			});
 		}
 	};
 
@@ -73,9 +81,17 @@ const WriteNovel = ({ activePage }: { activePage: (id: number) => void }) => {
 		setGenre(res.data);
 	};
 
+	const getAuthor = useCallback(async () => {
+		if (user?.author) return;
+		const req = await fetch(`/api/author/${user?.id}`);
+		const res = await req.json();
+		if (req.ok) setAuthor(res.data);
+	}, [user]);
+
 	useEffect(() => {
 		fetchGenre();
-	}, []);
+		getAuthor();
+	}, [getAuthor]);
 
 	return (
 		<Form {...form}>
