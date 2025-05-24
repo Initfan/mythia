@@ -10,7 +10,7 @@ export async function POST(req: Request) {
 				gender: z.string(),
 				email: z.string().email(),
 				phone: z.string().min(9),
-
+				image: z.string(),
 				userId: z.number(),
 			})
 			.safeParse(data);
@@ -18,10 +18,7 @@ export async function POST(req: Request) {
 		if (validate.error) return Response.json(validate.error);
 
 		const author = await prisma.author.create({
-			data: {
-				...validate.data,
-				image: "https://jygqe5edc8.ufs.sh/f/TflkBZUONMuW9Asj5W26r5iZ0xqUuNg7QztGyaSs2ob1AdLk",
-			},
+			data: validate.data,
 		});
 
 		return Response.json(

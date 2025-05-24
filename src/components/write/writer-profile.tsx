@@ -20,6 +20,7 @@ import Link from "next/link";
 import { FileUploadThing } from "./file-upload";
 import { uploadFiles } from "@/lib/uploadthing";
 import { userContext } from "@/context/user-context";
+import { toast } from "sonner";
 
 const schema = z.object({
 	pen_name: z.string().min(4),
@@ -48,21 +49,27 @@ const WriterProfile = ({
 	});
 
 	const onSubmit = async (values: z.infer<typeof schema>) => {
-		const image = await uploadFiles("imageUploader", {
-			files,
-		});
-		const author = await fetch("api/author", {
-			method: "POST",
-			body: JSON.stringify({
-				...values,
-				image: image[0].ufsUrl,
-				userId: user?.id,
-			}),
-		});
+		try {
+			const image = await uploadFiles("imageUploader", {
+				files,
+			});
+			const author = await fetch("api/author", {
+				method: "POST",
+				body: JSON.stringify({
+					...values,
+					image: image[0].ufsUrl,
+					userId: user?.id,
+				}),
+			});
 
-		const res = await author.json();
-		if (res.status == 201) {
-			activePage(2);
+			await author.json();
+			if (author.status == 201) {
+				activePage(2);
+			}
+		} catch {
+			toast("Gagal membuat profile, coba lagi", {
+				className: "bg-red-500",
+			});
 		}
 	};
 

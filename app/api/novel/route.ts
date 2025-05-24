@@ -1,6 +1,21 @@
 import prisma from "@/lib/prisma";
 import { z } from "zod";
 
+export async function GET() {
+	try {
+		const novel = await prisma.novel.findMany();
+		return Response.json({ message: "Novel data", data: novel });
+	} catch (error) {
+		return Response.json(
+			{
+				message: "Server error, try again later",
+				error,
+			},
+			{ status: 500 }
+		);
+	}
+}
+
 export async function POST(req: Request) {
 	try {
 		const data = await req.json();
