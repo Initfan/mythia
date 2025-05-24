@@ -10,14 +10,16 @@ const AuthBackground = dynamic(
 
 const AuthLayout = ({ children }: { children: React.ReactNode }) => {
 	return (
-		<main className="grid grid-cols-2 space-x-4 h-screen p-4">
+		<main className="md:grid grid-cols-2 space-x-4 h-screen p-4">
 			<div className="p-4 relative">
 				<div className="absolute">
 					<ThemeToggle />
 				</div>
 				{children}
 			</div>
-			<AuthBackground />
+			<div className="hidden md:block size-full">
+				<AuthBackground />
+			</div>
 		</main>
 	);
 };

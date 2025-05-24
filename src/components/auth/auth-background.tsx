@@ -10,7 +10,9 @@ const AuthBackground = () => {
 
 	return (
 		<div
-			className={theme.theme == "dark" ? "mix-blend-difference" : ""}
+			className={`size-full ${
+				theme.theme == "dark" ? "mix-blend-difference" : ""
+			}`}
 			suppressHydrationWarning
 		>
 			{theme.theme == "dark" ? (

@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import Image from "next/image";
 import logo from "@/assets/mythia-logo.png";
@@ -13,11 +14,11 @@ import {
 	FormLabel,
 	FormMessage,
 } from "@/components/ui/form";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
 import { redirect } from "next/navigation";
+import { useForm } from "react-hook-form";
 
 const formSchema = z.object({
 	username: z.string().min(3),
@@ -54,7 +55,7 @@ const Login = () => {
 	};
 
 	return (
-		<div className="flex flex-col items-center justify-center h-full space-y-2 w-2/3 mx-auto">
+		<div className="flex flex-col items-center justify-center h-full space-y-2 w-full md:w-1/2 lg:w-2/3 mx-auto pt-12 md:pt-0">
 			<Image src={logo} alt="mythia logo" width={75} />
 			<h2 className="text-2xl font-semibold">Daftar</h2>
 			<p className="text-sm text-center">
@@ -118,7 +119,7 @@ const Login = () => {
 			<span>
 				Sudah memiliki akun?{" "}
 				<Link
-					href={"auth/signin"}
+					href={"/auth/signin"}
 					className="text-blue-500 hover:underline"
 				>
 					Log In

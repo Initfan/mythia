@@ -46,11 +46,11 @@ const Login = () => {
 	};
 
 	return (
-		<div className="flex flex-col items-center justify-center h-full space-y-2 w-2/3 mx-auto">
+		<div className="flex flex-col items-center justify-center h-full space-y-2 w-full md:w-1/2 lg:w-2/3 mx-auto pt-12 md:pt-0">
 			<Image src={logo} alt="mythia logo" width={75} />
 			<h2 className="text-2xl font-semibold">Log In</h2>
 			<p className="text-sm text-center">
-				Masuk dan rasakan pengalaman membaca novel dengan nyaman di
+				Bergabung dan rasakan pengalaman membaca novel dengan nyaman di
 				mythia.
 			</p>
 			<Form {...form}>
@@ -98,7 +98,7 @@ const Login = () => {
 			<span>
 				Belum memiliki akun?{" "}
 				<Link
-					href={"auth/signup"}
+					href={"/auth/signup"}
 					className="text-blue-500 hover:underline"
 				>
 					Daftar
