@@ -33,16 +33,16 @@ model author {
 
 model novel {
   id              Int             @id @default(autoincrement())
-  cover           String
   title           String
   genre           String
   synopsis        String
-  target_audience String
   content_rating  String
   authorId        Int
+  cover           String
+  target_audience String
   author          author          @relation(fields: [authorId], references: [id])
-  tag             tag_novel[]
   chapter         novel_chapter[]
+  tag             tag_novel[]
 }
 
 model novel_chapter {
@@ -50,10 +50,10 @@ model novel_chapter {
   title   String
   content String
   novelId Int
-  novel   novel             @relation(fields: [novelId], references: [id])
   likes   Int               @default(0)
-  comment chapter_comment[]
   share   Int               @default(0)
+  comment chapter_comment[]
+  novel   novel             @relation(fields: [novelId], references: [id])
 }
 
 model chapter_comment {
@@ -61,8 +61,8 @@ model chapter_comment {
   comment   String
   likes     Int
   chapterId Int
-  chapter   novel_chapter @relation(fields: [chapterId], references: [id])
   userId    Int
+  chapter   novel_chapter @relation(fields: [chapterId], references: [id])
   user      user          @relation(fields: [userId], references: [id])
 }
 

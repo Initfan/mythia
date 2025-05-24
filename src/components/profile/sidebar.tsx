@@ -1,7 +1,4 @@
 "use client";
-
-import * as React from "react";
-
 import {
 	Sidebar,
 	SidebarContent,
@@ -13,6 +10,7 @@ import {
 	SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { Book, Home, LogOut, Settings, Wallet } from "lucide-react";
+import { redirect } from "next/navigation";
 
 const items = [
 	{
@@ -38,14 +36,14 @@ const action = [
 		url: "#",
 		icon: Settings,
 	},
-	{
-		title: "Logout",
-		url: "#",
-		icon: LogOut,
-	},
 ];
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+	const logout = async () => {
+		const req = await fetch("/api/auth/logout");
+		if (req.ok) return redirect("/");
+	};
+
 	return (
 		<Sidebar collapsible="icon" {...props}>
 			<SidebarContent>
@@ -80,6 +78,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 									</SidebarMenuButton>
 								</SidebarMenuItem>
 							))}
+							<SidebarMenuItem>
+								<SidebarMenuButton asChild>
+									<button onClick={logout}>
+										<LogOut />
+										<span>Logout</span>
+									</button>
+								</SidebarMenuButton>
+							</SidebarMenuItem>
 						</SidebarMenu>
 					</SidebarGroupContent>
 				</SidebarGroup>
