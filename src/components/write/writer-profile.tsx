@@ -1,5 +1,5 @@
 "use client";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Form, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Input } from "../ui/input";
 import { useForm } from "react-hook-form";
@@ -48,6 +48,10 @@ const WriterProfile = ({
 		},
 	});
 
+	useEffect(() => {
+		if (user?.author) return activePage(2);
+	}, [user, activePage]);
+
 	const onSubmit = async (values: z.infer<typeof schema>) => {
 		try {
 			const image = await uploadFiles("imageUploader", {
@@ -62,10 +66,7 @@ const WriterProfile = ({
 				}),
 			});
 
-			await author.json();
-			if (author.status == 201) {
-				activePage(2);
-			}
+			if (author.status == 201) activePage(2);
 		} catch {
 			toast("Gagal membuat profile, coba lagi", {
 				className: "bg-red-500",
@@ -78,8 +79,8 @@ const WriterProfile = ({
 	return (
 		<Form {...form}>
 			<form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
-				<div className="flex space-x-4 w-full mb-4">
-					<div className="space-y-2 flex flex-col w-[30%]">
+				<div className="flex flex-col md:flex-row md:space-y-0 space-y-4 md:space-x-4 w-full mb-4">
+					<div className="space-y-2 flex flex-col md:w-[30%]">
 						<h3 className="text-xl">Foto Profile</h3>
 						<FileUploadThing onUpload={onUpload} />
 					</div>

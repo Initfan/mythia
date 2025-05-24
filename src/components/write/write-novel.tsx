@@ -96,7 +96,7 @@ const WriteNovel = ({ activePage }: { activePage: (id: number) => void }) => {
 	return (
 		<Form {...form}>
 			<form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
-				<div className="flex space-x-4 w-full mb-4">
+				<div className="flex flex-col md:flex-row md:space-y-0 space-y-4 md:space-x-4 w-full mb-4">
 					<div className="space-y-4 flex flex-col">
 						<h1 className="text-xl font-semibold">Cover novel</h1>
 						<div className="h-[300px] w-[200px]">

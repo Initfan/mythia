@@ -4,16 +4,19 @@ import Editor from "./editor";
 import { userContext } from "@/context/user-context";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
 
 const WriteChapter = () => {
 	const router = useRouter();
 	const user = useContext(userContext);
+	const [loading, setLoading] = useState(false);
 	const [novelId, setNovelId] = useState<number>();
 	const [editorContent, setContent] = useState("");
 	const titleRef = useRef<HTMLInputElement>(null);
 
 	const saveChapter = async () => {
 		try {
+			setLoading(true);
 			const req = await fetch("api/novel/chapter", {
 				method: "POST",
 				body: JSON.stringify({
@@ -33,18 +36,15 @@ const WriteChapter = () => {
 				toast("Kamu telah selesai menulis novel pertamamu 👏");
 			return router.replace(`./profile/${user?.username}`);
 		} catch (error) {
+			setLoading(false);
 			console.log(error);
 		}
 	};
 
 	const fetchNovel = useCallback(async () => {
-		try {
-			const req = await fetch(`api/novel/${user!.author!.id}`);
-			const res = await req.json();
-			setNovelId(res.data.id);
-		} catch (error) {
-			console.log(error);
-		}
+		const req = await fetch(`api/novel/${user!.author!.id}`);
+		const res = await req.json();
+		setNovelId(res.data.id);
 	}, [user]);
 
 	useEffect(() => {
@@ -63,7 +63,12 @@ const WriteChapter = () => {
 			</div>
 			<div className="grid grid-cols-3 space-x-4">
 				<Button variant="outline">Preview</Button>
-				<Button variant="secondary" onClick={saveChapter}>
+				<Button
+					variant="secondary"
+					onClick={saveChapter}
+					disabled={loading}
+				>
+					{loading && <Loader2 className="animate-spin" />}
 					Save
 				</Button>
 				<Button>Publish</Button>

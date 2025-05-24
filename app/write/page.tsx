@@ -7,7 +7,7 @@ import WriteNovel from "@/components/write/write-novel";
 import WriteChapter from "@/components/write/write-chapter";
 
 const page = () => {
-	const [active, setActive] = useState<number>(1);
+	const [active, setActive] = useState<number>(3);
 
 	const setActivePage = (id: number) => setActive(id);
 
@@ -17,7 +17,7 @@ const page = () => {
 				active={active}
 				step={["Profile", "Buat Novel", "Tulis Cerita"]}
 			/>
-			<main className="space-x-8 flex w-1/2 mx-auto">
+			<main className="space-x-8 flex md:w-2/3 px-8 md:px-0 lg:w-1/2 mx-auto">
 				{active == 1 && <WriterProfile activePage={setActivePage} />}
 				{active == 2 && <WriteNovel activePage={setActivePage} />}
 				{active == 3 && <WriteChapter />}
