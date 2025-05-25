@@ -17,6 +17,7 @@ model user {
   role            String            @default("reader")
   author          author?
   chapter_comment chapter_comment[]
+  novel_review    novel_review[]
 }
 
 model author {
@@ -40,9 +41,26 @@ model novel {
   authorId        Int
   cover           String
   target_audience String
+  views           Int             @default(0)
+  status          String          @default("On going")
   author          author          @relation(fields: [authorId], references: [id])
+  novel_review    novel_review[]
   chapter         novel_chapter[]
   tag             tag_novel[]
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @default(now()) @updatedAt
+}
+
+model novel_review {
+  id        Int      @id @default(autoincrement())
+  rating    Int
+  review    String
+  novelId   Int
+  novel     novel    @relation(fields: [novelId], references: [id])
+  userId    Int
+  user      user     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  likes     Int
 }
 
 model novel_chapter {
