@@ -18,6 +18,7 @@ model user {
   author          author?
   chapter_comment chapter_comment[]
   novel_review    novel_review[]
+  user_library    user_library[]
 }
 
 model author {
@@ -30,6 +31,7 @@ model author {
   phone    String
   user     user    @relation(fields: [userId], references: [id])
   novel    novel[]
+  createdAt DateTime @default(now())
 }
 
 model novel {
@@ -47,8 +49,17 @@ model novel {
   novel_review    novel_review[]
   chapter         novel_chapter[]
   tag             tag_novel[]
+  user_library    user_library[]
   createdAt       DateTime        @default(now())
   updatedAt       DateTime        @default(now()) @updatedAt
+}
+
+model user_library {
+  id      Int    @id @default(autoincrement())
+  userId  Int
+  novelId Int
+  user    user   @relation(fields: [userId], references: [id])
+  novel   novel  @relation(fields: [novelId], references: [id])
 }
 
 model novel_review {
