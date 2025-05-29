@@ -1,13 +1,20 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 "use client";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import StepWrite from "@/components/write/step-write";
 import WriterProfile from "@/components/write/writer-profile";
 import WriteNovel from "@/components/write/write-novel";
 import WriteChapter from "@/components/write/write-chapter";
+import { userContext } from "@/context/user-context";
+import { redirect } from "next/navigation";
 
 const page = () => {
-	const [active, setActive] = useState<number>(3);
+	const [active, setActive] = useState<number>(1);
+	const user = useContext(userContext);
+
+	useEffect(() => {
+		if (!user) return redirect("/");
+	}, [user]);
 
 	const setActivePage = (id: number) => setActive(id);
 
