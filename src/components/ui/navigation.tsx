@@ -26,7 +26,7 @@ const Navigation = async ({ children, noLink = false }: props) => {
 					/>
 					<h3 className="text-xl font-semibold">Mythia</h3>
 				</Link>
-				<div className="space-x-6">
+				<div className="space-x-6 hidden lg:block">
 					<Link
 						href="/browse"
 						className="text-sm font-semibold hover:underline"
@@ -42,32 +42,30 @@ const Navigation = async ({ children, noLink = false }: props) => {
 				</div>
 			</div>
 			{!noLink && (
-				<>
-					<div className="flex space-x-3">
-						<Button variant="outline">
-							<Search />
-						</Button>
-						<Input placeholder="Cari novel..." />
-						{session.isAuth && (
-							<Link href={"/write"}>
-								<Button>Tulis</Button>
-							</Link>
-						)}
-						{!session.isAuth && (
-							<Link href={"/auth/signin"}>
-								<Button variant={"outline"}>Log In</Button>
-							</Link>
-						)}
-						{session.isAuth && (
-							<Link href={`/profile/${session.user?.username}`}>
-								<Button variant={"link"}>
-									<User2 />
-									Profile
-								</Button>
-							</Link>
-						)}
-					</div>
-				</>
+				<div className="hidden md:flex space-x-3">
+					<Button variant="outline">
+						<Search />
+					</Button>
+					<Input placeholder="Cari novel..." />
+					{session.isAuth && (
+						<Link href={"/write"}>
+							<Button>Tulis</Button>
+						</Link>
+					)}
+					{!session.isAuth && (
+						<Link href={"/auth/signin"}>
+							<Button variant={"outline"}>Log In</Button>
+						</Link>
+					)}
+					{session.isAuth && (
+						<Link href={`/profile/${session.user?.username}`}>
+							<Button variant={"link"}>
+								<User2 />
+								Profile
+							</Button>
+						</Link>
+					)}
+				</div>
 			)}
 			{children}
 		</nav>

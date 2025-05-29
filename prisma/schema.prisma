@@ -65,6 +65,7 @@ model novel_review {
 
 model novel_chapter {
   id      Int               @id @default(autoincrement())
+  chapter Int @default(0)
   title   String
   content String
   novelId Int
@@ -72,6 +73,8 @@ model novel_chapter {
   share   Int               @default(0)
   comment chapter_comment[]
   novel   novel             @relation(fields: [novelId], references: [id])
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @default(now()) @updatedAt
 }
 
 model chapter_comment {
