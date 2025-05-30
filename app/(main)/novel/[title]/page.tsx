@@ -9,9 +9,9 @@ import { redirect } from "next/navigation";
 import parse from "html-react-parser";
 import { Separator } from "@/components/ui/separator";
 import ReviewSection from "@/components/novel/review";
-import Cover from "@/components/cover";
 import Share from "@/components/novel/share";
 import ButtonLibrary from "@/components/novel/button-library";
+import Image from "next/image";
 
 const page = async ({ params }: { params: Promise<{ title: string }> }) => {
 	const { title } = await params;
@@ -41,7 +41,12 @@ const page = async ({ params }: { params: Promise<{ title: string }> }) => {
 		<>
 			<div className="flex space-x-6">
 				<div className="w-[250px] relative h-[300px]">
-					<Cover src={novel.cover} alt={novel.title} />
+					<Image
+						src={novel.cover}
+						alt={novel.title}
+						className="rounded object-cover object-center"
+						fill
+					/>
 				</div>
 				<div className="flex flex-col space-y-6 flex-1 items-start">
 					<h1 className="text-4xl font-semibold">{novel.title}</h1>

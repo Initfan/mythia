@@ -32,7 +32,7 @@ const PopularNovel = async () => {
 								{v.synopsis}
 							</p>
 							<p className="text-sm text-muted flex">
-								100k views
+								{v.views} views
 								<Dot />
 								{v.chapter.length} Chapters
 							</p>
