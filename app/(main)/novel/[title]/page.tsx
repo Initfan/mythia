@@ -12,6 +12,7 @@ import ReviewSection from "@/components/novel/review";
 import Share from "@/components/novel/share";
 import ButtonLibrary from "@/components/novel/button-library";
 import Image from "next/image";
+import ChapterList from "@/components/novel/chapter-list";
 
 const page = async ({ params }: { params: Promise<{ title: string }> }) => {
 	const { title } = await params;
@@ -83,7 +84,7 @@ const page = async ({ params }: { params: Promise<{ title: string }> }) => {
 							<p className="text-muted-foreground">Dibaca</p>
 						</div>
 					</div>
-					<div className="space-x-4 flex">
+					<div className="space-x-2 flex">
 						<Link
 							href={`${novel.title.replaceAll(
 								" ",
@@ -92,6 +93,7 @@ const page = async ({ params }: { params: Promise<{ title: string }> }) => {
 						>
 							<Button>Mulai Membaca</Button>
 						</Link>
+						<ChapterList novelId={novel.id} />
 						<Share />
 					</div>
 				</div>
@@ -114,10 +116,6 @@ const page = async ({ params }: { params: Promise<{ title: string }> }) => {
 				</div>
 				<div className="leading-loose text-lg">
 					{parse(novel.chapter.at(0)!.content)}
-				</div>
-				<div className="flex justify-center space-x-2">
-					<Button variant="outline">Daftar Bab</Button>
-					<Button>Bab Selanjutnya</Button>
 				</div>
 			</div>
 			<ReviewSection
