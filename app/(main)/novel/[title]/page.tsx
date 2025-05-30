@@ -112,7 +112,11 @@ const page = async ({ params }: { params: Promise<{ title: string }> }) => {
 					<Button>Bab Selanjutnya</Button>
 				</div>
 			</div>
-			<ReviewSection review={novel.novel_review} novelId={novel.id} />
+			<ReviewSection
+				review={novel.novel_review}
+				novelId={novel.id}
+				reviewedBy={novel.reviewd_by}
+			/>
 		</div>
 	);
 };

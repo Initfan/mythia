@@ -46,6 +46,7 @@ model novel {
   views           Int             @default(0)
   status          String          @default("On going")
   author          author          @relation(fields: [authorId], references: [id])
+  reviewd_by      Int[]
   novel_review    novel_review[]
   chapter         novel_chapter[]
   tag             tag_novel[]
