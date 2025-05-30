@@ -82,8 +82,7 @@ model novel_chapter {
   title     String
   content   String
   novelId   Int
-  likes     Int               @default(0)
-  share     Int               @default(0)
+  views     Int               @default(0)
   comment   chapter_comment[]
   novel     novel             @relation(fields: [novelId], references: [id])
   createdAt DateTime          @default(now())
