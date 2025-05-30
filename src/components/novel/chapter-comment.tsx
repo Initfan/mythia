@@ -2,7 +2,7 @@
 import React, { useContext, useRef } from "react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { SendIcon } from "lucide-react";
+import { Loader2, SendIcon } from "lucide-react";
 import { Prisma } from "@/generated/prisma";
 import { toast } from "sonner";
 import { userContext } from "@/context/user-context";
@@ -22,9 +22,11 @@ const ChapterComment = ({
 }) => {
 	const user = useContext(userContext);
 	const inputRef = useRef<HTMLInputElement>(null);
+	const [loading, setLoading] = React.useState(false);
 	const [comment, setComment] = React.useState<userComment[]>(comments);
 
 	const handleSubmit = async () => {
+		setLoading(true);
 		try {
 			const req = await fetch("/api/novel/chapter/comment", {
 				method: "POST",
@@ -43,9 +45,11 @@ const ChapterComment = ({
 
 			const res = await req.json();
 			setComment((p) => [...p, res.data]);
-
+			inputRef.current!.value = "";
+			setLoading(false);
 			toast.success("Komentar berhasil dikirim");
 		} catch {
+			setLoading(false);
 			toast.error("Gagal mengirim komentar");
 		}
 	};
@@ -55,8 +59,12 @@ const ChapterComment = ({
 			<h2 className="text-2xl font-semibold">Komentar</h2>
 			<div className="flex space-x-2">
 				<Input className="flex-1" ref={inputRef} />
-				<Button onClick={handleSubmit} disabled={!user}>
-					<SendIcon />
+				<Button onClick={handleSubmit} disabled={loading}>
+					{loading ? (
+						<Loader2 className="animate-spin" />
+					) : (
+						<SendIcon />
+					)}
 				</Button>
 			</div>
 			{comment.length == 0 && (

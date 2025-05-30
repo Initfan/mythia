@@ -21,6 +21,9 @@ export async function POST(req: Request) {
 
 		const comment = await prisma.chapter_comment.create({
 			data: validate.data,
+			include: {
+				user: true,
+			},
 		});
 
 		return Response.json(
