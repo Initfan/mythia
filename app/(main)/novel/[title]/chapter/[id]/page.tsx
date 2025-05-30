@@ -14,7 +14,11 @@ const page = async ({
 		where: { title: title.replaceAll("-", " ") },
 		include: {
 			author: true,
-			chapter: { where: { chapter: parseInt(id) }, take: 1 },
+			chapter: {
+				where: { chapter: parseInt(id) },
+				take: 1,
+				include: { comment: { include: { user: true } } },
+			},
 		},
 	});
 
@@ -29,7 +33,10 @@ const page = async ({
 					{parse(novel.chapter.at(0)?.content || "")}
 				</div>
 			</div>
-			<ChapterComment />
+			<ChapterComment
+				chapterId={novel.chapter.at(0)!.id}
+				comments={novel.chapter.at(0)!.comment}
+			/>
 		</div>
 	);
 };

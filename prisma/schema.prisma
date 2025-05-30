@@ -93,7 +93,6 @@ model novel_chapter {
 model chapter_comment {
   id        Int           @id @default(autoincrement())
   comment   String
-  likes     Int
   chapterId Int
   userId    Int
   chapter   novel_chapter @relation(fields: [chapterId], references: [id])
