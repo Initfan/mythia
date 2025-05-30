@@ -38,7 +38,7 @@ const page = async ({ params }: { params: Promise<{ title: string }> }) => {
 	if (!novel) return redirect("/");
 
 	return (
-		<div className="mx-auto w-3/4 space-y-6 pb-10">
+		<>
 			<div className="flex space-x-6">
 				<div className="w-[250px] relative h-[300px]">
 					<Cover src={novel.cover} alt={novel.title} />
@@ -79,7 +79,14 @@ const page = async ({ params }: { params: Promise<{ title: string }> }) => {
 						</div>
 					</div>
 					<div className="space-x-4 flex">
-						<Button>Mulai Membaca</Button>
+						<Link
+							href={`${novel.title.replaceAll(
+								" ",
+								"-"
+							)}/chapter/1`}
+						>
+							<Button>Mulai Membaca</Button>
+						</Link>
 						<Share />
 					</div>
 				</div>
@@ -113,7 +120,7 @@ const page = async ({ params }: { params: Promise<{ title: string }> }) => {
 				novelId={novel.id}
 				reviewedBy={novel.reviewd_by}
 			/>
-		</div>
+		</>
 	);
 };
 
