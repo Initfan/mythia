@@ -1,0 +1,90 @@
+import prisma from "@/lib/prisma";
+import { z } from "zod";
+
+export async function PUT(req: Request) {
+	try {
+		const data = await req.json();
+
+		const validate = z
+			.object({
+				reviewId: z.number(),
+				userId: z.number(),
+			})
+			.safeParse(data);
+
+		if (validate.error)
+			return Response.json({
+				message: "Gagal menyukai review novel",
+				error: validate.error,
+			});
+
+		const review = await prisma.novel_review.update({
+			where: { id: validate.data.reviewId },
+			data: {
+				likes: {
+					increment: 1,
+				},
+			},
+		});
+
+		return Response.json(
+			{
+				message: "Review novel berhasil disukai",
+				data: review.likes,
+			},
+			{ status: 200 }
+		);
+	} catch (error) {
+		return Response.json(
+			{
+				message: "Server error, try again later",
+				error: error?.toString(),
+			},
+			{ status: 500 }
+		);
+	}
+}
+
+export async function DELETE(req: Request) {
+	try {
+		const data = await req.json();
+
+		const validate = z
+			.object({
+				reviewId: z.number(),
+				userId: z.number(),
+			})
+			.safeParse(data);
+
+		if (validate.error)
+			return Response.json({
+				message: "Gagal menghapus like review novel",
+				error: validate.error,
+			});
+
+		const review = await prisma.novel_review.update({
+			where: { id: validate.data.reviewId },
+			data: {
+				likes: {
+					decrement: 1,
+				},
+			},
+		});
+
+		return Response.json(
+			{
+				message: "Like review novel berhasil dihapus",
+				data: review.likes,
+			},
+			{ status: 200 }
+		);
+	} catch (error) {
+		return Response.json(
+			{
+				message: "Server error, try again later",
+				error: error?.toString(),
+			},
+			{ status: 500 }
+		);
+	}
+}
