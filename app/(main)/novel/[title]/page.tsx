@@ -12,7 +12,6 @@ import ReviewSection from "@/components/novel/review";
 import Cover from "@/components/cover";
 import Share from "@/components/novel/share";
 import ButtonLibrary from "@/components/novel/button-library";
-// import ButtonLibrary from "@/components/novel/button-library";
 
 const page = async ({ params }: { params: Promise<{ title: string }> }) => {
 	const { title } = await params;
@@ -69,10 +68,7 @@ const page = async ({ params }: { params: Promise<{ title: string }> }) => {
 						</Link>
 					</div>
 					<div className="flex space-x-12">
-						<Rating
-							rating={novel.novel_review.length}
-							reviews={novel.novel_review.length}
-						/>
+						<Rating novelReview={novel.novel_review} />
 						<div className="space-y-2 flex items-center flex-col">
 							<h1 className="text-4xl">{novel.chapter.length}</h1>
 							<p className="text-muted-foreground">Bab</p>

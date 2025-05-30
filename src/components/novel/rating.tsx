@@ -1,19 +1,31 @@
+import { novel_review } from "@/generated/prisma";
 import { Dot, Star } from "lucide-react";
 import React from "react";
 
-const Rating = ({ rating, reviews }: { rating: number; reviews: number }) => {
+const Rating = ({ novelReview }: { novelReview: novel_review[] }) => {
+	const rating = novelReview.reduce((sum, review) => sum + review.rating, 0);
+	const averageRating = rating / novelReview.length || 0;
+
 	return (
 		<div className="space-y-2">
 			<div className="space-x-4 flex items-center">
-				<h1 className="text-4xl">{rating}</h1>
-				{Array.from([1, 2, 3, 4, 5]).map((v) => (
-					<Star key={v} className="stroke-0 mr-2" fill="yellow" />
+				<h1 className="text-4xl">{averageRating}</h1>
+				{Array.from({
+					length: 5,
+				}).map((_, idx) => (
+					<Star
+						key={idx}
+						className={`${
+							idx + 1 > averageRating ? "stroke-1" : "stroke-0"
+						} mr-2`}
+						fill={averageRating > idx ? "yellow" : "none"}
+					/>
 				))}
 			</div>
 			<div className="flex space-x-2 text-muted-foreground">
-				<p>{rating} rating</p>
+				<p>{novelReview.length} rating</p>
 				<Dot />
-				<p>{reviews} ulasan</p>
+				<p>{novelReview.length} Ulansan</p>
 			</div>
 		</div>
 	);
