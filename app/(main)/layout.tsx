@@ -9,10 +9,9 @@ const layout = async ({
 	children: React.ReactNode;
 }>) => {
 	const { user } = await verifySession();
-	if (!user) return null;
 
 	return (
-		<UserContext user={user}>
+		<UserContext user={user!}>
 			<Navigation />
 			<main className="pt-30 pb-6 w-[90vw] mx-auto">{children}</main>
 		</UserContext>

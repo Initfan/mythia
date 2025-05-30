@@ -37,7 +37,13 @@ const Navigation = async ({ children, noLink = false }: props) => {
 						href="/library"
 						className="text-sm font-semibold hover:underline"
 					>
-						Library
+						Pustaka
+					</Link>
+					<Link
+						href="/history"
+						className="text-sm font-semibold hover:underline"
+					>
+						Riwayat
 					</Link>
 				</div>
 			</div>
