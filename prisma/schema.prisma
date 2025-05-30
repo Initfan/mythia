@@ -72,6 +72,7 @@ model novel_review {
   user      user     @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
   likes     Int      @default(0)
+  liked_by  Int[]
 }
 
 model novel_chapter {

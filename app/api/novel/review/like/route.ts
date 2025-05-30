@@ -21,6 +21,7 @@ export async function PUT(req: Request) {
 		const review = await prisma.novel_review.update({
 			where: { id: validate.data.reviewId },
 			data: {
+				liked_by: { push: validate.data.userId },
 				likes: {
 					increment: 1,
 				},
@@ -62,9 +63,28 @@ export async function DELETE(req: Request) {
 				error: validate.error,
 			});
 
+		const existingReview = await prisma.novel_review.findUnique({
+			where: { id: validate.data.reviewId },
+			select: { liked_by: true },
+		});
+
+		if (!existingReview) {
+			return Response.json(
+				{
+					message: "Review not found",
+				},
+				{ status: 404 }
+			);
+		}
+
+		const updatedLikedBy = (existingReview.liked_by as number[]).filter(
+			(id) => id !== validate.data.userId
+		);
+
 		const review = await prisma.novel_review.update({
 			where: { id: validate.data.reviewId },
 			data: {
+				liked_by: updatedLikedBy,
 				likes: {
 					decrement: 1,
 				},

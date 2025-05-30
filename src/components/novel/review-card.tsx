@@ -12,7 +12,9 @@ type userReview = Prisma.novel_reviewGetPayload<{
 
 const ReviewCard = ({ review }: { review: userReview }) => {
 	const [likes, setLikes] = useState(review.likes);
-	const [liked, setLiked] = useState(false);
+	const [liked, setLiked] = useState(
+		review.liked_by.includes(review.user.id)
+	);
 	const [loading, setLoading] = useState(false);
 
 	const likeHandler = async () => {
