@@ -32,7 +32,7 @@ const page = async ({ params }: { params: Promise<{ title: string }> }) => {
 				},
 				take: 1,
 			},
-			novel_review: true,
+			novel_review: { include: { user: true } },
 		},
 	});
 
@@ -112,7 +112,7 @@ const page = async ({ params }: { params: Promise<{ title: string }> }) => {
 					<Button>Bab Selanjutnya</Button>
 				</div>
 			</div>
-			<ReviewSection review={novel.novel_review} />
+			<ReviewSection review={novel.novel_review} novelId={novel.id} />
 		</div>
 	);
 };

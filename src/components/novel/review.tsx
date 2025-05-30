@@ -1,23 +1,44 @@
-import React from "react";
-import { novel_review } from "@/generated/prisma";
+"use client";
+import { useState } from "react";
+import { novel_review, Prisma } from "@/generated/prisma";
 import ReviewCard from "./review-card";
-import { Button } from "../ui/button";
+import CreateReview from "./review-create";
 
-const ReviewSection = ({ review }: { review: novel_review[] }) => {
+type userReview = Prisma.novel_reviewGetPayload<{
+	include: { user: true };
+}>;
+
+const ReviewSection = ({
+	review,
+	novelId,
+}: {
+	review: userReview[];
+	novelId: number;
+}) => {
+	const [novelReview, setNovelReview] = useState<novel_review[]>(review);
+
+	const handleAddedReview = (newReview: novel_review) =>
+		setNovelReview((prev) => [...prev, newReview]);
+
 	return (
 		<div className="space-y-4">
 			<div className="flex justify-between items-center">
 				<h2 className="text-2xl font-semibold">Reviews</h2>
-				<Button>Tulis review</Button>
+				<CreateReview
+					novelId={novelId}
+					addedReview={handleAddedReview}
+				/>
 			</div>
-			{review.length == 0 && (
+			{novelReview.length == 0 && (
 				<p className="text-muted-foreground">
 					Belum ada review untuk novel ini. Ayo jadi yang pertama
 					memberikan review!
 				</p>
 			)}
-			{review.length > 0 &&
-				review.map((value) => <ReviewCard key={value.id} />)}
+			{novelReview.length > 0 &&
+				review.map((value) => (
+					<ReviewCard key={value.id} review={value} />
+				))}
 		</div>
 	);
 };

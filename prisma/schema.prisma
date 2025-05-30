@@ -22,15 +22,15 @@ model user {
 }
 
 model author {
-  id       Int     @id @default(autoincrement())
-  userId   Int     @unique
-  image    String?
-  pen_name String  @unique
-  gender   String
-  email    String
-  phone    String
-  user     user    @relation(fields: [userId], references: [id])
-  novel    novel[]
+  id        Int      @id @default(autoincrement())
+  userId    Int      @unique
+  image     String?
+  pen_name  String   @unique
+  gender    String
+  email     String
+  phone     String
+  user      user     @relation(fields: [userId], references: [id])
+  novel     novel[]
   createdAt DateTime @default(now())
 }
 
@@ -55,37 +55,37 @@ model novel {
 }
 
 model user_library {
-  id      Int    @id @default(autoincrement())
+  id      Int   @id @default(autoincrement())
   userId  Int
   novelId Int
-  user    user   @relation(fields: [userId], references: [id])
-  novel   novel  @relation(fields: [novelId], references: [id])
+  user    user  @relation(fields: [userId], references: [id])
+  novel   novel @relation(fields: [novelId], references: [id])
 }
 
 model novel_review {
   id        Int      @id @default(autoincrement())
   rating    Int
-  review    String
+  review    String?
   novelId   Int
   novel     novel    @relation(fields: [novelId], references: [id])
   userId    Int
   user      user     @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
-  likes     Int
+  likes     Int      @default(0)
 }
 
 model novel_chapter {
-  id      Int               @id @default(autoincrement())
-  chapter Int @default(0)
-  title   String
-  content String
-  novelId Int
-  likes   Int               @default(0)
-  share   Int               @default(0)
-  comment chapter_comment[]
-  novel   novel             @relation(fields: [novelId], references: [id])
-  createdAt DateTime       @default(now())
-  updatedAt DateTime       @default(now()) @updatedAt
+  id        Int               @id @default(autoincrement())
+  chapter   Int               @default(0)
+  title     String
+  content   String
+  novelId   Int
+  likes     Int               @default(0)
+  share     Int               @default(0)
+  comment   chapter_comment[]
+  novel     novel             @relation(fields: [novelId], references: [id])
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @default(now()) @updatedAt
 }
 
 model chapter_comment {
