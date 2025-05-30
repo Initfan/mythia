@@ -3,13 +3,16 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import prisma from "@/lib/prisma";
-import { Dot, Forward, Heart, User2 } from "lucide-react";
+import { Dot, User2 } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import parse from "html-react-parser";
 import { Separator } from "@/components/ui/separator";
 import ReviewSection from "@/components/novel/review";
 import Cover from "@/components/cover";
+import Share from "@/components/novel/share";
+import ButtonLibrary from "@/components/novel/button-library";
+// import ButtonLibrary from "@/components/novel/button-library";
 
 const page = async ({ params }: { params: Promise<{ title: string }> }) => {
 	const { title } = await params;
@@ -79,16 +82,12 @@ const page = async ({ params }: { params: Promise<{ title: string }> }) => {
 							<p className="text-muted-foreground">Dibaca</p>
 						</div>
 					</div>
-					<Button>Mulai Membaca</Button>
+					<div className="space-x-4 flex">
+						<Button>Mulai Membaca</Button>
+						<Share />
+					</div>
 				</div>
-				<div className="flex space-x-2">
-					<Button variant="ghost">
-						<Forward />
-					</Button>
-					<Button variant="ghost">
-						<Heart />
-					</Button>
-				</div>
+				<ButtonLibrary novelId={novel.id} />
 			</div>
 			<div className="space-y-4">
 				<h2 className="text-2xl font-semibold">Sinopsis</h2>
