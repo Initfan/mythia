@@ -1,19 +1,29 @@
+"use client";
 import Image from "next/image";
-import React from "react";
+import React, { useContext } from "react";
 import MythiaLogo from "@/assets/mythia-logo.png";
 import Link from "next/link";
 import { Button } from "./button";
-import { Search, User2 } from "lucide-react";
-import { verifySession } from "@/lib/dal";
+import { Search } from "lucide-react";
 import { Input } from "./input";
+import { Avatar, AvatarFallback } from "./avatar";
+import { userContext } from "@/context/user-context";
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuLabel,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
+} from "./dropdown-menu";
 
 interface props {
 	children?: React.ReactNode;
 	noLink?: boolean;
 }
 
-const Navigation = async ({ children, noLink = false }: props) => {
-	const session = await verifySession();
+const Navigation = ({ children, noLink = false }: props) => {
+	const user = useContext(userContext);
 
 	return (
 		<nav className="flex items-center justify-between py-5 absolute px-[5%] w-full m-auto shadow-md">
@@ -48,28 +58,46 @@ const Navigation = async ({ children, noLink = false }: props) => {
 				</div>
 			</div>
 			{!noLink && (
-				<div className="hidden md:flex space-x-3">
+				<div className="hidden md:flex space-x-3 items-center">
 					<Button variant="outline">
 						<Search />
 					</Button>
 					<Input placeholder="Cari novel..." />
-					{session.isAuth && (
-						<Link href={"/write"}>
-							<Button>Tulis</Button>
-						</Link>
-					)}
-					{!session.isAuth && (
-						<Link href={"/auth/signin"}>
-							<Button variant={"outline"}>Log In</Button>
-						</Link>
-					)}
-					{session.isAuth && (
-						<Link href={`/profile/${session.user?.username}`}>
-							<Button variant={"link"}>
-								<User2 />
-								Profile
-							</Button>
-						</Link>
+					{user ? (
+						<>
+							<Link href={"/write"}>
+								<Button>Tulis</Button>
+							</Link>
+							<DropdownMenu>
+								<DropdownMenuTrigger>
+									<Avatar>
+										<AvatarFallback>
+											{user.username
+												.slice(0, 1)
+												.toUpperCase()}
+										</AvatarFallback>
+									</Avatar>
+								</DropdownMenuTrigger>
+								<DropdownMenuContent>
+									<DropdownMenuLabel>
+										{user.username}
+									</DropdownMenuLabel>
+									<DropdownMenuSeparator />
+									<DropdownMenuItem>Profile</DropdownMenuItem>
+									<DropdownMenuItem>
+										<Link href="/dashboard">Dashboard</Link>
+									</DropdownMenuItem>
+									<DropdownMenuItem>Tulis</DropdownMenuItem>
+									<DropdownMenuItem>Coins</DropdownMenuItem>
+								</DropdownMenuContent>
+							</DropdownMenu>
+						</>
+					) : (
+						<>
+							<Link href={"/auth/signin"}>
+								<Button variant={"outline"}>Log In</Button>
+							</Link>
+						</>
 					)}
 				</div>
 			)}
