@@ -28,7 +28,7 @@ const ReviewSection = ({
 		<div className="space-y-4">
 			<div className="flex justify-between items-center">
 				<h2 className="text-2xl font-semibold">Reviews</h2>
-				{!reviewedBy.includes(user!.id) && (
+				{user && !reviewedBy.includes(user.id) && (
 					<CreateReview
 						novelId={novelId}
 						addedReview={handleAddedReview}
