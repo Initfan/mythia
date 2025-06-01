@@ -1,36 +1,103 @@
+// prisma/seed.ts
+
+import { faker } from "@faker-js/faker";
 import { PrismaClient } from "@prisma/client";
-
 const prisma = new PrismaClient();
+
 async function main() {
-	const genres = [
-		"urban",
-		"fantasy",
-		"history",
-		"sci-fi",
-		"teen",
-		"horor",
-		"sports",
-		"games",
-		"eastenrn",
-		"realistic",
-		"action",
-		"war",
-	];
+	console.log("🌱 Seeding data...");
 
-	await prisma.genre.createMany({
-		data: genres.map((v) => ({ genre: v, genreType: "male" })),
-	});
+	const users = [];
+	const authors = [];
+	for (let i = 0; i < 5; i++) {
+		const user = await prisma.user.create({
+			data: {
+				username: faker.person.fullName(),
+				password: faker.internet.password(),
+				email: faker.internet.email(),
+			},
+		});
 
-	const genre = await prisma.genre.findMany();
-	console.log(genre);
+		const author = await prisma.author.create({
+			data: {
+				pen_name: faker.person.fullName(),
+				phone: faker.phone.number(),
+				image: faker.image.avatar(),
+				gender: faker.helpers.arrayElement(["male", "female"]),
+				email: faker.internet.email(),
+				userId: user.id,
+			},
+		});
+		users.push(user);
+		authors.push(author);
+	}
+
+	for (let i = 0; i < 10; i++) {
+		const author = faker.helpers.arrayElement(authors);
+
+		const novel = await prisma.novel.create({
+			data: {
+				title: faker.lorem.words(3),
+				genre: faker.music.genre(),
+				synopsis: faker.lorem.sentences(2),
+				content_rating: faker.helpers.arrayElement([
+					"G",
+					"PG",
+					"PG-13",
+					"R",
+				]),
+				authorId: author.id,
+				cover: faker.image.urlPicsumPhotos(),
+				target_audience: faker.helpers.arrayElement([
+					"Adults",
+					"Teens",
+					"Kids",
+				]),
+				views: faker.number.int({ min: 0, max: 1000 }),
+				status: faker.helpers.arrayElement(["On going", "Completed"]),
+				reviewd_by: users.map((u) => u.id),
+			},
+		});
+
+		// Create chapters for each novel
+		for (let ch = 1; ch <= 2; ch++) {
+			await prisma.novel_chapter.create({
+				data: {
+					chapter: ch,
+					title: `Chapter ${ch}: ${faker.lorem.words(2)}`,
+					content: faker.lorem.paragraphs(3),
+					novelId: novel.id,
+				},
+			});
+		}
+
+		// Create reviews for each novel
+		for (let j = 0; j < 2; j++) {
+			const user = users[j];
+
+			await prisma.novel_review.create({
+				data: {
+					rating: faker.number.int({ min: 1, max: 5 }),
+					review: faker.lorem.sentences(2),
+					novelId: novel.id,
+					userId: user.id,
+					likes: faker.number.int({ min: 0, max: 100 }),
+					liked_by: users
+						.filter((u) => u.id !== user.id)
+						.map((u) => u.id),
+				},
+			});
+		}
+	}
+
+	console.log("✅ Seeding complete!");
 }
 
 main()
-	.then(async () => {
-		await prisma.$disconnect();
+	.catch((e) => {
+		console.error("❌ Seeding failed:", e);
+		process.exit(1);
 	})
-	.catch(async (e) => {
-		console.log(e);
+	.finally(async () => {
 		await prisma.$disconnect();
-		process.exit();
 	});
