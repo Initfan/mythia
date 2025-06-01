@@ -24,7 +24,7 @@ const page = () => {
 				active={active}
 				step={["Profile", "Buat Novel", "Tulis Cerita"]}
 			/>
-			<main className="space-x-8 flex md:w-2/3 px-8 md:px-0 lg:w-1/2 mx-auto">
+			<main className="space-x-8 flex lg:w-2/3 px-8 md:px-0 mx-auto">
 				{active == 1 && <WriterProfile activePage={setActivePage} />}
 				{active == 2 && <WriteNovel activePage={setActivePage} />}
 				{active == 3 && <WriteChapter />}

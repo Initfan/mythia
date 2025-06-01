@@ -26,7 +26,7 @@ const Navigation = ({ children, noLink = false }: props) => {
 	const user = useContext(userContext);
 
 	return (
-		<nav className="flex items-center justify-between py-5 absolute px-[5%] w-full m-auto shadow-md">
+		<nav className="flex items-center justify-between py-6 px-[5%] w-full m-auto shadow-md">
 			<div className="space-x-12 flex items-center">
 				<Link href={"/"} className="flex items-center space-x-2">
 					<Image
@@ -39,19 +39,19 @@ const Navigation = ({ children, noLink = false }: props) => {
 				<div className="space-x-6 hidden lg:block">
 					<Link
 						href="/browse"
-						className="text-sm font-semibold hover:underline"
+						className="text-sm font-medium hover:underline"
 					>
 						Temukan
 					</Link>
 					<Link
 						href="/library"
-						className="text-sm font-semibold hover:underline"
+						className="text-sm font-medium hover:underline"
 					>
 						Pustaka
 					</Link>
 					<Link
 						href="/history"
-						className="text-sm font-semibold hover:underline"
+						className="text-sm font-medium hover:underline"
 					>
 						Riwayat
 					</Link>
@@ -59,39 +59,35 @@ const Navigation = ({ children, noLink = false }: props) => {
 			</div>
 			{!noLink && (
 				<div className="hidden md:flex space-x-3 items-center">
+					<Link href={"/write"}>
+						<Button>Tulis</Button>
+					</Link>
+					<Input placeholder="Cari novel..." />
 					<Button variant="outline">
 						<Search />
 					</Button>
-					<Input placeholder="Cari novel..." />
 					{user ? (
-						<>
-							<Link href={"/write"}>
-								<Button>Tulis</Button>
-							</Link>
-							<DropdownMenu>
-								<DropdownMenuTrigger>
-									<Avatar>
-										<AvatarFallback>
-											{user.username
-												.slice(0, 1)
-												.toUpperCase()}
-										</AvatarFallback>
-									</Avatar>
-								</DropdownMenuTrigger>
-								<DropdownMenuContent>
-									<DropdownMenuLabel>
-										{user.username}
-									</DropdownMenuLabel>
-									<DropdownMenuSeparator />
-									<DropdownMenuItem>Profile</DropdownMenuItem>
-									<DropdownMenuItem>
-										<Link href="/dashboard">Dashboard</Link>
-									</DropdownMenuItem>
-									<DropdownMenuItem>Tulis</DropdownMenuItem>
-									<DropdownMenuItem>Coins</DropdownMenuItem>
-								</DropdownMenuContent>
-							</DropdownMenu>
-						</>
+						<DropdownMenu>
+							<DropdownMenuTrigger className="outline-none cursor-pointer">
+								<Avatar>
+									<AvatarFallback>
+										{user.username
+											.slice(0, 1)
+											.toUpperCase()}
+									</AvatarFallback>
+								</Avatar>
+							</DropdownMenuTrigger>
+							<DropdownMenuContent>
+								<DropdownMenuLabel>
+									Halo, {user.username.split(" ")[0]}
+								</DropdownMenuLabel>
+								<DropdownMenuSeparator />
+								<DropdownMenuItem>Profile</DropdownMenuItem>
+								<DropdownMenuItem>Koin</DropdownMenuItem>
+								<DropdownMenuSeparator />
+								<DropdownMenuItem>Pengaturan</DropdownMenuItem>
+							</DropdownMenuContent>
+						</DropdownMenu>
 					) : (
 						<>
 							<Link href={"/auth/signin"}>
