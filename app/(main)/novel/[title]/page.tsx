@@ -51,8 +51,8 @@ const page = async ({ params }: { params: Promise<{ title: string }> }) => {
 				</div>
 				<div className="flex flex-col space-y-6 flex-1 items-start">
 					<h1 className="text-4xl font-semibold">{novel.title}</h1>
-					<div className="flex space-x-2 text-muted-foreground">
-						<Badge className="text-purple-500">{novel.genre}</Badge>
+					<div className="flex space-x-2">
+						<Badge>{novel.genre}</Badge>
 						<Dot />
 						<p>On going</p>
 					</div>
