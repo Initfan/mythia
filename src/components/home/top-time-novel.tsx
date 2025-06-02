@@ -24,7 +24,7 @@ const TopTimeNovel = () => {
 			</h1>
 			<Carousel
 				className="flex items-center relative gap-6"
-				plugins={[Autoplay({ delay: 5000 })]}
+				plugins={[Autoplay({ delay: 5000, stopOnInteraction: false })]}
 			>
 				<div className="flex-1 mx-auto">
 					<CarouselContent className="-ml-8">

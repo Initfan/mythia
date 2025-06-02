@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
 	images: {
-		domains: ["jygqe5edc8.ufs.sh", "picsum.photos"],
+		domains: ["jygqe5edc8.ufs.sh", "picsum.photos", "cdn.jsdelivr.net"],
 		remotePatterns: [
 			{
 				protocol: "https",
@@ -13,6 +13,10 @@ const nextConfig: NextConfig = {
 			{
 				protocol: "https",
 				hostname: "picsum.photos",
+			},
+			{
+				protocol: "https",
+				hostname: "cdn.jsdelivr.net",
 			},
 		],
 	},

@@ -13,7 +13,7 @@ const layout = async ({
 	return (
 		<UserContext user={user!}>
 			<Navigation />
-			<main className="py-5 pb-6 w-[90vw] mx-auto">{children}</main>
+			<main className="pb-6 w-[90vw] mx-auto">{children}</main>
 		</UserContext>
 	);
 };
