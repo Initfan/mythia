@@ -19,7 +19,7 @@ const page = async () => {
 		<div className="space-y-4 pb-12">
 			<EventNovel />
 			<PopularNovel novel={novel} />
-			<TopTimeNovel />
+			<TopTimeNovel novel={novel} />
 			<NewestNovel novel={novel} />
 			<PopularNovelGenre genre={genre} />
 		</div>
