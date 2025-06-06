@@ -3,7 +3,9 @@ import { Carousel, CarouselContent, CarouselItem } from "../ui/carousel";
 import CardNovel from "./card-novel";
 import { Prisma } from "@prisma/client";
 
-type NovelChapter = Prisma.novelGetPayload<{ include: { chapter: true } }>;
+type NovelChapter = Prisma.novelGetPayload<{
+	include: { chapter: true; author: { select: { pen_name: true } } };
+}>;
 
 const NewestNovel = ({ novel }: { novel: NovelChapter[] }) => {
 	return (
