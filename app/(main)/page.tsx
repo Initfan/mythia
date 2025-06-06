@@ -1,10 +1,10 @@
 import PopularNovelGenre from "@/components/home/popular-novel-genre";
 import prisma from "@/lib/prisma";
-import TopTimeNovel from "@/components/home/top-time-novel";
 import React from "react";
 import NewestNovel from "@/components/home/newest-novel";
 import EventNovel from "@/components/home/event-novel";
 import PopularNovel from "@/components/home/popular-novel";
+import TopWeeklyNovel from "@/components/home/top-weekly-novel";
 
 const page = async () => {
 	const novel = await prisma.novel.findMany({
@@ -19,7 +19,7 @@ const page = async () => {
 		<div className="space-y-4 pb-12">
 			<EventNovel />
 			<PopularNovel novel={novel} />
-			<TopTimeNovel novel={novel} />
+			<TopWeeklyNovel />
 			<NewestNovel novel={novel} />
 			<PopularNovelGenre genre={genre} />
 		</div>
