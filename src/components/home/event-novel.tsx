@@ -19,31 +19,21 @@ const EventNovel = () => {
 			>
 				<CarouselPrevious className="hidden group-hover:flex absolute left-14 z-10 bg-primary!" />
 				<CarouselContent>
-					<CarouselItem>
-						<Link
-							href={`/event/book-day`}
-							className="block h-[350px] relative"
-						>
-							<Image
-								src="/event-world-book-day.jpg"
-								alt="event world book day"
-								className="size-full object-cover rounded"
-								fill
-							/>
-						</Link>
+					<CarouselItem className="block h-[350px] relative">
+						<Image
+							src="/event-world-book-day.jpg"
+							alt="event world book day"
+							className="size-full object-cover rounded"
+							fill
+						/>
 					</CarouselItem>
-					<CarouselItem>
-						<Link
-							href={`/event/book-day`}
-							className="block h-[350px] relative"
-						>
-							<Image
-								src="/event-world-book-day-1.jpg"
-								alt="event world book day"
-								className="size-full object-cover rounded"
-								fill
-							/>
-						</Link>
+					<CarouselItem className="block h-[350px] relative">
+						<Image
+							src="/event-world-book-day-1.jpg"
+							alt="event world book day"
+							className="size-full object-cover rounded"
+							fill
+						/>
 					</CarouselItem>
 				</CarouselContent>
 				<CarouselNext className="hidden group-hover:flex absolute right-14 z-10 bg-primary!" />
