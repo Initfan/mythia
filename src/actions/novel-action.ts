@@ -14,3 +14,13 @@ export const novelByGenre = async (genre: string) => {
 
 	return novel;
 };
+
+export const searchNovel = async (title: string) => {
+	const novel = await prisma.novel.findMany({
+		where: { title: { mode: "insensitive", contains: title } },
+		include: {
+			chapter: true,
+		},
+	});
+	return novel;
+};

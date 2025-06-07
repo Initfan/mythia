@@ -8,7 +8,6 @@ import Link from "next/link";
 type NovelChapter = Prisma.novelGetPayload<{
 	include: {
 		chapter: true;
-		author: { select: { pen_name: true } };
 	};
 }>;
 

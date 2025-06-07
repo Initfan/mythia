@@ -1,11 +1,9 @@
 "use client";
 import Image from "next/image";
-import React, { useContext } from "react";
+import React, { useContext, useRef } from "react";
 import MythiaLogo from "@/assets/mythia-logo.png";
 import Link from "next/link";
 import { Button } from "./button";
-import { Search } from "lucide-react";
-import { Input } from "./input";
 import { Avatar, AvatarFallback } from "./avatar";
 import { userContext } from "@/context/user-context";
 import {
@@ -16,14 +14,25 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "./dropdown-menu";
+import { Input } from "./input";
+import { Search } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface props {
 	children?: React.ReactNode;
 	noLink?: boolean;
+	noSearch?: boolean;
 }
 
-const Navigation = ({ children, noLink = false }: props) => {
+const Navigation = ({ children, noLink = false, noSearch = false }: props) => {
 	const user = useContext(userContext);
+	const router = useRouter();
+	const ref = useRef<HTMLInputElement>(null);
+
+	const handleSubmit = () => {
+		if (ref.current?.value.trim().length == 0) return;
+		router.push(`/search?title=${ref.current?.value}`);
+	};
 
 	return (
 		<nav className="flex items-center justify-between py-6 px-[5%] w-full m-auto shadow-md">
@@ -58,14 +67,22 @@ const Navigation = ({ children, noLink = false }: props) => {
 				</div>
 			</div>
 			{!noLink && (
-				<div className="hidden md:flex space-x-3 items-center">
+				<div className="hidden md:flex space-x-2 items-center">
+					{!noSearch && (
+						<form action={handleSubmit} className="flex space-x-1">
+							<Input
+								placeholder="Cari novel..."
+								ref={ref}
+								className="w-[300px]"
+							/>
+							<Button variant="outline" type="submit">
+								<Search />
+							</Button>
+						</form>
+					)}
 					<Link href={"/write"}>
 						<Button>Tulis</Button>
 					</Link>
-					<Input placeholder="Cari novel..." />
-					<Button variant="outline">
-						<Search />
-					</Button>
 					{user ? (
 						<DropdownMenu>
 							<DropdownMenuTrigger className="outline-none cursor-pointer">
@@ -89,11 +106,9 @@ const Navigation = ({ children, noLink = false }: props) => {
 							</DropdownMenuContent>
 						</DropdownMenu>
 					) : (
-						<>
-							<Link href={"/auth/signin"}>
-								<Button variant={"outline"}>Log In</Button>
-							</Link>
-						</>
+						<Link href={"/auth/signin"}>
+							<Button variant={"outline"}>Log In</Button>
+						</Link>
 					)}
 				</div>
 			)}
