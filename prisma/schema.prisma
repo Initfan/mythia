@@ -108,10 +108,4 @@ model tag_novel {
 model genre {
   id         Int        @id @default(autoincrement())
   genre      String
-  genre_type GenderType @default(male)
-}
-
-enum GenderType {
-  male
-  female
 }
