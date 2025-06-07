@@ -1,6 +1,6 @@
 generator client {
   provider        = "prisma-client-js"
-  // output          = "../src/generated/prisma"
+  output = "../src/generated" // disable when seed data
   previewFeatures = ["relationJoins"]
 }
 
@@ -29,9 +29,9 @@ model author {
   gender    String
   email     String
   phone     String
+  createdAt DateTime @default(now())
   user      user     @relation(fields: [userId], references: [id])
   novel     novel[]
-  createdAt DateTime @default(now())
 }
 
 model novel {
@@ -45,22 +45,22 @@ model novel {
   target_audience String
   views           Int             @default(0)
   status          String          @default("On going")
-  author          author          @relation(fields: [authorId], references: [id])
   reviewd_by      Int[]
-  novel_review    novel_review[]
-  chapter         novel_chapter[]
-  tag             tag_novel[]
-  user_library    user_library[]
   createdAt       DateTime        @default(now())
   updatedAt       DateTime        @default(now()) @updatedAt
+  author          author          @relation(fields: [authorId], references: [id])
+  chapter         novel_chapter[]
+  novel_review    novel_review[]
+  tag             tag_novel[]
+  user_library    user_library[]
 }
 
 model user_library {
   id      Int   @id @default(autoincrement())
   userId  Int
   novelId Int
-  user    user  @relation(fields: [userId], references: [id])
   novel   novel @relation(fields: [novelId], references: [id])
+  user    user  @relation(fields: [userId], references: [id])
 }
 
 model novel_review {
@@ -68,12 +68,12 @@ model novel_review {
   rating    Int
   review    String?
   novelId   Int
-  novel     novel    @relation(fields: [novelId], references: [id])
   userId    Int
-  user      user     @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
   likes     Int      @default(0)
   liked_by  Int[]
+  novel     novel    @relation(fields: [novelId], references: [id])
+  user      user     @relation(fields: [userId], references: [id])
 }
 
 model novel_chapter {
@@ -83,10 +83,10 @@ model novel_chapter {
   content   String
   novelId   Int
   views     Int               @default(0)
-  comment   chapter_comment[]
-  novel     novel             @relation(fields: [novelId], references: [id])
   createdAt DateTime          @default(now())
   updatedAt DateTime          @default(now()) @updatedAt
+  comment   chapter_comment[]
+  novel     novel             @relation(fields: [novelId], references: [id])
 }
 
 model chapter_comment {
@@ -106,6 +106,6 @@ model tag_novel {
 }
 
 model genre {
-  id         Int        @id @default(autoincrement())
-  genre      String
+  id    Int    @id @default(autoincrement())
+  genre String
 }
