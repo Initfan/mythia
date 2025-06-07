@@ -24,3 +24,8 @@ export const searchNovel = async (title: string) => {
 	});
 	return novel;
 };
+
+export const getAllGenre = async () => {
+	const genre = await prisma.genre.findMany();
+	return genre;
+};
