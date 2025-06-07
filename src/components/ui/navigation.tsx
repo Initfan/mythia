@@ -45,6 +45,7 @@ const Navigation = ({ children, noLink = false, noSearch = false }: props) => {
 						src={MythiaLogo}
 						alt="mythia application logo"
 						width={60}
+						priority={true}
 					/>
 					<h3 className="text-xl font-semibold">Mythia</h3>
 				</Link>
