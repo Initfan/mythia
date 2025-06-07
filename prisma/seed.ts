@@ -88,7 +88,7 @@ async function main() {
 						"R",
 					]),
 					authorId: author.id,
-					cover: cover[i].urls.full,
+					cover: cover[i].urls.regular,
 					target_audience: faker.helpers.arrayElement([
 						"dewasa",
 						"remaja",
