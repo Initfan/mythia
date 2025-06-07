@@ -6,7 +6,7 @@ import { Suspense } from "react";
 const page = async ({
 	searchParams,
 }: {
-	searchParams: Promise<{ title: string }>;
+	searchParams: Promise<{ title: string; page: string }>;
 }) => {
 	const title = (await searchParams).title;
 
@@ -21,7 +21,7 @@ const page = async ({
 				<h1 className="text-3xl font-semibold">
 					Novel &quot;{title}&quot;
 				</h1>
-				<ScrollArea className="h-full">
+				<ScrollArea className="h-full pb-8">
 					<Suspense fallback={<Loading />}>
 						<NovelList params={searchParams} />
 					</Suspense>

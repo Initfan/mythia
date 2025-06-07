@@ -26,7 +26,7 @@ const SidebarSearch = () => {
 	return (
 		<div className="space-y-3">
 			{sidebarContent.map((v) => (
-				<>
+				<div key={v.title}>
 					<h2 className="text-2xl font-semibold">{v.title}</h2>
 					<div>
 						{v.children.map((v, i) => (
@@ -38,7 +38,7 @@ const SidebarSearch = () => {
 							</div>
 						))}
 					</div>
-				</>
+				</div>
 			))}
 			<h2 className="text-2xl font-semibold">Genre</h2>
 			<div className="flex flex-wrap gap-2">

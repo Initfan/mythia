@@ -15,14 +15,21 @@ export const novelByGenre = async (genre: string) => {
 	return novel;
 };
 
-export const searchNovel = async (title: string) => {
+export const searchNovel = async (title: string, page?: string) => {
+	const total = await prisma.novel.count({
+		where: { title: { mode: "insensitive", contains: title } },
+	});
+
 	const novel = await prisma.novel.findMany({
 		where: { title: { mode: "insensitive", contains: title } },
 		include: {
 			chapter: true,
 		},
+		skip: page ? (parseInt(page) - 1) * 10 : 0,
+		take: 10,
 	});
-	return novel;
+
+	return { novel, total };
 };
 
 export const getAllGenre = async () => {

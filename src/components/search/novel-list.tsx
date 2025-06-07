@@ -2,17 +2,19 @@ import CardNovel, { LoadingCardNovel } from "../home/card-novel";
 
 import { searchNovel } from "@/actions/novel-action";
 import { CircleAlert } from "lucide-react";
+import { SearchPagination } from "./pagination";
 
 const NovelList = async ({
 	params,
 }: {
-	params: Promise<{ title: string }>;
+	params: Promise<{ title: string; page: string }>;
 }) => {
 	const title = (await params).title;
+	const page = (await params).page;
 
-	const novel = await searchNovel(title);
+	const data = await searchNovel(title, page);
 
-	if (novel.length == 0)
+	if (data.total == 0)
 		return (
 			<div className="text-sm flex space-x-2 text-destructive">
 				<CircleAlert size={20} />
@@ -21,10 +23,17 @@ const NovelList = async ({
 		);
 
 	return (
-		<div className="grid grid-cols-2 gap-4">
-			{novel.map((v, i) => (
-				<CardNovel key={i} v={v} />
-			))}
+		<div className="pb-8 space-y-6">
+			<div className="grid grid-cols-2 gap-4">
+				{data.novel.map((v, i) => (
+					<CardNovel key={i} v={v} />
+				))}
+			</div>
+			<SearchPagination
+				title={title}
+				page={page}
+				pageSize={Math.ceil(data.total / 10)}
+			/>
 		</div>
 	);
 };
