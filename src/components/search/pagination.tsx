@@ -23,7 +23,14 @@ export function SearchPagination({
 				<PaginationContent>
 					<PaginationItem>
 						<PaginationPrevious
-							href={`?title=${title}&page=${parseInt(page) - 1}`}
+							href={
+								parseInt(page) > 1
+									? `?title=${title}&page=${
+											parseInt(page) - 1
+									  }`
+									: "#"
+							}
+							className={parseInt(page) == 1 ? "text-muted" : ""}
 						/>
 					</PaginationItem>
 					{Array.from({ length: pageSize }).map((_, i) => (
@@ -41,7 +48,16 @@ export function SearchPagination({
 					</PaginationItem>
 					<PaginationItem>
 						<PaginationNext
-							href={`?title=${title}&page=${parseInt(page) + 1}`}
+							href={
+								parseInt(page) != pageSize
+									? `?title=${title}&page=${
+											parseInt(page) + 1
+									  }`
+									: "#"
+							}
+							className={
+								parseInt(page) == pageSize ? "text-muted" : ""
+							}
 						/>
 					</PaginationItem>
 				</PaginationContent>

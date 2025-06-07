@@ -10,7 +10,7 @@ const NovelList = async ({
 	params: Promise<{ title: string; page: string }>;
 }) => {
 	const title = (await params).title;
-	const page = (await params).page;
+	const page = (await params).page || "1";
 
 	const data = await searchNovel(title, page);
 
