@@ -5,11 +5,13 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function main() {
+	const seed_user = 20;
+	const seed_novel = 40;
 	console.log("🌱 Seeding data...");
 
 	const users = [];
 	const authors = [];
-	for (let i = 0; i < 5; i++) {
+	for (let i = 0; i < seed_user; i++) {
 		const user = await prisma.user.create({
 			data: {
 				username: faker.person.fullName(),
@@ -23,7 +25,7 @@ async function main() {
 				pen_name: faker.person.fullName(),
 				phone: faker.phone.number(),
 				image: faker.image.avatar(),
-				gender: faker.helpers.arrayElement(["male", "female"]),
+				gender: faker.helpers.arrayElement(["pria", "perempuan"]),
 				email: faker.internet.email(),
 				userId: user.id,
 			},
@@ -32,7 +34,7 @@ async function main() {
 		authors.push(author);
 	}
 
-	for (let i = 0; i < 10; i++) {
+	for (let i = 0; i < seed_novel; i++) {
 		const author = faker.helpers.arrayElement(authors);
 
 		const novel = await prisma.novel.create({
@@ -49,12 +51,12 @@ async function main() {
 				authorId: author.id,
 				cover: faker.image.urlPicsumPhotos(),
 				target_audience: faker.helpers.arrayElement([
-					"Adults",
-					"Teens",
-					"Kids",
+					"dewasa",
+					"remaja",
+					"anak-anak",
 				]),
 				views: faker.number.int({ min: 0, max: 1000 }),
-				status: faker.helpers.arrayElement(["On going", "Completed"]),
+				status: faker.helpers.arrayElement(["", ""]),
 				reviewd_by: users.map((u) => u.id),
 			},
 		});
