@@ -18,6 +18,23 @@ export const createLibrary = async (
 	return library;
 };
 
+export const userLibraryNovel = async (
+	userId: number
+): Promise<libraryType[]> => {
+	try {
+		const libraries = await prisma.user_library.findMany({
+			where: { userId },
+			include: {
+				library_detail: true,
+			},
+		});
+
+		return libraries;
+	} catch {
+		throw new Error("Library tidak ditemukan");
+	}
+};
+
 export const userLibrary = async (userId: number): Promise<libraryType[]> => {
 	const libraries = await prisma.user_library.findMany({
 		where: { userId },

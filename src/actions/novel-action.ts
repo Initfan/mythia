@@ -94,6 +94,15 @@ export const searchNovel = async (
 	return { total, novel };
 };
 
+export const getNovelsId = async (novelsId: number[]) => {
+	const novels = await prisma.novel.findMany({
+		where: { id: { in: novelsId } },
+		include: { chapter: true },
+	});
+
+	return novels;
+};
+
 export const getAllGenre = async () => {
 	const genre = await prisma.genre.findMany();
 	return genre;
