@@ -110,6 +110,13 @@ const Navigation = ({ children, noLink = false, noSearch = false }: props) => {
 								</DropdownMenuLabel>
 								<DropdownMenuSeparator />
 								<DropdownMenuItem>Profile</DropdownMenuItem>
+								{user.role == "author" && (
+									<DropdownMenuItem>
+										<Link href="/dashboard/novel">
+											Novelku
+										</Link>
+									</DropdownMenuItem>
+								)}
 								<DropdownMenuItem>Koin</DropdownMenuItem>
 								<DropdownMenuSeparator />
 								<DropdownMenuItem>Pengaturan</DropdownMenuItem>
