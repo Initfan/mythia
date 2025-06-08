@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import React, { useActionState, useContext, useRef } from "react";
+import React, { useContext } from "react";
 import MythiaLogo from "@/assets/mythia-logo.png";
 import Link from "next/link";
 import { Button } from "./button";
@@ -14,9 +14,7 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "./dropdown-menu";
-import { Input } from "./input";
-import { Loader2, Search } from "lucide-react";
-import { useRouter } from "next/navigation";
+import SearchNovel from "../search-novel";
 
 interface props {
 	children?: React.ReactNode;
@@ -26,16 +24,6 @@ interface props {
 
 const Navigation = ({ children, noLink = false, noSearch = false }: props) => {
 	const user = useContext(userContext);
-	const router = useRouter();
-	const ref = useRef<HTMLInputElement>(null);
-
-	const handleSubmit = (): boolean => {
-		if (ref.current?.value.trim().length == 0) return false;
-		router.push(`/search?title=${ref.current?.value}`);
-		return true;
-	};
-
-	const [, action, pending] = useActionState(handleSubmit, false);
 
 	return (
 		<nav className="flex items-center justify-between py-6 px-[5%] w-full m-auto shadow-md">
@@ -72,26 +60,7 @@ const Navigation = ({ children, noLink = false, noSearch = false }: props) => {
 			</div>
 			{!noLink && (
 				<div className="hidden md:flex space-x-2 items-center">
-					{!noSearch && (
-						<form action={action} className="flex space-x-1">
-							<Input
-								placeholder="Cari novel..."
-								ref={ref}
-								className="w-[300px]"
-							/>
-							<Button
-								variant="outline"
-								type="submit"
-								disabled={pending}
-							>
-								{pending ? (
-									<Loader2 className="animate-spin" />
-								) : (
-									<Search />
-								)}
-							</Button>
-						</form>
-					)}
+					{!noSearch && <SearchNovel />}
 					<Link href={"/write"}>
 						<Button>Tulis</Button>
 					</Link>

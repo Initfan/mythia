@@ -49,7 +49,7 @@ const PopularNovelGenre = ({ genre }: { genre: genre[] }) => {
 						<p className="text-muted-foreground">
 							Novel bergenre {selectedGenre} tidak ada.
 						</p>
-					) : (
+					) : novel.length > 0 ? (
 						<Carousel>
 							<CarouselContent>
 								{novel.map((v) => (
@@ -62,8 +62,7 @@ const PopularNovelGenre = ({ genre }: { genre: genre[] }) => {
 								))}
 							</CarouselContent>
 						</Carousel>
-					)}
-					{isPending && (
+					) : (
 						<div className="grid grid-cols-2 gap-4">
 							<LoadingCardNovel />
 							<LoadingCardNovel />
