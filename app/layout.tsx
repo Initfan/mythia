@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
+import UserContext from "@/context/user-context";
+import { verifySession } from "@/lib/dal";
 
 export const metadata: Metadata = {
 	title: "Mythia - Baca novel",
@@ -14,11 +16,13 @@ export const metadata: Metadata = {
 	},
 };
 
-export default function RootLayout({
+export default async function RootLayout({
 	children,
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
+	const { user } = await verifySession();
+
 	return (
 		<html lang="id" suppressHydrationWarning>
 			<body>
@@ -28,7 +32,9 @@ export default function RootLayout({
 					enableSystem
 					disableTransitionOnChange
 				>
-					<main>{children}</main>
+					<UserContext user={user!}>
+						<main>{children}</main>
+					</UserContext>
 					<Toaster />
 				</ThemeProvider>
 			</body>

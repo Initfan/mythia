@@ -1,16 +1,16 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
 import { Instagram, Twitter } from "lucide-react";
 import SearchNovel from "../search-novel";
 import { Button } from "../ui/button";
-import { Prisma } from "@prisma/client";
 import { Avatar, AvatarFallback } from "../ui/avatar";
+import { useContext } from "react";
+import { userContext } from "@/context/user-context";
 
-const Footer = ({
-	user,
-}: {
-	user?: Prisma.userGetPayload<{ include: { author: true } }>;
-}) => {
+const Footer = () => {
+	const user = useContext(userContext);
+
 	return (
 		<div className="px-[5%] py-6 grid grid-cols-2 items-start gap-8">
 			<div className="space-y-4">
