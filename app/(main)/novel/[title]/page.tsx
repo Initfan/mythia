@@ -10,9 +10,10 @@ import parse from "html-react-parser";
 import { Separator } from "@/components/ui/separator";
 import ReviewSection from "@/components/novel/review";
 import Share from "@/components/novel/share";
-import ButtonLibrary from "@/components/novel/button-library";
+// import ButtonLibrary from "@/components/novel/button-library";
 import Image from "next/image";
 import ChapterList from "@/components/novel/chapter-list";
+import ButtonLike from "@/components/novel/button-like";
 
 const page = async ({ params }: { params: Promise<{ title: string }> }) => {
 	const { title } = await params;
@@ -97,7 +98,8 @@ const page = async ({ params }: { params: Promise<{ title: string }> }) => {
 						<Share />
 					</div>
 				</div>
-				<ButtonLibrary novelId={novel.id} />
+				{/* <ButtonLibrary novelId={novel.id} /> */}
+				<ButtonLike novelId={novel.id} />
 			</div>
 			<div className="space-y-4">
 				<h2 className="text-2xl font-semibold">Sinopsis</h2>

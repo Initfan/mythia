@@ -1,6 +1,6 @@
 generator client {
   provider        = "prisma-client-js"
-  output          = "../src/generated" // disable when seed data
+  output          = "../src/generated"
   previewFeatures = ["relationJoins"]
 }
 
@@ -35,7 +35,7 @@ model author {
 }
 
 model novel {
-  id              Int             @id @default(autoincrement())
+  id              Int              @id @default(autoincrement())
   title           String
   genre           String
   synopsis        String
@@ -43,25 +43,34 @@ model novel {
   authorId        Int
   cover           String
   target_audience String
-  views           Int             @default(0)
-  status          String          @default("berjalan")
-  type            String          @default("gratis")
+  views           Int              @default(0)
+  status          String           @default("berjalan")
+  liked_by        Int[]
   reviewd_by      Int[]
-  createdAt       DateTime        @default(now())
-  updatedAt       DateTime        @default(now()) @updatedAt
-  author          author          @relation(fields: [authorId], references: [id])
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @default(now()) @updatedAt
+  type            String           @default("gratis")
+  library_detail  library_detail[]
+  author          author           @relation(fields: [authorId], references: [id])
   chapter         novel_chapter[]
   novel_review    novel_review[]
   tag             tag_novel[]
-  user_library    user_library[]
 }
 
 model user_library {
-  id      Int   @id @default(autoincrement())
-  userId  Int
-  novelId Int
-  novel   novel @relation(fields: [novelId], references: [id])
-  user    user  @relation(fields: [userId], references: [id])
+  id             Int              @id @default(autoincrement())
+  userId         Int
+  title          String?
+  library_detail library_detail[]
+  user           user             @relation(fields: [userId], references: [id])
+}
+
+model library_detail {
+  id        Int          @id @default(autoincrement())
+  libraryId Int
+  novelId   Int
+  library   user_library @relation(fields: [libraryId], references: [id])
+  novel     novel        @relation(fields: [novelId], references: [id])
 }
 
 model novel_review {

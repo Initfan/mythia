@@ -1,5 +1,5 @@
 "use client";
-import { Prisma } from "@/generated/prisma";
+import { Prisma } from "@/generated";
 import { createContext, ReactNode } from "react";
 
 type userAuthor = Prisma.userGetPayload<{ include: { author: true } }>;

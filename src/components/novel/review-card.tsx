@@ -2,7 +2,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Star, ThumbsUp } from "lucide-react";
 import { Button } from "../ui/button";
-import { Prisma } from "@/generated/prisma";
+import { Prisma } from "@/generated";
 import { toast } from "sonner";
 import { useState } from "react";
 

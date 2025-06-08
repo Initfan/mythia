@@ -98,3 +98,72 @@ export const getAllGenre = async () => {
 	const genre = await prisma.genre.findMany();
 	return genre;
 };
+
+export const likedNovel = async (id: number, userId: number) => {
+	try {
+		const liked = await prisma.novel.findFirst({
+			where: { id, liked_by: { has: userId } },
+			select: { title: true },
+		});
+
+		return {
+			message: "Telah memberi like novel",
+			novel: liked?.title,
+			liked: true,
+		};
+	} catch (error) {
+		return {
+			message: "Belum memberi like novel",
+			error,
+		};
+	}
+};
+
+export const likeNovel = async (id: number, userId: number) => {
+	try {
+		const liked = await prisma.novel.update({
+			where: { id },
+			data: { liked_by: { push: userId } },
+			select: { title: true },
+		});
+
+		return {
+			message: "Berhasil memberi like novel",
+			novel: liked.title,
+			liked: true,
+		};
+	} catch (error) {
+		return {
+			message: "Gagal memberi like novel",
+			error,
+		};
+	}
+};
+
+export const unlikeNovel = async (id: number, userId: number) => {
+	try {
+		const removeLike = await prisma.novel.findUnique({
+			where: { id },
+			select: { liked_by: true },
+		});
+
+		const updatedLike = removeLike?.liked_by.filter((v) => v != userId);
+
+		const liked = await prisma.novel.update({
+			where: { id },
+			data: { liked_by: { set: updatedLike } },
+			select: { title: true },
+		});
+
+		return {
+			message: "Berhasil memberi like novel",
+			novel: liked.title,
+			liked: false,
+		};
+	} catch (error) {
+		return {
+			message: "Gagal memberi like novel",
+			error,
+		};
+	}
+};

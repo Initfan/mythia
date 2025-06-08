@@ -4,7 +4,7 @@ import { Button } from "../ui/button";
 import { Heart } from "lucide-react";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { toast } from "sonner";
-import { user_library } from "@/generated/prisma";
+import { user_library } from "@/generated";
 
 const ButtonLibrary = ({ novelId }: { novelId: number }) => {
 	const user = useContext(userContext);

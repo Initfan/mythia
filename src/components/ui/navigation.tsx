@@ -74,13 +74,13 @@ const Navigation = ({ children, noLink = false, noSearch = false }: props) => {
 								</NavigationMenuContent>
 							</NavigationMenuItem>
 							<NavigationMenuItem>
-								<NavigationMenuLink>
-									<Link href="/library">Pustaka</Link>
+								<NavigationMenuLink href="/library">
+									Pustaka
 								</NavigationMenuLink>
 							</NavigationMenuItem>
 							<NavigationMenuItem>
-								<NavigationMenuLink>
-									<Link href="/history">Riwayat</Link>
+								<NavigationMenuLink href="/history">
+									Riwayat
 								</NavigationMenuLink>
 							</NavigationMenuItem>
 						</NavigationMenuList>
