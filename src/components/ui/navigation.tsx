@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import MythiaLogo from "@/assets/mythia-logo.png";
 import Link from "next/link";
 import { Button } from "./button";
@@ -15,6 +15,16 @@ import {
 	DropdownMenuTrigger,
 } from "./dropdown-menu";
 import SearchNovel from "../search-novel";
+import {
+	NavigationMenu,
+	NavigationMenuContent,
+	NavigationMenuItem,
+	NavigationMenuLink,
+	NavigationMenuList,
+	NavigationMenuTrigger,
+} from "./navigation-menu";
+import { genre } from "@/generated";
+import { getAllGenre } from "@/actions/novel-action";
 
 interface props {
 	children?: React.ReactNode;
@@ -24,6 +34,11 @@ interface props {
 
 const Navigation = ({ children, noLink = false, noSearch = false }: props) => {
 	const user = useContext(userContext);
+	const [genre, setGenre] = useState<genre[]>();
+
+	useEffect(() => {
+		getAllGenre().then((res) => setGenre(res));
+	}, []);
 
 	return (
 		<nav className="flex items-center justify-between py-6 px-[5%] w-full m-auto shadow-md">
@@ -37,25 +52,39 @@ const Navigation = ({ children, noLink = false, noSearch = false }: props) => {
 					/>
 					<h3 className="text-xl font-semibold">Mythia</h3>
 				</Link>
-				<div className="space-x-6 hidden lg:block">
-					<Link
-						href="/browse"
-						className="text-sm font-medium hover:underline"
-					>
-						Temukan
-					</Link>
-					<Link
-						href="/library"
-						className="text-sm font-medium hover:underline"
-					>
-						Pustaka
-					</Link>
-					<Link
-						href="/history"
-						className="text-sm font-medium hover:underline"
-					>
-						Riwayat
-					</Link>
+				<div className="space-x-6 hidden lg:flex items-center">
+					<NavigationMenu>
+						<NavigationMenuList>
+							<NavigationMenuItem>
+								<NavigationMenuTrigger>
+									Temukan
+								</NavigationMenuTrigger>
+								<NavigationMenuContent>
+									<ul className="flex space-x-2 w-[300px] flex-wrap">
+										{genre?.map((component) => (
+											<NavigationMenuLink
+												key={component.id}
+												title={component.genre}
+												href={`/search?filter=genre&value=${component.genre}`}
+											>
+												{component.genre}
+											</NavigationMenuLink>
+										))}
+									</ul>
+								</NavigationMenuContent>
+							</NavigationMenuItem>
+							<NavigationMenuItem>
+								<NavigationMenuLink>
+									<Link href="/library">Pustaka</Link>
+								</NavigationMenuLink>
+							</NavigationMenuItem>
+							<NavigationMenuItem>
+								<NavigationMenuLink>
+									<Link href="/history">Riwayat</Link>
+								</NavigationMenuLink>
+							</NavigationMenuItem>
+						</NavigationMenuList>
+					</NavigationMenu>
 				</div>
 			</div>
 			{!noLink && (

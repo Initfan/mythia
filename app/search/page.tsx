@@ -20,7 +20,7 @@ const page = async ({ searchParams }: { searchParams: Promise<NewType> }) => {
 			</div>
 			<div className="flex-1 space-y-4 flex flex-col">
 				<h1 className="text-3xl font-semibold">
-					Novel &quot;{title}&quot;
+					Novel {title && <>&quot;{title}&quot;</>}
 				</h1>
 				<ScrollArea className="h-full pb-8">
 					<Suspense fallback={<Loading />}>

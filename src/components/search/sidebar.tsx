@@ -49,10 +49,10 @@ const SidebarSearch = () => {
 
 	const filteringNovel = (title: string, value: string) => {
 		setPending(true);
-		const novelTitle = params.get("title");
-		router.replace(
-			`/search?title=${novelTitle}&filter=${title}&value=${value}`
-		);
+		const novelTitle = params.get("title")
+			? `&title=${params.get("title")}`
+			: null;
+		router.replace(`/search?${novelTitle}filter=${title}&value=${value}`);
 		setPending(false);
 	};
 
