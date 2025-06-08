@@ -1,76 +1,141 @@
 "use client";
+import {
+	FormEvent,
+	useActionState,
+	useContext,
+	useEffect,
+	useRef,
+	useState,
+	useTransition,
+} from "react";
 import { userContext } from "@/context/user-context";
+import {
+	Dialog,
+	DialogContent,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+} from "../ui/dialog";
 import { Button } from "../ui/button";
-import { Heart } from "lucide-react";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { BookmarkPlusIcon, LibraryBig, Loader2, Plus } from "lucide-react";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import {
+	addLibraryNovel,
+	createLibrary,
+	userLibrary,
+} from "@/actions/library-action";
+import { Card, CardContent } from "../ui/card";
+import { Prisma } from "@/generated";
+import { Skeleton } from "../ui/skeleton";
 import { toast } from "sonner";
-import { user_library } from "@/generated";
+
+type libraryType = Prisma.user_libraryGetPayload<{
+	include: { library_detail: true };
+}>;
 
 const ButtonLibrary = ({ novelId }: { novelId: number }) => {
 	const user = useContext(userContext);
-	const [library, setLibrary] = useState<user_library>();
+	const ref = useRef<HTMLInputElement>(null);
+	const [library, setLibrary] = useState<libraryType[]>();
+	const [pending, startTransition] = useTransition();
+	const [pendingAdd, addTransition] = useTransition();
 
-	const checkLibrary = useCallback(async () => {
-		if (!user) return;
-		try {
-			const req = await fetch(`/api/user/library/${novelId}/${user?.id}`);
-			const res = await req.json();
-			setLibrary(res.data);
-		} catch (error) {
-			console.error("Error checking library:", error);
-		}
-	}, [novelId, user]);
+	const [state, action] = useActionState(
+		() => createLibrary(ref.current!.value!, user!.id),
+		null
+	);
 
 	useEffect(() => {
-		checkLibrary();
-	}, [checkLibrary]);
+		setLibrary((p) => (p && state ? [...p, state] : p));
+	}, [state]);
 
-	const removeFromLibrary = async () => {
-		try {
-			await fetch("/api/user/library", {
-				method: "delete",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({ id: library?.id }),
-			});
-			toast.success("Novel di hapus dari daftar pustaka");
-			setLibrary(undefined);
-		} catch {
-			toast.error("Gagal menghapus novel ke pustaka");
-		}
+	useEffect(() => {
+		startTransition(async () =>
+			userLibrary(user!.id).then((res) => setLibrary(res))
+		);
+	}, [user]);
+
+	const addToLibrary = (v: libraryType) => {
+		addTransition(async () => {
+			const adding = await addLibraryNovel(v.id, novelId);
+			setLibrary(
+				Array.isArray(adding.library)
+					? adding.library
+					: [adding.library!]
+			);
+			toast(adding.message);
+		});
 	};
 
-	const addToLibrary = async () => {
-		try {
-			const req = await fetch("/api/user/library", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({ userId: user!.id, novelId }),
-			});
-			const res = await req.json();
-			setLibrary(res.data);
-			toast.success("Novel berhasil ditambahkan ke daftar pustaka");
-		} catch {
-			toast.error("Gagal menambahkan novel ke pustaka");
-		}
-	};
-
-	const handleLibrary = library ? removeFromLibrary : addToLibrary;
+	if (!user) return;
 
 	return (
-		<Button
-			variant="secondary"
-			title={`${library ? "Hapus dari" : "Tambahkan ke"} Favorit`}
-			onClick={handleLibrary}
-		>
-			<Heart
-				fill={library ? "red" : undefined}
-				stroke={library ? "none" : "white"}
-			/>
-		</Button>
+		<Dialog>
+			<DialogTrigger asChild>
+				<Button>
+					<LibraryBig />
+				</Button>
+			</DialogTrigger>
+			<DialogContent>
+				<DialogHeader>
+					<DialogTitle>Masukan ke daftar pustaka?</DialogTitle>
+					<div className="py-3 space-y-3">
+						<Label>Buat pustaka</Label>
+						<form
+							className="w-full flex space-x-2"
+							onSubmit={(e: FormEvent) => {
+								e.preventDefault();
+								startTransition(async () => action());
+							}}
+						>
+							<Input name="title" ref={ref} />
+							<Button type="submit" disabled={pending}>
+								{pending ? (
+									<Loader2 className="animate-spin" />
+								) : (
+									<Plus />
+								)}
+							</Button>
+						</form>
+						<div className="space-y-2">
+							{pending ? (
+								<Skeleton className="h-8 w-full" />
+							) : (
+								library?.map((v, i) => (
+									<Card key={v.id} className="p-0">
+										<CardContent className="flex justify-between items-center py-2 px-3">
+											<p>{v.title}</p>
+											<Button
+												size="icon"
+												variant={
+													v.library_detail[i]
+														?.novelId == novelId
+														? "default"
+														: "outline"
+												}
+												disabled={
+													pendingAdd ||
+													v.library_detail[i]
+														?.novelId == novelId
+												}
+												onClick={() => addToLibrary(v)}
+											>
+												<BookmarkPlusIcon />
+											</Button>
+										</CardContent>
+									</Card>
+								))
+							)}
+						</div>
+					</div>
+				</DialogHeader>
+				<DialogFooter>
+					<Button variant="destructive">Close</Button>
+				</DialogFooter>
+			</DialogContent>
+		</Dialog>
 	);
 };
 
