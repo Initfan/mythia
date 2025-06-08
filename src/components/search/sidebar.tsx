@@ -5,17 +5,56 @@ import { Button } from "../ui/button";
 import { Skeleton } from "../ui/skeleton";
 import { genre } from "@prisma/client";
 import { getAllGenre } from "@/actions/novel-action";
+import { useRouter, useSearchParams } from "next/navigation";
 
-const sidebarContent = [
-	{ title: "Tipe", children: ["gratis", "berbayar", "percobaan"] },
-	{ title: "Popularitas", children: ["rating", "dilihat", "disukai"] },
-	{ title: "Terbit", children: ["terbaru", "terlama"] },
-	{ title: "Status", children: ["berjalan", "selesai", "hiatus"] },
+type sidebarType = {
+	title: "type" | "popular" | "created" | "status";
+	label: string;
+	children: string[];
+};
+
+const sidebarContent: sidebarType[] = [
+	{
+		title: "type",
+		label: "Tipe",
+		children: ["gratis", "berbayar", "percobaan"],
+	},
+	{ title: "created", label: "Terbit", children: ["terbaru", "terlama"] },
+	{
+		title: "status",
+		label: "Status",
+		children: ["berjalan", "selesai", "hiatus"],
+	},
 ];
 
 const SidebarSearch = () => {
+	const router = useRouter();
+	const params = useSearchParams();
 	const [genre, setGenre] = useState<genre[]>();
 	const [pending, setPending] = useState(false);
+	const [activeFilter, setActiveFilter] = useState<{
+		title: string | null;
+		active: string | null;
+	}>({
+		title: null,
+		active: null,
+	});
+
+	useEffect(() => {
+		setActiveFilter({
+			title: params.get("filter"),
+			active: params.get("value"),
+		});
+	}, [params]);
+
+	const filteringNovel = (title: string, value: string) => {
+		setPending(true);
+		const novelTitle = params.get("title");
+		router.replace(
+			`/search?title=${novelTitle}&filter=${title}&value=${value}`
+		);
+		setPending(false);
+	};
 
 	useEffect(() => {
 		setPending(true);
@@ -25,16 +64,22 @@ const SidebarSearch = () => {
 
 	return (
 		<div className="space-y-3">
-			{sidebarContent.map((v) => (
-				<div key={v.title}>
-					<h2 className="text-2xl font-semibold">{v.title}</h2>
+			{sidebarContent.map((sidebar) => (
+				<div key={sidebar.title}>
+					<h2 className="text-2xl font-semibold mb-2">
+						{sidebar.label}
+					</h2>
 					<div>
-						{v.children.map((v, i) => (
+						{sidebar.children.map((v, i) => (
 							<div
 								key={i}
-								className="p-2 rounded cursor-pointer flex items-center hover:bg-primary/50 space-x-2"
+								className={`p-2 rounded cursor-pointer flex items-center hover:bg-primary/50 space-x-2 ${
+									pending ? "text-muted" : ""
+								}`}
+								onClick={() => filteringNovel(sidebar.title, v)}
 							>
-								<Checkbox /> <p>{v}</p>
+								<Checkbox checked={activeFilter.active == v} />{" "}
+								<p>{v}</p>
 							</div>
 						))}
 					</div>
@@ -50,7 +95,16 @@ const SidebarSearch = () => {
 					))}
 				{genre &&
 					genre.map((v, i) => (
-						<Button key={i} size="sm" variant="outline">
+						<Button
+							key={i}
+							size="sm"
+							variant={
+								activeFilter.active == v.genre
+									? "default"
+									: "outline"
+							}
+							onClick={() => filteringNovel("genre", v.genre)}
+						>
 							{v.genre}
 						</Button>
 					))}

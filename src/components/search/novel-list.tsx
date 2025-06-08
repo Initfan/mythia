@@ -4,15 +4,21 @@ import { searchNovel } from "@/actions/novel-action";
 import { CircleAlert } from "lucide-react";
 import { SearchPagination } from "./pagination";
 
-const NovelList = async ({
-	params,
-}: {
-	params: Promise<{ title: string; page: string }>;
-}) => {
-	const title = (await params).title;
-	const page = (await params).page || "1";
+type NewType = {
+	title: string;
+	page?: string;
+	filter?: string;
+	value?: string;
+};
 
-	const data = await searchNovel(title, page);
+const NovelList = async ({ params }: { params: Promise<NewType> }) => {
+	const param = await params;
+	const title = param.title;
+	const page = param.page || "1";
+	const filter = param.filter;
+	const value = param.value;
+
+	const data = await searchNovel(title, page, filter, value);
 
 	if (data.total == 0)
 		return (

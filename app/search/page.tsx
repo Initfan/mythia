@@ -3,11 +3,12 @@ import SidebarSearch from "@/components/search/sidebar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Suspense } from "react";
 
-const page = async ({
-	searchParams,
-}: {
-	searchParams: Promise<{ title: string; page: string }>;
-}) => {
+type NewType = {
+	title: string;
+	page: string;
+};
+
+const page = async ({ searchParams }: { searchParams: Promise<NewType> }) => {
 	const title = (await searchParams).title;
 
 	return (

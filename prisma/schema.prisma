@@ -44,8 +44,6 @@ model novel {
   cover           String
   target_audience String
   views           Int             @default(0)
-  liked           Int             @default(0)
-  rating          Int             @default(0)
   status          String          @default("berjalan")
   type            String          @default("gratis")
   reviewd_by      Int[]
