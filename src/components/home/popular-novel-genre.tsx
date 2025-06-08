@@ -14,7 +14,7 @@ type NovelChapter = Prisma.novelGetPayload<{
 }>;
 
 const PopularNovelGenre = ({ genre }: { genre: genre[] }) => {
-	const [selectedGenre, setSelectedGenre] = React.useState("Romance");
+	const [selectedGenre, setSelectedGenre] = React.useState("Fantasi");
 	const [novel, setNovel] = React.useState<NovelChapter[]>([]);
 	const [isPending, startTransition] = useTransition();
 

@@ -1,13 +1,15 @@
 import Link from "next/link";
 import { Carousel, CarouselContent, CarouselItem } from "../ui/carousel";
 import CardNovel from "./card-novel";
-import { Prisma } from "@prisma/client";
+import prisma from "@/lib/prisma";
 
-type NovelChapter = Prisma.novelGetPayload<{
-	include: { chapter: true; author: { select: { pen_name: true } } };
-}>;
+const NewestNovel = async () => {
+	const novel = await prisma.novel.findMany({
+		orderBy: { createdAt: "asc" },
+		include: { chapter: true },
+		take: 10,
+	});
 
-const NewestNovel = ({ novel }: { novel: NovelChapter[] }) => {
 	return (
 		<div className="space-y-4">
 			<h1 className="text-3xl font-semibold">Terbaru</h1>

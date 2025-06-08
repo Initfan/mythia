@@ -1,16 +1,13 @@
-"use client";
 import { Carousel, CarouselContent, CarouselItem } from "../ui/carousel";
-import { Prisma } from "@prisma/client";
 import CardNovel from "./card-novel";
+import prisma from "@/lib/prisma";
 
-type NovelChapter = Prisma.novelGetPayload<{
-	include: {
-		chapter: true;
-		author: { select: { pen_name: true } };
-	};
-}>;
-
-const PopularNovel = ({ novel }: { novel: NovelChapter[] }) => {
+const PopularNovel = async () => {
+	const novel = await prisma.novel.findMany({
+		orderBy: { views: "desc" },
+		include: { chapter: true },
+		take: 10,
+	});
 	return (
 		<div className="space-y-4">
 			<h1 className="text-3xl font-semibold">Terpopuler</h1>

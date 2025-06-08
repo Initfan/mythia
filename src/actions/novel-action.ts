@@ -4,12 +4,15 @@ import prisma from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
 
 export const novelByGenre = async (genre: string) => {
+	const total = await prisma.novel.count({ where: { genre } });
+
 	const novel = await prisma.novel.findMany({
 		where: { genre: { equals: genre } },
 		include: {
 			chapter: true,
 			author: { select: { pen_name: true } },
 		},
+		skip: Math.floor(Math.random() * total),
 		take: 10,
 	});
 
