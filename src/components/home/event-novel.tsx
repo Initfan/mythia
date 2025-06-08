@@ -8,7 +8,6 @@ import {
 	CarouselPrevious,
 } from "../ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
-import Link from "next/link";
 
 const EventNovel = () => {
 	return (
@@ -21,15 +20,15 @@ const EventNovel = () => {
 				<CarouselContent>
 					<CarouselItem className="block h-[350px] relative">
 						<Image
-							src="/event-world-book-day.jpg"
-							alt="event world book day"
+							src="/event.jpg"
+							alt="event novel promo"
 							className="size-full object-cover rounded"
 							fill
 						/>
 					</CarouselItem>
 					<CarouselItem className="block h-[350px] relative">
 						<Image
-							src="/event-world-book-day-1.jpg"
+							src="/event-world-book-day.jpg"
 							alt="event world book day"
 							className="size-full object-cover rounded"
 							fill
