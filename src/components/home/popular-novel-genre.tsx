@@ -45,10 +45,23 @@ const PopularNovelGenre = ({ genre }: { genre: genre[] }) => {
 					))}
 				</div>
 				<div className="w-2/3">
-					{!isPending && novel.length === 0 && (
+					{!isPending && novel.length === 0 ? (
 						<p className="text-muted-foreground">
 							Novel bergenre {selectedGenre} tidak ada.
 						</p>
+					) : (
+						<Carousel>
+							<CarouselContent>
+								{novel.map((v) => (
+									<CarouselItem
+										key={v.id}
+										className="lg:basis-1/2 w-full lg:w-1/2"
+									>
+										<CardNovel v={v} />
+									</CarouselItem>
+								))}
+							</CarouselContent>
+						</Carousel>
 					)}
 					{isPending && (
 						<div className="grid grid-cols-2 gap-4">
@@ -56,18 +69,6 @@ const PopularNovelGenre = ({ genre }: { genre: genre[] }) => {
 							<LoadingCardNovel />
 						</div>
 					)}
-					<Carousel>
-						<CarouselContent>
-							{novel.map((v) => (
-								<CarouselItem
-									key={v.id}
-									className="lg:basis-1/2 w-full lg:w-1/2"
-								>
-									<CardNovel v={v} />
-								</CarouselItem>
-							))}
-						</CarouselContent>
-					</Carousel>
 				</div>
 			</div>
 		</div>
