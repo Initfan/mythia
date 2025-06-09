@@ -1,6 +1,6 @@
 "use client";
 import { useContext, useState } from "react";
-import { novel_review, Prisma } from "@/generated/prisma";
+import { Prisma } from "@/generated";
 import ReviewCard from "./review-card";
 import CreateReview from "./review-create";
 import { userContext } from "@/context/user-context";
@@ -19,15 +19,15 @@ const ReviewSection = ({
 	reviewedBy: number[];
 }) => {
 	const user = useContext(userContext);
-	const [novelReview, setNovelReview] = useState<novel_review[]>(review);
+	const [novelReview, setNovelReview] = useState<userReview[]>(review);
 
-	const handleAddedReview = (newReview: novel_review) =>
-		setNovelReview((prev) => [...prev, newReview]);
+	const handleAddedReview = (newReview: userReview) =>
+		setNovelReview((prev) => [newReview, ...prev]);
 
 	return (
 		<div className="space-y-4">
 			<div className="flex justify-between items-center">
-				<h2 className="text-2xl font-semibold">Reviews</h2>
+				<h2 className="text-2xl font-semibold">Ulasan</h2>
 				{user && !reviewedBy.includes(user.id) && (
 					<CreateReview
 						novelId={novelId}
@@ -42,7 +42,7 @@ const ReviewSection = ({
 				</p>
 			)}
 			{novelReview.length > 0 &&
-				review.map((value) => (
+				novelReview.map((value) => (
 					<ReviewCard key={value.id} review={value} />
 				))}
 		</div>
