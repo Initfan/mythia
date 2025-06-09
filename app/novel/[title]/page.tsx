@@ -28,6 +28,7 @@ const page = async ({ params }: { params: Promise<{ title: string }> }) => {
 					comment: true,
 					content: true,
 					chapter: true,
+					views: true,
 					createdAt: true,
 				},
 				take: 1,

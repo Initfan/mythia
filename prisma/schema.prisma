@@ -45,11 +45,11 @@ model novel {
   target_audience String
   views           Int              @default(0)
   status          String           @default("berjalan")
-  liked_by        Int[]
   reviewd_by      Int[]
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @default(now()) @updatedAt
   type            String           @default("gratis")
+  liked_by        Int[]
   library_detail  library_detail[]
   author          author           @relation(fields: [authorId], references: [id])
   chapter         novel_chapter[]

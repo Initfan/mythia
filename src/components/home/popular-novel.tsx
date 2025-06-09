@@ -4,7 +4,7 @@ import prisma from "@/lib/prisma";
 
 const PopularNovel = async () => {
 	const novel = await prisma.novel.findMany({
-		orderBy: { views: "desc" },
+		orderBy: { views: 'desc' },
 		include: { chapter: true },
 		take: 10,
 	});

@@ -96,7 +96,6 @@ async function main() {
 						"remaja",
 						"anak-anak",
 					]),
-					views: faker.number.int({ min: 0, max: 1000 }),
 					status: faker.helpers.arrayElement([
 						"berjalan",
 						"selesai",
@@ -123,6 +122,7 @@ async function main() {
 						title: `Chapter ${ch}: ${faker.lorem.words(2)}`,
 						content: faker.lorem.paragraphs(3),
 						novelId: novel.id,
+						views: faker.number.int({ min: 0, max: 1000 }),
 					},
 				});
 			}

@@ -5,7 +5,7 @@ import prisma from "@/lib/prisma";
 
 const NewestNovel = async () => {
 	const novel = await prisma.novel.findMany({
-		orderBy: { createdAt: "asc" },
+		orderBy: { createdAt: "desc" },
 		include: { chapter: true },
 		take: 10,
 	});
