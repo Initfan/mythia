@@ -1,7 +1,9 @@
 import BreadcrumbChapter from "@/components/novel/breadcrumb-chapter";
 import ChapterComment from "@/components/novel/chapter-comment";
+import ChapterList from "@/components/novel/chapter-list";
 import { Button } from "@/components/ui/button";
 import prisma from "@/lib/prisma";
+import parser from "html-react-parser";
 import { Eye, MessageCircle } from "lucide-react";
 import Link from "next/link";
 
@@ -16,6 +18,7 @@ const page = async ({
 		where: { title: title.replaceAll("-", " ") },
 		include: {
 			author: true,
+			_count: true,
 			chapter: {
 				where: { chapter: parseInt(id) },
 				take: 1,
@@ -65,15 +68,23 @@ const page = async ({
 				<h1 className="text-5xl text-center">
 					{novel.chapter.at(0)?.title}
 				</h1>
-				<div
-					className="leading-loose text-lg"
-					dangerouslySetInnerHTML={{
-						__html: novel.chapter.at(0)!.content,
-					}}
-				></div>
+				<div className="leading-loose text-lg">
+					{parser(novel.chapter.at(0)!.content)}
+				</div>
 				<div className="flex justify-center space-x-2">
-					<Button variant="outline">Daftar Bab</Button>
-					<Button>Bab Selanjutnya</Button>
+					<ChapterList novelId={novel.id} />
+					{novel._count.chapter != parseInt(id) && (
+						<Button>
+							<Link
+								href={`/novel/${novel.title.replaceAll(
+									" ",
+									"-"
+								)}/chapter/${parseInt(id) + 1}`}
+							>
+								Bab Selanjutnya
+							</Link>
+						</Button>
+					)}
 				</div>
 			</div>
 			<ChapterComment

@@ -86,7 +86,7 @@ const page = async ({ params }: { params: Promise<{ title: string }> }) => {
 					</div>
 					<div className="space-x-2 flex">
 						<Link
-							href={`${novel.title.replaceAll(
+							href={`/novel/${novel.title.replaceAll(
 								" ",
 								"-"
 							)}/chapter/1`}
