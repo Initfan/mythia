@@ -5,7 +5,7 @@ import logo from "@/assets/mythia-logo.png";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Loader2Icon, LogIn } from "lucide-react";
+import { Loader2Icon } from "lucide-react";
 import {
 	Form,
 	FormControl,
@@ -17,8 +17,8 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
-import { redirect } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { register } from "@/actions/auth-action";
 
 const formSchema = z.object({
 	username: z.string().min(3),
@@ -37,21 +37,11 @@ const Login = () => {
 	});
 
 	const onSubmit = async (values: z.infer<typeof formSchema>) => {
-		const req = await fetch("/api/auth/register", {
-			method: "POST",
-			body: JSON.stringify(values),
-		});
+		const user = await register(values);
 
-		await req.json();
-		if (req.status == 201)
-			toast("Akun berhasil dibuat", {
-				description: "Login untuk lanjut membaca.",
-				action: {
-					label: <LogIn />,
-					onClick: () => redirect("../signin"),
-				},
-			});
-		else toast("Server bermasalah, coba lagi nanti.");
+		if (user.error) return toast("Server bermasalah, coba lagi nanti.");
+
+		return toast("Akun berhasil dibuat");
 	};
 
 	return (
