@@ -25,6 +25,7 @@ import {
 } from "./navigation-menu";
 import { genre } from "@/generated";
 import { getAllGenre } from "@/actions/novel-action";
+import { logout } from "@/actions/user-action";
 
 interface props {
 	children?: React.ReactNode;
@@ -120,6 +121,14 @@ const Navigation = ({ children, noLink = false, noSearch = false }: props) => {
 								<DropdownMenuItem>Koin</DropdownMenuItem>
 								<DropdownMenuSeparator />
 								<DropdownMenuItem>Pengaturan</DropdownMenuItem>
+								<DropdownMenuItem>
+									<span
+										className="text-destructive"
+										onClick={logout}
+									>
+										Logout
+									</span>
+								</DropdownMenuItem>
 							</DropdownMenuContent>
 						</DropdownMenu>
 					) : (

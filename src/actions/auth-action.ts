@@ -59,7 +59,7 @@ export async function login(
 			path: "/",
 		});
 
-		redirect("/");
+		return redirect("/");
 	} catch (error) {
 		return { message: "Server error, coba lagi.", error: String(error) };
 	}
