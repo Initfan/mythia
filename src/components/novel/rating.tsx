@@ -1,4 +1,4 @@
-import { novel_review } from "@/generated/prisma";
+import { novel_review } from "@/generated";
 import { Dot, Star } from "lucide-react";
 import React from "react";
 
@@ -9,7 +9,7 @@ const Rating = ({ novelReview }: { novelReview: novel_review[] }) => {
 	return (
 		<div className="space-y-2">
 			<div className="space-x-4 flex items-center">
-				<h1 className="text-4xl">{averageRating}</h1>
+				<h1 className="text-4xl">{averageRating.toFixed(1)}</h1>
 				{Array.from({ length: 5 }).map((_, idx) => {
 					const fullStar = idx + 1 <= Math.floor(averageRating);
 					const halfStar =
