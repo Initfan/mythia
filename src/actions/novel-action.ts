@@ -51,8 +51,12 @@ export async function createChapter(
 				error: JSON.stringify(parsed.error),
 			};
 
+		const totalChapter = await prisma.novel_chapter.count({
+			where: { novelId: parsed.data.novelId },
+		});
+
 		const novel = await prisma.novel_chapter.create({
-			data: parsed.data,
+			data: { ...parsed.data, chapter: (totalChapter ?? 0) + 1 },
 		});
 
 		return {
