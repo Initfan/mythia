@@ -10,7 +10,7 @@ import { redirect } from "next/navigation";
 
 const page = () => {
 	const user = useContext(userContext);
-	const [novelId, setNovelId] = useState<number | null>(32);
+	const [novelId, setNovelId] = useState<number | null>(null);
 	const [active, setActive] = useState<number>(
 		user?.author && !novelId ? 2 : novelId ? 3 : 1
 	);

@@ -22,7 +22,7 @@ const DashboardNovelList = () => {
 	}, []);
 
 	return (
-		<div className="space-y-4">
+		<div className="space-y-4 pb-8">
 			{pending &&
 				Array.from({ length: 2 }).map((v, i) => (
 					<LoadingCardNovel key={i} />
