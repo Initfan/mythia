@@ -26,9 +26,15 @@ export async function createReview(value: z.infer<typeof schema>) {
 			include: { user: true },
 		});
 
+		const reviewers = await prisma.novel.update({
+			where: { id: parsed.data.novelId },
+			data: { reviewd_by: { push: user!.id } },
+		});
+
 		return {
 			message: "Review novel berhasil dibuat",
 			data: review,
+			reviewers,
 			status: 201,
 		};
 	} catch (error) {

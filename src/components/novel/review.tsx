@@ -19,16 +19,19 @@ const ReviewSection = ({
 	reviewedBy: number[];
 }) => {
 	const user = useContext(userContext);
+	const [reviewers, setReviewers] = useState<number[]>(reviewedBy);
 	const [novelReview, setNovelReview] = useState<userReview[]>(review);
 
-	const handleAddedReview = (newReview: userReview) =>
+	const handleAddedReview = (newReview: userReview, reviewers: number[]) => {
 		setNovelReview((prev) => [newReview, ...prev]);
+		setReviewers(reviewers);
+	};
 
 	return (
 		<div className="space-y-4">
 			<div className="flex justify-between items-center">
 				<h2 className="text-2xl font-semibold">Ulasan</h2>
-				{user && !reviewedBy.includes(user.id) && (
+				{user && !reviewers.includes(user.id) && (
 					<CreateReview
 						novelId={novelId}
 						addedReview={handleAddedReview}

@@ -25,7 +25,7 @@ const CreateReview = ({
 	addedReview,
 }: {
 	novelId: number;
-	addedReview: (newReview: userReview) => void;
+	addedReview: (newReview: userReview, reviewers: number[]) => void;
 }) => {
 	const reviewRef = useRef<HTMLTextAreaElement>(null);
 	const dialogRef = useRef<HTMLButtonElement>(null);
@@ -41,7 +41,7 @@ const CreateReview = ({
 			});
 			if (review.status == 201) {
 				toast("Berhasil membuat review");
-				addedReview(review.data!);
+				addedReview(review.data!, review.reviewers!.reviewd_by);
 				dialogRef.current?.click();
 			}
 		});
