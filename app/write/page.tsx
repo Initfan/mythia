@@ -9,14 +9,18 @@ import { userContext } from "@/context/user-context";
 import { redirect } from "next/navigation";
 
 const page = () => {
-	const [active, setActive] = useState<number>(1);
 	const user = useContext(userContext);
+	const [novelId, setNovelId] = useState<number | null>(32);
+	const [active, setActive] = useState<number>(
+		user?.author && !novelId ? 2 : novelId ? 3 : 1
+	);
 
 	useEffect(() => {
 		if (!user) return redirect("/");
 	}, [user]);
 
 	const setActivePage = (id: number) => setActive(id);
+	const onSetNovelId = (id: number) => setNovelId(id);
 
 	return (
 		<>
@@ -26,8 +30,18 @@ const page = () => {
 			/>
 			<main className="space-x-8 flex lg:w-2/3 px-8 md:px-0 mx-auto">
 				{active == 1 && <WriterProfile activePage={setActivePage} />}
-				{active == 2 && <WriteNovel activePage={setActivePage} />}
-				{active == 3 && <WriteChapter />}
+				{active == 2 && (
+					<WriteNovel
+						activePage={setActivePage}
+						onSetNovelId={onSetNovelId}
+					/>
+				)}
+				{active == 3 && (
+					<WriteChapter
+						novelId={novelId}
+						activePage={setActivePage}
+					/>
+				)}
 			</main>
 		</>
 	);

@@ -2,9 +2,16 @@ import { FileUploadThing } from "@/components/write/file-upload";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useCallback, useContext, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Form, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
+import {
+	Form,
+	FormDescription,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+} from "../ui/form";
 import {
 	Select,
 	SelectContent,
@@ -14,12 +21,13 @@ import {
 	SelectValue,
 } from "../ui/select";
 import { uploadFiles } from "@/lib/uploadthing";
-import { author, genre } from "@/generated/prisma";
-import { userContext } from "../../context/user-context";
-import { Textarea } from "../ui/textarea";
-import { Loader2Icon, Send } from "lucide-react";
+import { Loader2Icon, Send, X } from "lucide-react";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
+import { createNovel, getAllGenre, updateCover } from "@/actions/novel-action";
+import { genre } from "@/generated";
+import Editor from "./editor";
+import { Skeleton } from "../ui/skeleton";
 
 const schema = z.object({
 	title: z.string().min(4),
@@ -29,12 +37,18 @@ const schema = z.object({
 	content_rating: z.enum(["semua umur", "6+", "12+", "17+", "21+"]),
 });
 
-const WriteNovel = ({ activePage }: { activePage: (id: number) => void }) => {
-	const user = useContext(userContext);
+const WriteNovel = ({
+	activePage,
+	onSetNovelId,
+}: {
+	activePage: (id: number) => void;
+	onSetNovelId: (id: number) => void;
+}) => {
 	const tagRef = useRef<HTMLInputElement>(null);
-	const [author, setAuthor] = useState<author>();
 	const [tag, setTag] = useState<string[]>([]);
+	const [synopsis, setSinopsis] = useState("");
 	const [genre, setGenre] = useState<genre[]>();
+	const [pending, transition] = useTransition();
 	const [files, setFile] = useState<File[]>([]);
 	const form = useForm<z.infer<typeof schema>>({
 		resolver: zodResolver(schema),
@@ -47,26 +61,33 @@ const WriteNovel = ({ activePage }: { activePage: (id: number) => void }) => {
 		},
 	});
 
+	useEffect(() => {
+		transition(
+			async () => await getAllGenre().then((res) => setGenre(res))
+		);
+	}, []);
+
 	const onSubmit = async (values: z.infer<typeof schema>) => {
 		try {
-			console.log(user);
+			const novel = await createNovel({
+				...values,
+				synopsis,
+				tag_novel: tag,
+			});
+
+			if (novel?.error) return toast("Gagal membuat novel");
+
 			const image = await uploadFiles("imageUploader", {
 				files,
 			});
-			const novel = await fetch("api/novel", {
-				method: "POST",
-				body: JSON.stringify({
-					...values,
-					cover: image[0].ufsUrl,
-					authorId: user!.author ? user?.author.id : author?.id,
-					tag_novel: tag,
-				}),
-			});
 
-			await novel.json();
-			if (novel.status == 201) activePage(3);
-		} catch (err) {
-			console.log(err);
+			updateCover(novel!.data!.id, image[0].ufsUrl);
+
+			toast("Novel berhasil dibuat");
+			onSetNovelId(novel!.data!.id);
+
+			if (novel?.data) activePage(3);
+		} catch {
 			toast("Gagal membuat novel, coba lagi", {
 				className: "bg-red-500",
 			});
@@ -75,27 +96,12 @@ const WriteNovel = ({ activePage }: { activePage: (id: number) => void }) => {
 
 	const onUpload = (file: File) => setFile([file]);
 
-	const fetchGenre = async () => {
-		const req = await fetch("api/genre");
-		const res = await req.json();
-		setGenre(res.data);
-	};
-
-	const getAuthor = useCallback(async () => {
-		if (user?.author) return;
-		const req = await fetch(`/api/author/${user?.id}`);
-		const res = await req.json();
-		if (req.ok) setAuthor(res.data);
-	}, [user]);
-
-	useEffect(() => {
-		fetchGenre();
-		getAuthor();
-	}, [getAuthor]);
-
 	return (
 		<Form {...form}>
-			<form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
+			<form
+				onSubmit={form.handleSubmit(onSubmit)}
+				className="w-full pb-4"
+			>
 				<div className="flex flex-col md:flex-row md:space-y-0 space-y-4 md:space-x-4 w-full mb-4">
 					<div className="space-y-4 flex flex-col">
 						<h1 className="text-xl font-semibold">Cover novel</h1>
@@ -122,7 +128,13 @@ const WriteNovel = ({ activePage }: { activePage: (id: number) => void }) => {
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>Sinopsis</FormLabel>
-									<Textarea {...field} />
+									<div className="min-h-[200px] flex">
+										<Editor
+											{...field}
+											placeholder="Sinopsis cerita..."
+											setContent={(v) => setSinopsis(v)}
+										/>
+									</div>
 									<FormMessage />
 								</FormItem>
 							)}
@@ -142,6 +154,9 @@ const WriteNovel = ({ activePage }: { activePage: (id: number) => void }) => {
 											<SelectValue placeholder="Pilih" />
 										</SelectTrigger>
 										<SelectContent>
+											{pending && (
+												<Skeleton className="h-4" />
+											)}
 											<SelectGroup>
 												{genre?.map((v) => (
 													<SelectItem
@@ -163,7 +178,7 @@ const WriteNovel = ({ activePage }: { activePage: (id: number) => void }) => {
 							name="target_audience"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Target Audience</FormLabel>
+									<FormLabel>Target Pembaca</FormLabel>
 									<Select
 										name={field.name}
 										defaultValue={field.value}
@@ -175,10 +190,10 @@ const WriteNovel = ({ activePage }: { activePage: (id: number) => void }) => {
 										<SelectContent>
 											<SelectGroup>
 												<SelectItem value={"male"}>
-													Male
+													Pria
 												</SelectItem>
 												<SelectItem value={"female"}>
-													Female
+													Wanita
 												</SelectItem>
 											</SelectGroup>
 										</SelectContent>
@@ -239,6 +254,7 @@ const WriteNovel = ({ activePage }: { activePage: (id: number) => void }) => {
 												...p,
 												tagRef.current!.value,
 											]);
+											tagRef.current!.value = "";
 										}
 									}}
 								/>
@@ -248,17 +264,22 @@ const WriteNovel = ({ activePage }: { activePage: (id: number) => void }) => {
 										const avail = tag.includes(
 											tagRef.current!.value
 										);
-										if (!avail)
+										if (!avail) {
 											setTag((p) => [
 												...p,
 												tagRef.current!.value,
 											]);
+											tagRef.current!.value = "";
+										}
 									}}
 								>
 									<Send />
 								</Button>
 							</div>
-							<div className="flex space-x-2">
+							<FormDescription>
+								Memudahkan pencarian novel
+							</FormDescription>
+							<div className="flex gap-2 flex-wrap">
 								{tag?.map((v) => (
 									<Button
 										key={v}
@@ -271,7 +292,7 @@ const WriteNovel = ({ activePage }: { activePage: (id: number) => void }) => {
 											setTag(remain);
 										}}
 									>
-										{v}
+										{v} <X />
 									</Button>
 								))}
 							</div>

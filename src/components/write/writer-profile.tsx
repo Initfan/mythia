@@ -1,6 +1,13 @@
 "use client";
-import React, { useContext, useEffect, useState } from "react";
-import { Form, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
+import React, { useContext, useState } from "react";
+import {
+	Form,
+	FormDescription,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+} from "../ui/form";
 import { Input } from "../ui/input";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -21,6 +28,7 @@ import { FileUploadThing } from "./file-upload";
 import { uploadFiles } from "@/lib/uploadthing";
 import { userContext } from "@/context/user-context";
 import { toast } from "sonner";
+import { createAuthorProfile } from "@/actions/author-action";
 
 const schema = z.object({
 	pen_name: z.string().min(4),
@@ -48,25 +56,23 @@ const WriterProfile = ({
 		},
 	});
 
-	useEffect(() => {
-		if (user?.author) return activePage(2);
-	}, [user, activePage]);
-
 	const onSubmit = async (values: z.infer<typeof schema>) => {
 		try {
 			const image = await uploadFiles("imageUploader", {
 				files,
 			});
-			const author = await fetch("api/author", {
-				method: "POST",
-				body: JSON.stringify({
-					...values,
-					image: image[0].ufsUrl,
-					userId: user?.id,
-				}),
+			const author = await createAuthorProfile({
+				...values,
+				image: image[0].ufsUrl,
+				userId: user!.id,
 			});
 
-			if (author.status == 201) activePage(2);
+			if (author.error)
+				return toast("Gagal membuat profile, coba lagi", {
+					className: "bg-red-500",
+				});
+
+			if (author.data) activePage(2);
 		} catch {
 			toast("Gagal membuat profile, coba lagi", {
 				className: "bg-red-500",
@@ -133,6 +139,9 @@ const WriterProfile = ({
 									<FormLabel>E-mail</FormLabel>
 									<Input {...field} />
 									<FormMessage />
+									<FormDescription>
+										Email professional untuk di hubungi
+									</FormDescription>
 								</FormItem>
 							)}
 						/>

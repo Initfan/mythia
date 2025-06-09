@@ -1,78 +1,84 @@
-import { useCallback, useContext, useEffect, useRef, useState } from "react";
+"use client";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { Button } from "../ui/button";
 import Editor from "./editor";
-import { userContext } from "@/context/user-context";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
+import { createChapter, getNovelId } from "@/actions/novel-action";
+import { Prisma } from "@/generated";
+import { toast } from "sonner";
+import { redirect } from "next/navigation";
+import { Skeleton } from "../ui/skeleton";
 
-const WriteChapter = () => {
-	const router = useRouter();
-	const user = useContext(userContext);
-	const [loading, setLoading] = useState(false);
-	const [novelId, setNovelId] = useState<number>();
+type novelChapter = Prisma.novelGetPayload<{
+	include: { chapter: true; _count: true };
+}>;
+
+const WriteChapter = ({
+	novelId,
+	activePage,
+}: {
+	activePage: (id: number) => void;
+	novelId: number | null;
+}) => {
+	const [pending, transition] = useTransition();
+	const [novel, setNovel] = useState<novelChapter>();
 	const [editorContent, setContent] = useState("");
 	const titleRef = useRef<HTMLInputElement>(null);
 
+	useEffect(() => {
+		if (!novelId) return activePage(2);
+		transition(
+			async () => await getNovelId(novelId).then((res) => setNovel(res!))
+		);
+	}, [novelId, activePage]);
+
 	const saveChapter = async () => {
-		try {
-			setLoading(true);
-			const req = await fetch("api/novel/chapter", {
-				method: "POST",
-				body: JSON.stringify({
-					title: titleRef.current?.value,
-					content: editorContent,
-					novelId: novelId,
-				}),
-			});
-
-			if (req.status !== 201) return toast("Gagal menulis content novel");
-
-			const updateRole = await fetch(`api/user/${user!.id}`, {
-				method: "PUT",
-			});
-
-			if (updateRole.ok)
-				toast("Kamu telah selesai menulis novel pertamamu 👏");
-			return router.replace(`./profile/${user?.username}`);
-		} catch (error) {
-			setLoading(false);
-			console.log(error);
+		if (titleRef.current?.value.length == 0) {
+			toast("Masukan judul chapter");
+			return;
 		}
+
+		const chapter = await createChapter({
+			title: titleRef.current!.value,
+			content: editorContent,
+			novelId: novelId!,
+		});
+
+		if (chapter.error || !chapter.data) {
+			toast("Gagal menyimpan chapter novel");
+			return;
+		}
+
+		toast("Berhasil menyimpan chapter novel");
+		setTimeout(() => {
+			return redirect("/dashboard/novel");
+		}, 2000);
 	};
 
-	const fetchNovel = useCallback(async () => {
-		const req = await fetch(`api/novel/${user!.author!.id}`);
-		const res = await req.json();
-		setNovelId(res.data.id);
-	}, [user]);
-
-	useEffect(() => {
-		fetchNovel();
-	}, [fetchNovel]);
-
 	return (
-		<main className="flex flex-col w-full space-y-8">
+		<main className="flex flex-col w-full space-y-8 pb-4">
+			{pending ? (
+				<Skeleton className="h-6" />
+			) : (
+				<h1 className="text-2xl font-semibold">
+					{novel?.title} - Bab {(novel?._count.chapter ?? 0) + 1}
+				</h1>
+			)}
 			<input
-				placeholder="Masuk Judul Chapter"
+				placeholder="Masuk Judul Bab"
 				className="text-3xl bg-transpate hover:outline-none focus:outline-none"
 				ref={titleRef}
 			/>
-			<div className="h-[300px] flex">
+			<div className="min-h-[300px] flex">
 				<Editor setContent={(e) => setContent(e)} />
 			</div>
-			<div className="grid grid-cols-3 space-x-4">
-				<Button variant="outline">Preview</Button>
-				<Button
-					variant="secondary"
-					onClick={saveChapter}
-					disabled={loading}
-				>
-					{loading && <Loader2 className="animate-spin" />}
-					Save
-				</Button>
-				<Button>Publish</Button>
-			</div>
+			<Button
+				onClick={() => transition(async () => await saveChapter())}
+				disabled={pending}
+			>
+				{pending && <Loader2 className="animate-spin" />}
+				Save
+			</Button>
 		</main>
 	);
 };

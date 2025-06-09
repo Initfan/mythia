@@ -1,9 +1,119 @@
 "use server";
 
+import { novel, novel_chapter } from "@/generated";
 import { verifySession } from "@/lib/dal";
 import prisma from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
 import { redirect } from "next/navigation";
+import { z } from "zod";
+
+const schema = z.object({
+	title: z.string().min(4),
+	genre: z.string(),
+	synopsis: z.string(),
+	target_audience: z.string(),
+	content_rating: z.string(),
+	tag_novel: z.string().array(),
+});
+
+const chapterSchema = z.object({
+	title: z.string(),
+	content: z.string(),
+	novelId: z.number(),
+});
+
+type response = {
+	message: string;
+	data?: novel | novel_chapter;
+	status?: number;
+	error?: string;
+};
+
+export const updateCover = async (
+	novelId: number,
+	cover: string
+): Promise<novel> => {
+	return await prisma.novel.update({
+		where: { id: novelId },
+		data: { cover },
+	});
+};
+
+export async function createChapter(
+	value: z.infer<typeof chapterSchema>
+): Promise<response> {
+	try {
+		const parsed = chapterSchema.safeParse(value);
+
+		if (parsed.error)
+			return {
+				message: "Gagal menambah chapter novel",
+				error: JSON.stringify(parsed.error),
+			};
+
+		const novel = await prisma.novel_chapter.create({
+			data: parsed.data,
+		});
+
+		return {
+			message: "Chapter novel berhasil dibuat",
+			data: novel,
+			status: 201,
+		};
+	} catch (error) {
+		return {
+			message: "Server error, try again later",
+			error: JSON.stringify(error),
+		};
+	}
+}
+
+export async function createNovel(
+	data: z.infer<typeof schema>
+): Promise<response | null> {
+	const { user } = await verifySession();
+
+	try {
+		const parsedTag = schema.pick({ tag_novel: true }).safeParse(data);
+		const parsedNovel = schema.omit({ tag_novel: true }).safeParse(data);
+
+		if (!parsedNovel.success)
+			return {
+				message: "Gagal membuat novel",
+				error: JSON.stringify(parsedNovel.error.flatten().fieldErrors),
+			};
+
+		const novel = await prisma.novel.create({
+			data: {
+				...parsedNovel.data,
+				cover: "",
+				authorId: user!.author!.id,
+			},
+		});
+
+		if (parsedTag.success)
+			await Promise.all(
+				parsedTag.data.tag_novel.map((v: string) =>
+					prisma.tag_novel.create({
+						data: { novelId: novel.id, tag: v },
+					})
+				)
+			);
+
+		return {
+			message: "Novel berhasil dibuat",
+			data: novel,
+			status: 201,
+		};
+	} catch (error) {
+		console.log(error);
+		return {
+			message: "Server error, try again later",
+			error: JSON.stringify(error),
+			status: 500,
+		};
+	}
+}
 
 export const novelByGenre = async (genre: string) => {
 	const total = await prisma.novel.count({ where: { genre } });
@@ -104,6 +214,15 @@ export const getAuthorNovel = async () => {
 	const novels = await prisma.novel.findMany({
 		where: { authorId: user.author.id },
 		include: { chapter: true },
+	});
+
+	return novels;
+};
+
+export const getNovelId = async (novelId: number) => {
+	const novels = await prisma.novel.findUnique({
+		where: { id: novelId },
+		include: { chapter: true, _count: true },
 	});
 
 	return novels;
