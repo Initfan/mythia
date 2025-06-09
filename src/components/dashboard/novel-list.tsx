@@ -5,7 +5,7 @@ import { Prisma } from "@/generated";
 import { useEffect, useState, useTransition } from "react";
 import CardNovel, { LoadingCardNovel } from "../home/card-novel";
 import { Button } from "../ui/button";
-import { Eye, PenBox } from "lucide-react";
+import { PenBox } from "lucide-react";
 import Link from "next/link";
 
 type novel = Prisma.novelGetPayload<{ include: { chapter: true } }>;
@@ -35,10 +35,9 @@ const DashboardNovelList = () => {
 						<CardNovel key={v.id} v={v} />
 						<div className="flex space-x-2 absolute bottom-0 right-0">
 							<Button variant="outline" size="sm">
-								<Eye />
-							</Button>
-							<Button variant="outline" size="sm">
-								<PenBox />
+								<Link href={`novel/edit/${v.id}`}>
+									<PenBox />
+								</Link>
 							</Button>
 							<Button size="sm">
 								<Link href={`novel/write/${v.id}`}>

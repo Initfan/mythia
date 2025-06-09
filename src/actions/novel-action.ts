@@ -72,6 +72,44 @@ export async function createChapter(
 	}
 }
 
+export const getChapterList = async (novelId: number) => {
+	const chapters = await prisma.novel_chapter.findMany({
+		where: { novelId },
+		include: { novel: { select: { title: true } } },
+	});
+	return chapters;
+};
+
+export async function updateNovel(
+	data: z.infer<typeof schema> & { novelId: number }
+) {
+	const parsed = schema.omit({ tag_novel: true }).safeParse(data);
+	const parsedTag = schema.pick({ tag_novel: true }).safeParse(data);
+
+	const novel = await prisma.novel.update({
+		where: { id: data.novelId },
+		data: parsed.data!,
+	});
+
+	if (parsedTag.success) {
+		await prisma.tag_novel.deleteMany({
+			where: { novelId: novel.id },
+		});
+		await Promise.all(
+			parsedTag.data.tag_novel.map((v: string) =>
+				prisma.tag_novel.create({
+					data: { novelId: novel.id, tag: v },
+				})
+			)
+		);
+	}
+
+	return {
+		message: "Novel berhasil diupdate",
+		status: 201,
+	};
+}
+
 export async function createNovel(
 	data: z.infer<typeof schema>
 ): Promise<response | null> {

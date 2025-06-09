@@ -13,7 +13,9 @@ import { toast } from "sonner";
 
 export function FileUploadThing({
 	onUpload,
+	src,
 }: {
+	src?: string;
 	onUpload: (file: File) => void;
 }) {
 	const [cover, setCover] = React.useState<File>();
@@ -45,10 +47,17 @@ export function FileUploadThing({
 				<FileUploadDropzone
 					className={`flex-1 relative ${cover && "border-none"}`}
 				>
-					{cover ? (
+					{cover && !src ? (
 						<Image
 							src={URL.createObjectURL(cover)}
 							alt={cover.name}
+							fill
+							className="object-cover"
+						/>
+					) : src ? (
+						<Image
+							src={src}
+							alt={src}
 							fill
 							className="object-cover"
 						/>

@@ -4,9 +4,11 @@ import ReactEditor, { ContentEditableEvent } from "react-simple-wysiwyg";
 const Editor = ({
 	setContent,
 	placeholder,
+	value,
 }: {
 	placeholder?: string;
 	setContent: (value: string) => void;
+	value?: string;
 }) => {
 	const [html, setHtml] = useState<string>();
 
@@ -18,7 +20,7 @@ const Editor = ({
 	return (
 		<ReactEditor
 			containerProps={{ className: "flex-1 border-zinc-800!" }}
-			value={html}
+			value={value || html}
 			onChange={onChange}
 			placeholder={placeholder || "Tulis content cerita..."}
 		/>
