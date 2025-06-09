@@ -17,7 +17,7 @@ const WriteChapter = ({
 	novelId,
 	activePage,
 }: {
-	activePage: (id: number) => void;
+	activePage?: (id: number) => void;
 	novelId: number | null;
 }) => {
 	const [pending, transition] = useTransition();
@@ -26,7 +26,7 @@ const WriteChapter = ({
 	const titleRef = useRef<HTMLInputElement>(null);
 
 	useEffect(() => {
-		if (!novelId) return activePage(2);
+		if (!novelId) return activePage!(2);
 		transition(
 			async () => await getNovelId(novelId).then((res) => setNovel(res!))
 		);

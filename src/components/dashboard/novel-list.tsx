@@ -41,7 +41,9 @@ const DashboardNovelList = () => {
 								<PenBox />
 							</Button>
 							<Button size="sm">
-								<Link href="novel/write">Tulis Bab</Link>
+								<Link href={`novel/write/${v.id}`}>
+									Tulis Bab
+								</Link>
 							</Button>
 						</div>
 					</div>
