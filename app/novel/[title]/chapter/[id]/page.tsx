@@ -2,7 +2,6 @@ import BreadcrumbChapter from "@/components/novel/breadcrumb-chapter";
 import ChapterComment from "@/components/novel/chapter-comment";
 import { Button } from "@/components/ui/button";
 import prisma from "@/lib/prisma";
-import parse from "html-react-parser";
 import { Eye, MessageCircle } from "lucide-react";
 import Link from "next/link";
 
@@ -66,9 +65,12 @@ const page = async ({
 				<h1 className="text-5xl text-center">
 					{novel.chapter.at(0)?.title}
 				</h1>
-				<div className="leading-loose text-lg">
-					{parse(novel.chapter.at(0)?.content || "")}
-				</div>
+				<div
+					className="leading-loose text-lg"
+					dangerouslySetInnerHTML={{
+						__html: novel.chapter.at(0)!.content,
+					}}
+				></div>
 				<div className="flex justify-center space-x-2">
 					<Button variant="outline">Daftar Bab</Button>
 					<Button>Bab Selanjutnya</Button>

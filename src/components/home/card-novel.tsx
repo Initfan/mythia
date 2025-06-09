@@ -5,6 +5,7 @@ import { Prisma } from "@prisma/client";
 import { Badge } from "../ui/badge";
 import { Skeleton } from "../ui/skeleton";
 import { useRouter } from "next/navigation";
+import parser from "html-react-parser";
 
 type NovelChapter = Prisma.novelGetPayload<{
 	include: {
@@ -31,7 +32,7 @@ const CardNovel = ({ v }: { v: NovelChapter }) => {
 					<Badge>{v.genre}</Badge> <Dot /> {v.status}
 				</p>
 				<p className="text-muted-foreground line-clamp-3">
-					{v.synopsis}
+					{parser(v.synopsis)}
 				</p>
 				<p className="text-sm flex">
 					{v.views} Dilihat

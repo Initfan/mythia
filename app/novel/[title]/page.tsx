@@ -5,9 +5,8 @@ import { Button } from "@/components/ui/button";
 import prisma from "@/lib/prisma";
 import { Dot, User2 } from "lucide-react";
 import Link from "next/link";
+import parser from "html-react-parser";
 import { redirect } from "next/navigation";
-import parse from "html-react-parser";
-import { Separator } from "@/components/ui/separator";
 import ReviewSection from "@/components/novel/review";
 import Share from "@/components/novel/share";
 import ButtonLibrary from "@/components/novel/button-library";
@@ -106,21 +105,8 @@ const page = async ({ params }: { params: Promise<{ title: string }> }) => {
 			<div className="space-y-4">
 				<h2 className="text-2xl font-semibold">Sinopsis</h2>
 				<p className="text-muted-foreground leading-relaxed">
-					{novel.synopsis}
+					{parser(novel.synopsis)}
 				</p>
-			</div>
-			<div className="space-y-4">
-				<h2 className="text-2xl font-semibold">Pratinjau Bab 1</h2>
-				<div className="flex space-x-6 items-center">
-					<Separator className="flex-1" />
-					<h1 className="text-3xl font-bold text-center">
-						{novel.chapter.at(0)?.title}
-					</h1>
-					<Separator className="flex-1" />
-				</div>
-				<div className="leading-loose text-lg">
-					{parse(novel.chapter.at(0)!.content)}
-				</div>
 			</div>
 			<ReviewSection
 				review={novel.novel_review}
