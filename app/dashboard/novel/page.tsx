@@ -1,4 +1,4 @@
-import DashboardNovelList from "@/components/dashboard/nove-list";
+import DashboardNovelList from "@/components/dashboard/novel-list";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import React from "react";

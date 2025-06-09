@@ -1,7 +1,9 @@
 "use server";
 
+import { verifySession } from "@/lib/dal";
 import prisma from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
+import { redirect } from "next/navigation";
 
 export const novelByGenre = async (genre: string) => {
 	const total = await prisma.novel.count({ where: { genre } });
@@ -94,9 +96,13 @@ export const searchNovel = async (
 	return { total, novel };
 };
 
-export const getAuthorNovel = async (authorId: number) => {
+export const getAuthorNovel = async () => {
+	const { user } = await verifySession();
+
+	if (!user?.author) return redirect("/");
+
 	const novels = await prisma.novel.findMany({
-		where: { authorId },
+		where: { authorId: user.author.id },
 		include: { chapter: true },
 	});
 
