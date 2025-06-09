@@ -104,9 +104,9 @@ const page = async ({ params }: { params: Promise<{ title: string }> }) => {
 			</div>
 			<div className="space-y-4">
 				<h2 className="text-2xl font-semibold">Sinopsis</h2>
-				<p className="text-muted-foreground leading-relaxed">
+				<div className="text-muted-foreground leading-relaxed">
 					{parser(novel.synopsis)}
-				</p>
+				</div>
 			</div>
 			<ReviewSection
 				review={novel.novel_review}
