@@ -25,6 +25,8 @@ const GENRE = [
 	"Petualangan",
 	"Kriminal",
 	"Fiksi Spiritual",
+	"Drama",
+	"Slice of Life",
 ];
 
 async function main() {
