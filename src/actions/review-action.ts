@@ -39,3 +39,37 @@ export async function createReview(value: z.infer<typeof schema>) {
 		};
 	}
 }
+
+export const likeReview = async (id: number) => {
+	const { user } = await verifySession();
+
+	await prisma.novel_review.update({
+		where: { id },
+		data: { liked_by: { push: user!.id }, likes: { increment: 1 } },
+	});
+
+	return {
+		message: "Memberi like review",
+	};
+};
+
+export const unlikeReview = async (id: number) => {
+	const { user } = await verifySession();
+
+	const likedBy = await prisma.novel_review.findFirst({
+		where: { id },
+		select: { liked_by: true },
+	});
+
+	await prisma.novel_review.update({
+		where: { id },
+		data: {
+			liked_by: { set: likedBy?.liked_by.filter((v) => v != user!.id) },
+			likes: { decrement: 1 },
+		},
+	});
+
+	return {
+		message: "Menghapus like review",
+	};
+};

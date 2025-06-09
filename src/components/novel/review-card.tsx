@@ -3,67 +3,41 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Star, ThumbsUp } from "lucide-react";
 import { Button } from "../ui/button";
 import { Prisma } from "@/generated";
-import { toast } from "sonner";
-import { useState } from "react";
+import { useContext, useState, useTransition } from "react";
+import { likeReview, unlikeReview } from "@/actions/review-action";
+import { userContext } from "@/context/user-context";
 
 type userReview = Prisma.novel_reviewGetPayload<{
 	include: { user: true };
 }>;
 
 const ReviewCard = ({ review }: { review: userReview }) => {
+	const user = useContext(userContext);
 	const [likes, setLikes] = useState(review.likes);
-	const [liked, setLiked] = useState(
-		review.liked_by.includes(review.user.id)
-	);
-	const [loading, setLoading] = useState(false);
+	const [liked, setLiked] = useState(review.liked_by.includes(user!.id));
 
-	const likeHandler = async () => {
-		setLoading(true);
-		try {
-			const req = await fetch("/api/novel/review/like", {
-				method: "PUT",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({
-					reviewId: review.id,
-					userId: review.user.id,
-				}),
-			});
+	const [pending, transition] = useTransition();
 
-			const res = await req.json();
-			setLikes(res.data);
-			setLiked(true);
-			setLoading(false);
-		} catch {
-			setLoading(false);
-			toast.error("Gagal menyukai review novel");
-		}
+	const likeHandler = () => {
+		transition(async () => {
+			const liked = await likeReview(review.id);
+
+			if (liked) {
+				setLiked(true);
+				setLikes((p) => p + 1);
+			}
+		});
 	};
 
-	const removeLikeHandler = async () => {
-		setLoading(true);
+	const unlikeHandler = () => {
+		transition(async () => {
+			const liked = await unlikeReview(review.id);
 
-		try {
-			const req = await fetch("/api/novel/review/like", {
-				method: "DELETE",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({
-					reviewId: review.id,
-					userId: review.user.id,
-				}),
-			});
-
-			const res = await req.json();
-			setLikes(res.data);
-			setLiked(false);
-			setLoading(false);
-		} catch {
-			setLoading(false);
-			toast.error("Gagal menyukai review novel");
-		}
+			if (liked) {
+				setLiked(false);
+				setLikes((p) => p - 1);
+			}
+		});
 	};
 
 	return (
@@ -95,8 +69,8 @@ const ReviewCard = ({ review }: { review: userReview }) => {
 			<div className="flex flex-col items-center">
 				<Button
 					variant="ghost"
-					onClick={liked ? removeLikeHandler : likeHandler}
-					disabled={loading}
+					onClick={liked ? unlikeHandler : likeHandler}
+					disabled={pending}
 				>
 					<ThumbsUp
 						fill={liked ? "white" : "none"}
