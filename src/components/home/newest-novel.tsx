@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { Carousel, CarouselContent, CarouselItem } from "../ui/carousel";
 import CardNovel from "./card-novel";
 import prisma from "@/lib/prisma";
@@ -13,19 +12,14 @@ const NewestNovel = async () => {
 	return (
 		<div className="space-y-4">
 			<h1 className="text-3xl font-semibold">Terbaru</h1>
-			<Carousel>
-				<CarouselContent>
+			<Carousel opts={{ align: "start" }}>
+				<CarouselContent className="cursor-grabbing select-none">
 					{novel.map((v) => (
 						<CarouselItem
 							key={v.id}
-							className="lg:basis-1/3 md:basis-1/2 w-full lg:w-1/3 md:w-1/2"
+							className="lg:basis-1/3 md:basis-1/2 w-full lg:w-1/3 md:w-1/2 pl-4 -mr-4"
 						>
-							<Link
-								href={`/novel/${v.title.replaceAll(" ", "-")}`}
-								className="flex h-[230px] space-x-4 hover:cursor-pointer group"
-							>
-								<CardNovel v={v} />
-							</Link>
+							<CardNovel v={v} />
 						</CarouselItem>
 					))}
 				</CarouselContent>

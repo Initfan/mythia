@@ -50,12 +50,12 @@ const PopularNovelGenre = ({ genre }: { genre: genre[] }) => {
 							Novel bergenre {selectedGenre} tidak ada.
 						</p>
 					) : novel.length > 0 ? (
-						<Carousel>
-							<CarouselContent>
+						<Carousel opts={{ align: "start" }}>
+							<CarouselContent className="cursor-grabbing select-none">
 								{novel.map((v) => (
 									<CarouselItem
 										key={v.id}
-										className="lg:basis-1/2 w-full lg:w-1/2"
+										className="lg:basis-1/2 basis-1 lg:w-1/2 w-full pl-4 -mr-4"
 									>
 										<CardNovel v={v} />
 									</CarouselItem>

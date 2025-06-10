@@ -31,7 +31,7 @@ const CardNovel = ({ v }: { v: NovelChapter }) => {
 				<p className="text-sm flex items-center">
 					<Badge>{v.genre}</Badge> <Dot /> {v.status}
 				</p>
-				<div className="text-muted-foreground line-clamp-3">
+				<div className="text-muted-foreground w-[90%] line-clamp-3">
 					{parser(v.synopsis)}
 				</div>
 				<p className="text-sm flex">
