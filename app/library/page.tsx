@@ -3,10 +3,10 @@
 import { userLibrary } from "@/actions/library-action";
 import { LoadingCardNovel } from "@/components/home/card-novel";
 import NovelList from "@/components/library/novel-list";
+import CreateLibrary from "@/components/novel/create-library";
 import { Skeleton } from "@/components/ui/skeleton";
-import { userContext } from "@/context/user-context";
 import { Prisma } from "@/generated";
-import { useContext, useEffect, useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 
 type libraryType = Prisma.user_libraryGetPayload<{
 	include: {
@@ -15,20 +15,27 @@ type libraryType = Prisma.user_libraryGetPayload<{
 }>;
 
 const page = () => {
-	const user = useContext(userContext);
 	const [libraries, setLibraries] = useState<libraryType[]>();
 	const [pending, transition] = useTransition();
 
 	useEffect(() => {
 		transition(async () => {
-			const library = await userLibrary(user!.id);
+			const library = await userLibrary();
 			setLibraries(library);
 		});
-	}, [user]);
+	}, []);
+
+	const onAddLibrary = (library: libraryType) =>
+		transition(() => setLibraries((p) => [...p!, library]));
 
 	return (
 		<div className="space-y-4">
-			<h1 className="text-3xl font-semibold">Perpustakaan Novel</h1>
+			<div className="flex justify-between">
+				<h1 className="text-3xl font-semibold flex-1">
+					Perpustakaan Novel
+				</h1>
+				{!pending && <CreateLibrary onAddLibrary={onAddLibrary} />}
+			</div>
 			{libraries &&
 				!pending &&
 				libraries.map((v) => {
@@ -51,7 +58,7 @@ const page = () => {
 					);
 				})}
 			{pending &&
-				Array.from({ length: 5 }).map((_, i) => (
+				Array.from({ length: 2 }).map((_, i) => (
 					<div key={i} className="space-y-2">
 						<Skeleton className="h-6 w-1/4" />
 						<LoadingCardNovel key={i} />

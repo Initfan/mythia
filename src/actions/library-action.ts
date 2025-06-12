@@ -1,17 +1,17 @@
 "use server";
 import { Prisma } from "@/generated";
+import { verifySession } from "@/lib/dal";
 import prisma from "@/lib/prisma";
 
 type libraryType = Prisma.user_libraryGetPayload<{
 	include: { library_detail: true };
 }>;
 
-export const createLibrary = async (
-	title: string,
-	userId: number
-): Promise<libraryType> => {
+export const createLibrary = async (title: string): Promise<libraryType> => {
+	const { user } = await verifySession();
+
 	const library = await prisma.user_library.create({
-		data: { title, userId },
+		data: { title, userId: user!.id },
 		include: { library_detail: true },
 	});
 
@@ -35,9 +35,11 @@ export const userLibraryNovel = async (
 	}
 };
 
-export const userLibrary = async (userId: number): Promise<libraryType[]> => {
+export const userLibrary = async (): Promise<libraryType[]> => {
+	const { user } = await verifySession();
+
 	const libraries = await prisma.user_library.findMany({
-		where: { userId },
+		where: { userId: user!.id },
 		include: { library_detail: true },
 	});
 
