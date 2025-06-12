@@ -43,7 +43,7 @@ const ButtonLibrary = ({ novelId }: { novelId: number }) => {
 	const [pendingAdd, addTransition] = useTransition();
 
 	const [state, action] = useActionState(
-		() => createLibrary(ref.current!.value!, user!.id),
+		() => createLibrary(ref.current!.value!),
 		null
 	);
 
@@ -53,7 +53,7 @@ const ButtonLibrary = ({ novelId }: { novelId: number }) => {
 
 	useEffect(() => {
 		startTransition(async () =>
-			userLibrary(user!.id).then((res) => setLibrary(res))
+			userLibrary().then((res) => setLibrary(res))
 		);
 	}, [user]);
 
@@ -90,7 +90,7 @@ const ButtonLibrary = ({ novelId }: { novelId: number }) => {
 								startTransition(async () => action());
 							}}
 						>
-							<Input name="title" ref={ref} />
+							<Input name="title" ref={ref} disabled={pending} />
 							<Button type="submit" disabled={pending}>
 								{pending ? (
 									<Loader2 className="animate-spin" />
