@@ -35,7 +35,8 @@ const CardNovel = ({ v }: { v: NovelChapter }) => {
 					{parser(v.synopsis)}
 				</div>
 				<p className="text-sm flex">
-					{v.views} Dilihat
+					{v.views.toLocaleString("en", { notation: "compact" })}{" "}
+					Dilihat
 					<Dot />
 					{v.chapter.length} Bab
 				</p>
