@@ -19,6 +19,8 @@ model user {
   chapter_comment chapter_comment[]
   novel_review    novel_review[]
   user_library    user_library[]
+
+  novel_history novel_history[]
 }
 
 model author {
@@ -55,6 +57,8 @@ model novel {
   chapter         novel_chapter[]
   novel_review    novel_review[]
   tag             tag_novel[]
+
+  novel_history novel_history[]
 }
 
 model user_library {
@@ -71,6 +75,16 @@ model library_detail {
   novelId   Int
   library   user_library @relation(fields: [libraryId], references: [id])
   novel     novel        @relation(fields: [novelId], references: [id])
+}
+
+model novel_history {
+  id             Int           @id @default(autoincrement())
+  novelId        Int
+  userId         Int
+  novelChapterId Int
+  novel_chapter  novel_chapter @relation(fields: [novelChapterId], references: [id])
+  user           user          @relation(fields: [userId], references: [id])
+  novel          novel         @relation(fields: [novelId], references: [id])
 }
 
 model novel_review {
@@ -97,6 +111,8 @@ model novel_chapter {
   updatedAt DateTime          @default(now()) @updatedAt
   comment   chapter_comment[]
   novel     novel             @relation(fields: [novelId], references: [id])
+
+  novel_history novel_history[]
 }
 
 model chapter_comment {

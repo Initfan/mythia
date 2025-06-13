@@ -55,7 +55,7 @@ const page = async ({ params }: { params: Promise<{ title: string }> }) => {
 					<div className="flex space-x-2">
 						<Badge>{novel.genre}</Badge>
 						<Dot />
-						<p>On going</p>
+						<p>{novel.status}</p>
 					</div>
 					<div className="flex space-x-2 items-center group">
 						<Avatar>

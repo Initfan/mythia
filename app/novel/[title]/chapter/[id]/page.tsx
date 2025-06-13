@@ -1,3 +1,4 @@
+import { historyRead } from "@/actions/novel-action";
 import BreadcrumbChapter from "@/components/novel/breadcrumb-chapter";
 import ChapterComment from "@/components/novel/chapter-comment";
 import ChapterList from "@/components/novel/chapter-list";
@@ -26,6 +27,8 @@ const page = async ({
 			},
 		},
 	});
+
+	await historyRead(Number(id), novel!.id);
 
 	await prisma.novel_chapter.update({
 		where: {
