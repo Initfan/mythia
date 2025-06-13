@@ -19,6 +19,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
 import { login } from "@/actions/auth-action";
+import { redirect } from "next/navigation";
 
 const formSchema = z.object({
 	email: z.string().email(),
@@ -38,6 +39,8 @@ const Login = () => {
 		const req = await login(values);
 
 		if (req.error) return toast(req.error);
+
+		if (req.status == 200) return redirect("/");
 
 		if (req.status == 404) return toast("User tidak ditemukan.");
 	};

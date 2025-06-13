@@ -2,7 +2,6 @@
 import prisma from "@/lib/prisma";
 import { encrypt } from "@/lib/session";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import { z } from "zod";
 
 const formSchema = z.object({
@@ -59,7 +58,7 @@ export async function login(
 			path: "/",
 		});
 
-		return redirect("/");
+		return { message: "Login berhasil", status: 200 };
 	} catch (error) {
 		return { message: "Server error, coba lagi.", error: String(error) };
 	}
