@@ -1,13 +1,13 @@
 "use client";
-import React, { useContext, useRef } from "react";
+import { useRef, useState, useTransition } from "react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Loader2, SendIcon } from "lucide-react";
-import { Prisma } from "@/generated/prisma";
+import { Prisma } from "@/generated";
 import { toast } from "sonner";
-import { userContext } from "@/context/user-context";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { Separator } from "../ui/separator";
+import { createComment } from "@/actions/novel-action";
 
 type userComment = Prisma.chapter_commentGetPayload<{
 	include: { user: true };
@@ -20,45 +20,43 @@ const ChapterComment = ({
 	comments: userComment[];
 	chapterId: number;
 }) => {
-	const user = useContext(userContext);
 	const inputRef = useRef<HTMLInputElement>(null);
-	const [loading, setLoading] = React.useState(false);
-	const [comment, setComment] = React.useState<userComment[]>(comments);
+	const [loading, transition] = useTransition();
+	const [comment, setComment] = useState<userComment[]>(comments);
 
-	const handleSubmit = async () => {
-		setLoading(true);
-		try {
-			const req = await fetch("/api/novel/chapter/comment", {
-				method: "POST",
-				body: JSON.stringify({
-					comment: inputRef.current?.value,
-					userId: user?.id,
-					chapterId,
-				}),
+	const handleSubmit = () => {
+		if (!inputRef.current?.value) return toast("Komen tidak boleh kosong");
+
+		transition(async () => {
+			const data = await createComment({
+				chapterId,
+				comment: inputRef.current!.value,
 			});
 
-			if (!req.ok) {
-				const res = await req.json();
-				toast.error(res.message || "Gagal mengirim komentar");
-				return;
-			}
+			console.log(data);
 
-			const res = await req.json();
-			setComment((p) => [...p, res.data]);
-			inputRef.current!.value = "";
-			setLoading(false);
-			toast.success("Komentar berhasil dikirim");
-		} catch {
-			setLoading(false);
-			toast.error("Gagal mengirim komentar");
-		}
+			if (data.data) {
+				toast(data.message);
+				inputRef.current!.value = "";
+				setComment((p) => [...p, data.data!]);
+			} else {
+				toast(data.message);
+			}
+		});
 	};
 
 	return (
 		<div className="space-y-4">
-			<h2 className="text-2xl font-semibold">Komentar</h2>
+			<h2 className="text-2xl font-semibold">
+				Komentar ({comment.length})
+			</h2>
 			<div className="flex space-x-2">
-				<Input className="flex-1" ref={inputRef} />
+				<Input
+					className="flex-1"
+					ref={inputRef}
+					onKeyUp={(e) => e.code == "Enter" && handleSubmit()}
+					disabled={loading}
+				/>
 				<Button onClick={handleSubmit} disabled={loading}>
 					{loading ? (
 						<Loader2 className="animate-spin" />

@@ -39,6 +39,37 @@ export const updateCover = async (
 	});
 };
 
+export const getHistoryRead = async (userId: number) => {
+	const history = await prisma.novel_history.findMany({
+		where: { userId },
+		include: { novel: true, novel_chapter: true },
+	});
+
+	return history;
+};
+
+export const historyRead = async (novelChapterId: number, novelId: number) => {
+	const { user } = await verifySession();
+
+	if (!user) return;
+
+	const history = await prisma.novel_history.findFirst({
+		where: { novelId, userId: user.id },
+		select: { id: true },
+	});
+
+	if (history) {
+		await prisma.novel_history.update({
+			where: { id: history.id },
+			data: { novelChapterId },
+		});
+	} else {
+		await prisma.novel_history.create({
+			data: { novelChapterId, novelId, userId: user.id },
+		});
+	}
+};
+
 export async function createChapter(
 	value: z.infer<typeof chapterSchema>
 ): Promise<response> {
@@ -78,6 +109,34 @@ export const getChapterList = async (novelId: number) => {
 		include: { novel: { select: { title: true } } },
 	});
 	return chapters;
+};
+
+const commentSchema = z.object({
+	comment: z.string(),
+	chapterId: z.number(),
+});
+
+type userComment = Prisma.chapter_commentGetPayload<{
+	include: { user: true };
+}>;
+
+export const createComment = async (
+	values: z.infer<typeof commentSchema>
+): Promise<{ data?: userComment; message: string }> => {
+	const { user } = await verifySession();
+
+	if (!user) return { message: "Unauthorized" };
+
+	const parsed = commentSchema.safeParse(values);
+
+	if (!parsed.success) return { message: "Gagal memberikan komentar" };
+
+	const comment = await prisma.chapter_comment.create({
+		data: { ...parsed.data, userId: user.id },
+		include: { user: true },
+	});
+
+	return { data: comment, message: "Berhasil memberikan komentar" };
 };
 
 export async function updateNovel(
