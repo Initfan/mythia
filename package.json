@@ -10,6 +10,7 @@
 		"lint": "next lint"
 	},
 	"prisma": {
+		"schema": "src/prisma/schema.prisma",
 		"seed": "node --loader ts-node/esm prisma/seed.ts"
 	},
 	"dependencies": {

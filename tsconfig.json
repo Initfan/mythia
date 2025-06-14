@@ -18,8 +18,10 @@
 				"name": "next"
 			}
 		],
+		"baseUrl": "./src",
 		"paths": {
-			"@/*": ["./src/*"]
+			"@/*": ["*"],
+			"@/components": ["./src/components/*"]
 		}
 	},
 	"include": [
@@ -28,7 +30,7 @@
 		"**/*.tsx",
 		".next/types/**/*.ts",
 		"src",
-		"prisma/seed.ts"
+		"src/prisma/seed.ts"
 	],
 	"exclude": ["node_modules"]
 }
