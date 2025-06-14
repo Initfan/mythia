@@ -66,7 +66,7 @@ const Footer = () => {
 							"Pengaturan",
 							"Koin",
 							"Pustaka",
-							"Riwayar",
+							"Riwayat",
 						]).map((v) => (
 							<Link
 								key={v}

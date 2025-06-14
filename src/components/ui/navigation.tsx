@@ -4,7 +4,7 @@ import React, { useContext, useEffect, useState } from "react";
 import MythiaLogo from "@/assets/mythia-logo.png";
 import Link from "next/link";
 import { Button } from "./button";
-import { Avatar, AvatarFallback } from "./avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
 import { userContext } from "@/context/user-context";
 import {
 	DropdownMenu,
@@ -26,6 +26,7 @@ import {
 import { genre } from "@/generated";
 import { getAllGenre } from "@/actions/novel-action";
 import { logout } from "@/actions/user-action";
+import { BookTextIcon, Coins, LogOut, Settings, User } from "lucide-react";
 
 interface props {
 	children?: React.ReactNode;
@@ -91,46 +92,78 @@ const Navigation = ({ children, noLink = false, noSearch = false }: props) => {
 			{!noLink && (
 				<div className="hidden md:flex space-x-2 items-center">
 					{!noSearch && <SearchNovel />}
-					<Link href={"/write"}>
-						<Button>Tulis</Button>
-					</Link>
 					{user ? (
-						<DropdownMenu>
-							<DropdownMenuTrigger className="outline-none cursor-pointer">
-								<Avatar>
-									<AvatarFallback>
-										{user.username
-											.slice(0, 1)
-											.toUpperCase()}
-									</AvatarFallback>
-								</Avatar>
-							</DropdownMenuTrigger>
-							<DropdownMenuContent>
-								<DropdownMenuLabel>
-									Halo, {user.username.split(" ")[0]}
-								</DropdownMenuLabel>
-								<DropdownMenuSeparator />
-								<DropdownMenuItem>Profile</DropdownMenuItem>
-								{user.role == "author" && (
+						<>
+							<Button variant="secondary">
+								<Link href={"/write"}>Tulis</Link>
+							</Button>
+							<Button>
+								<Link
+									href={"/coin/topup"}
+									className="flex items-center space-x-1"
+								>
+									<Coins size={20} />{" "}
+									<span>{user.coin} Koin</span>
+								</Link>
+							</Button>
+							<DropdownMenu>
+								<DropdownMenuTrigger className="outline-none cursor-pointer">
+									<Avatar>
+										{user.author?.image && (
+											<AvatarImage
+												src={user.author.image}
+												alt={user.author.pen_name}
+											/>
+										)}
+										<AvatarFallback>
+											{user.username
+												.slice(0, 1)
+												.toUpperCase()}
+										</AvatarFallback>
+									</Avatar>
+								</DropdownMenuTrigger>
+								<DropdownMenuContent>
+									<DropdownMenuLabel>
+										Halo, {user.username.split(" ")[0]}
+									</DropdownMenuLabel>
+									<DropdownMenuSeparator />
 									<DropdownMenuItem>
-										<Link href="/dashboard/novel">
-											Novelku
+										<User />
+										<Link href="/dashboard/profile">
+											Profile
 										</Link>
 									</DropdownMenuItem>
-								)}
-								<DropdownMenuItem>Koin</DropdownMenuItem>
-								<DropdownMenuSeparator />
-								<DropdownMenuItem>Pengaturan</DropdownMenuItem>
-								<DropdownMenuItem>
-									<span
-										className="text-destructive"
+									{user.role == "author" && (
+										<DropdownMenuItem>
+											<BookTextIcon />
+											<Link href="/dashboard/novel">
+												Novelku
+											</Link>
+										</DropdownMenuItem>
+									)}
+									<DropdownMenuItem>
+										<Coins />
+										<Link href="/dashboard/koin">Koin</Link>
+									</DropdownMenuItem>
+									<DropdownMenuSeparator />
+									<DropdownMenuItem>
+										<Settings />
+										<Link href="/dashboard/settings">
+											Pengaturan
+										</Link>
+									</DropdownMenuItem>
+									<DropdownMenuItem
 										onClick={logout}
+										className="cursor-pointer"
 									>
-										Logout
-									</span>
-								</DropdownMenuItem>
-							</DropdownMenuContent>
-						</DropdownMenu>
+										<LogOut />
+										<span className="text-destructive">
+											Logout
+										</span>
+									</DropdownMenuItem>
+								</DropdownMenuContent>
+							</DropdownMenu>
+						</>
 					) : (
 						<Link href={"/auth/signin"}>
 							<Button variant={"outline"}>Log In</Button>
