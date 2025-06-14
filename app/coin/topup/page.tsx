@@ -48,7 +48,7 @@ const page = () => {
 				currency: "IDR",
 				checkout_method: "ONE_TIME_PAYMENT",
 				reference_id: `topup_${user?.username}-${coin.value}`,
-				channel_properties: channelProperties!,
+				channel_properties: channelProperties,
 			});
 			setCharged(createdCharge);
 		});

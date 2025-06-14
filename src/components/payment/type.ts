@@ -14,6 +14,9 @@ export type transaction = {
 	amount: string;
 	status: "PENDING" | "SUCCEEDED" | "FAILED";
 	price: number;
+	actions?: {
+		desktop_web_checkout_url?: string;
+	};
 };
 
 export const PAYMENT_METHOD: { label: string; name: payment | null }[] = [

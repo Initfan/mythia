@@ -5,8 +5,16 @@ import { useEffect, useState } from "react";
 import { transaction } from "./type";
 import { addUserBalance, checkPaymentStatus } from "@/actions/payment-action";
 import { toast } from "sonner";
+import { Button } from "../ui/button";
+import Link from "next/link";
 
-const TransactionStatus = ({ id, amount, status, price }: transaction) => {
+const TransactionStatus = ({
+	id,
+	amount,
+	status,
+	price,
+	actions,
+}: transaction) => {
 	const [counter, setCounter] = useState<number>(60);
 	const [currentStatus, setStatus] = useState<transaction["status"]>(status);
 
@@ -62,6 +70,16 @@ const TransactionStatus = ({ id, amount, status, price }: transaction) => {
 						<CircleAlert />
 						<p>Segera Selesaikan Pembayaran</p>
 					</div>
+					{actions?.desktop_web_checkout_url && (
+						<Button>
+							<Link
+								href={actions.desktop_web_checkout_url}
+								target="_blank"
+							>
+								Bayar
+							</Link>
+						</Button>
+					)}
 				</>
 			)}
 		</div>

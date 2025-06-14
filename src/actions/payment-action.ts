@@ -12,9 +12,11 @@ const customerSchema = z.object({
 	amount: z.number(),
 	checkout_method: z.enum(["ONE_TIME_PAYMENT", "TOKENIZED_PAYMENT"]),
 	channel_code: z.enum(["ID_OVO", "ID_LINKAJA", "ID_DANA", "ID_SHOPEEPAY"]),
-	channel_properties: z.object({
-		mobile_number: z.string().nullable(),
-	}),
+	channel_properties: z
+		.object({
+			mobile_number: z.string().nullable(),
+		})
+		.optional(),
 });
 
 export const eWallatetCharge = async (
@@ -22,11 +24,13 @@ export const eWallatetCharge = async (
 ): Promise<transaction> => {
 	const parsed = customerSchema.safeParse(data);
 
-	if (!parsed.data) throw new Error("Invalid credentials");
+	console.log(parsed.error);
+
+	if (!parsed.success) throw new Error("Invalid credentials");
 
 	if (
 		parsed.data.channel_code == "ID_OVO" &&
-		!parsed.data.channel_properties.mobile_number
+		!parsed.data.channel_properties?.mobile_number
 	)
 		throw new Error("OVO Number is Required");
 
@@ -38,16 +42,25 @@ export const eWallatetCharge = async (
 				`${process.env.XENDIT_KEY}:`
 			).toString("base64")}`,
 		},
-		body: JSON.stringify(parsed.data),
+		body: JSON.stringify({
+			...parsed.data,
+			channel_properties: {
+				...parsed.data.channel_properties,
+				success_redirect_url: `${process.env.ENDPOINT}`,
+			},
+		}),
 	});
 
 	const res = await charge.json();
+
+	console.log(res);
 
 	return {
 		id: res.id,
 		status: res.status,
 		amount: parsed.data.reference_id.split("-")[1],
 		price: res.charge_amount,
+		actions: res.actions,
 	};
 };
 
