@@ -15,6 +15,8 @@ model user {
   username        String
   password        String
   role            String            @default("reader")
+  image           String?
+  coin            Int               @default(0)
   author          author?
   chapter_comment chapter_comment[]
   novel_review    novel_review[]
