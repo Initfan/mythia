@@ -4,8 +4,8 @@ import Cover from "../cover";
 import { Prisma } from "@prisma/client";
 import { Badge } from "../ui/badge";
 import { Skeleton } from "../ui/skeleton";
-import { useRouter } from "next/navigation";
 import parser from "html-react-parser";
+import Link from "next/link";
 
 type NovelChapter = Prisma.novelGetPayload<{
 	include: {
@@ -14,14 +14,10 @@ type NovelChapter = Prisma.novelGetPayload<{
 }>;
 
 const CardNovel = ({ v }: { v: NovelChapter }) => {
-	const router = useRouter();
-
 	return (
-		<div
+		<Link
+			href={`/novel/${v.title.replaceAll(" ", "-")}`}
 			className="flex h-[230px] space-x-4 hover:cursor-pointer group"
-			onClick={() =>
-				router.push(`/novel/${v.title.replaceAll(" ", "-")}`)
-			}
 		>
 			<Cover src={v.cover} alt={v.title} />
 			<div className="space-y-3 flex-1 flex justify-between flex-col">
@@ -41,7 +37,7 @@ const CardNovel = ({ v }: { v: NovelChapter }) => {
 					{v.chapter.length} Bab
 				</p>
 			</div>
-		</div>
+		</Link>
 	);
 };
 
