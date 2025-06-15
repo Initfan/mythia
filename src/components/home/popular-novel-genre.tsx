@@ -1,10 +1,12 @@
 "use client";
-import React, { useEffect, useTransition } from "react";
-import { genre, Prisma } from "@prisma/client";
+import { useEffect, useState, useTransition } from "react";
+import { Prisma } from "@prisma/client";
 import CardNovel, { LoadingCardNovel } from "./card-novel";
 import { Carousel, CarouselContent, CarouselItem } from "../ui/carousel";
-import { novelByGenre } from "@/actions/novel-action";
+import { getAllGenre, novelByGenre } from "@/actions/novel-action";
 import { Button } from "../ui/button";
+import { genre } from "@/generated";
+import { Skeleton } from "../ui/skeleton";
 
 type NovelChapter = Prisma.novelGetPayload<{
 	include: {
@@ -13,10 +15,16 @@ type NovelChapter = Prisma.novelGetPayload<{
 	};
 }>;
 
-const PopularNovelGenre = ({ genre }: { genre: genre[] }) => {
-	const [selectedGenre, setSelectedGenre] = React.useState("Fantasi");
-	const [novel, setNovel] = React.useState<NovelChapter[]>([]);
+const PopularNovelGenre = () => {
+	const [selectedGenre, setSelectedGenre] = useState("Fantasi");
+	const [genre, setGenre] = useState<genre[]>([]);
+	const [novel, setNovel] = useState<NovelChapter[]>([]);
 	const [isPending, startTransition] = useTransition();
+	const [genrePending, transition] = useTransition();
+
+	useEffect(() => {
+		transition(() => getAllGenre().then((res) => setGenre(res)));
+	}, []);
 
 	useEffect(() => {
 		setNovel([]);
@@ -30,20 +38,31 @@ const PopularNovelGenre = ({ genre }: { genre: genre[] }) => {
 		<div className="space-y-4">
 			<h1 className="text-3xl font-semibold">Teratas di Genre</h1>
 			<div className="flex space-x-2">
-				<div className="flex-1 gap-2 flex flex-wrap">
-					{genre.map((v) => (
-						<Button
-							key={v.id}
-							variant={
-								selectedGenre == v.genre ? "default" : "outline"
-							}
-							onClick={() => setSelectedGenre(v.genre)}
-							disabled={isPending}
-						>
-							{v.genre}
-						</Button>
-					))}
-				</div>
+				{genrePending ? (
+					<div className="flex-1 grid grid-cols-3 gap-2">
+						{Array.from({ length: 7 }).map((v, i) => (
+							<Skeleton key={i} className="" />
+						))}
+					</div>
+				) : (
+					<div className="flex-1 gap-2 flex flex-wrap">
+						{genre.map((v) => (
+							<Button
+								key={v.id}
+								variant={
+									selectedGenre == v.genre
+										? "default"
+										: "outline"
+								}
+								onClick={() => setSelectedGenre(v.genre)}
+								disabled={isPending}
+							>
+								{v.genre}
+							</Button>
+						))}
+					</div>
+				)}
+
 				<div className="w-2/3">
 					{!isPending && novel.length === 0 ? (
 						<p className="text-muted-foreground">
