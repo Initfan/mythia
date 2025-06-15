@@ -8,6 +8,8 @@ import { Prisma } from "@/generated";
 import { toast } from "sonner";
 import { redirect } from "next/navigation";
 import { Skeleton } from "../ui/skeleton";
+import { Checkbox } from "../ui/checkbox";
+import { Input } from "../ui/input";
 
 type novelChapter = Prisma.novelGetPayload<{
 	include: { chapter: true; _count: true };
@@ -20,10 +22,12 @@ const WriteChapter = ({
 	activePage?: (id: number) => void;
 	novelId: number | null;
 }) => {
+	const [paid, setPaid] = useState<boolean>();
 	const [pending, transition] = useTransition();
 	const [novel, setNovel] = useState<novelChapter>();
 	const [editorContent, setContent] = useState("");
 	const titleRef = useRef<HTMLInputElement>(null);
+	const coinRef = useRef<HTMLInputElement>(null);
 
 	useEffect(() => {
 		if (!novelId) return activePage!(2);
@@ -42,6 +46,8 @@ const WriteChapter = ({
 			title: titleRef.current!.value,
 			content: editorContent,
 			novelId: novelId!,
+			isPaid: paid,
+			paidAmount: Number(coinRef.current?.value),
 		});
 
 		if (chapter.error || !chapter.data) {
@@ -50,9 +56,7 @@ const WriteChapter = ({
 		}
 
 		toast("Berhasil menyimpan chapter novel");
-		setTimeout(() => {
-			return redirect("/dashboard/novel");
-		}, 2000);
+		return redirect("/dashboard/novel");
 	};
 
 	return (
@@ -72,12 +76,29 @@ const WriteChapter = ({
 			<div className="min-h-[300px] flex">
 				<Editor setContent={(e) => setContent(e)} />
 			</div>
+			<div className="space-y-2">
+				<div className="flex space-x-2 items-center">
+					<Checkbox
+						id="paid"
+						onCheckedChange={(e) => setPaid(e ? true : false)}
+					/>{" "}
+					<label htmlFor="paid">Chapter berbayar</label>
+				</div>
+				{paid && (
+					<Input
+						type="number"
+						placeholder="Jumlah koin untuk membaca chapter"
+						ref={coinRef}
+						required
+					/>
+				)}
+			</div>
 			<Button
 				onClick={() => transition(async () => await saveChapter())}
 				disabled={pending}
 			>
 				{pending && <Loader2 className="animate-spin" />}
-				Save
+				Simpan
 			</Button>
 		</main>
 	);

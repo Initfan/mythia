@@ -20,6 +20,8 @@ const chapterSchema = z.object({
 	title: z.string(),
 	content: z.string(),
 	novelId: z.number(),
+	isPaid: z.boolean().optional(),
+	paidAmount: z.number().optional(),
 });
 
 type response = {
@@ -96,6 +98,7 @@ export async function createChapter(
 			status: 201,
 		};
 	} catch (error) {
+		console.log(error);
 		return {
 			message: "Server error, try again later",
 			error: JSON.stringify(error),

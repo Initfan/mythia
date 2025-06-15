@@ -103,16 +103,18 @@ model novel_review {
 }
 
 model novel_chapter {
-  id        Int               @id @default(autoincrement())
-  chapter   Int               @default(0)
-  title     String
-  content   String
-  novelId   Int
-  views     Int               @default(0)
-  createdAt DateTime          @default(now())
-  updatedAt DateTime          @default(now()) @updatedAt
-  comment   chapter_comment[]
-  novel     novel             @relation(fields: [novelId], references: [id])
+  id         Int               @id @default(autoincrement())
+  chapter    Int               @default(0)
+  title      String
+  content    String
+  novelId    Int
+  views      Int               @default(0)
+  isPaid     Boolean           @default(false)
+  paidAmount Int               @default(0)
+  createdAt  DateTime          @default(now())
+  updatedAt  DateTime          @default(now()) @updatedAt
+  comment    chapter_comment[]
+  novel      novel             @relation(fields: [novelId], references: [id])
 
   novel_history novel_history[]
 }

@@ -34,16 +34,14 @@ const DashboardNovelList = () => {
 					<div key={v.id} className="relative">
 						<CardNovel key={v.id} v={v} />
 						<div className="flex space-x-2 absolute bottom-0 right-0">
-							<Button variant="outline" size="sm">
-								<Link href={`novel/edit/${v.id}`}>
+							<Link href={`novel/edit/${v.id}`}>
+								<Button variant="outline" size="sm">
 									<PenBox />
-								</Link>
-							</Button>
-							<Button size="sm">
-								<Link href={`novel/write/${v.id}`}>
-									Tulis Bab
-								</Link>
-							</Button>
+								</Button>
+							</Link>
+							<Link href={`novel/write/${v.id}`}>
+								<Button size="sm">Tulis Bab</Button>
+							</Link>
 						</div>
 					</div>
 				))
