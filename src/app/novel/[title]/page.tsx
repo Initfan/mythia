@@ -6,7 +6,7 @@ import prisma from "@/lib/prisma";
 import { Dot, User2 } from "lucide-react";
 import Link from "next/link";
 import parser from "html-react-parser";
-import { redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import ReviewSection from "@/components/novel/review";
 import Share from "@/components/novel/share";
 import ButtonLibrary from "@/components/novel/button-library";
@@ -37,7 +37,7 @@ const page = async ({ params }: { params: Promise<{ title: string }> }) => {
 		},
 	});
 
-	if (!novel) return redirect("/");
+	if (!novel) return notFound();
 
 	return (
 		<>
