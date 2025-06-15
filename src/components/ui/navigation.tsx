@@ -143,7 +143,9 @@ const Navigation = ({ children, noLink = false, noSearch = false }: props) => {
 									)}
 									<DropdownMenuItem>
 										<Coins />
-										<Link href="/dashboard/koin">Koin</Link>
+										<Link href="/dashboard/income">
+											Pendapatan
+										</Link>
 									</DropdownMenuItem>
 									<DropdownMenuSeparator />
 									<DropdownMenuItem>

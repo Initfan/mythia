@@ -10,7 +10,7 @@ const layout = async ({
 }>) => {
 	return (
 		<>
-			<main className="w-[60vw] mx-auto flex-1 overflow-hidden">
+			<main className="w-[60vw] mx-auto flex-1">
 				<DashboardNavigation />
 				<div className="pb-3">{breadcrumb}</div>
 				{children}

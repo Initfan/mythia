@@ -7,14 +7,16 @@ import {
 	BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import React, { Fragment, useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 
 const DefaultPage = () => {
+	const pathname = usePathname();
 	const [items, setItems] = useState<string[]>();
 
 	useEffect(() => {
-		const pathItem = window.location.pathname.split("/").slice(1);
+		const pathItem = pathname.split("/").slice(1);
 		setItems(pathItem);
-	}, []);
+	}, [pathname]);
 
 	return (
 		<Breadcrumb>
