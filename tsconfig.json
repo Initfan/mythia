@@ -20,12 +20,8 @@
 		],
 		"baseUrl": "./src",
 		"paths": {
-<<<<<<< HEAD
 			"@/*": ["*"],
 			"@/components": ["./src/components/*"]
-=======
-			"@/*": ["*"]
->>>>>>> aed14dfeeb75c258072837d247673649da0fcda6
 		}
 	},
 	"include": [
