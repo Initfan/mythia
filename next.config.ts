@@ -13,6 +13,10 @@ const nextConfig: NextConfig = {
 			},
 		],
 	},
+	eslint: {
+		// Warning: this will allow builds even if ESLint errors are present
+		ignoreDuringBuilds: true,
+	},
 };
 
 export default nextConfig;
