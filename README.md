@@ -1,10 +1,9 @@
-![icon](./public/mythia-logo.png)
-# Mythia
+# 🌌 Mythia
 
 **Mythia** is a **novel web application** that reimagines how users interact with digital experiences. It's not just an app — it's an immersive, evolving journey that blends interactivity, storytelling, and responsive design into a single seamless platform.
 
 <p align="center">
-  <img src="https://your-image-url.com/preview.png" alt="Mythia Preview" width="600"/>
+  <img src="./public/mythia-logo" alt="Mythia Preview" width="600"/>
 </p>
 
 ---
