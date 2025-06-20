@@ -1,4 +1,4 @@
-# <img src="./public/mythia-logo.png" alt="Demo Image" width="25" /> Mythia
+# <img src="./public/mythia-logo.png" alt="Demo Image" width="50" /> Mythia
 
 **Mythia** is a **novel web application** that reimagines how users interact with digital experiences. It's not just an app — it's an immersive, evolving journey that blends interactivity, storytelling, and responsive design into a single seamless platform.
 
@@ -25,8 +25,6 @@
 ---
 
 ## 🛠️ Built With
-
-> (Update this section with the real tech stack you're using)
 
 - **Frontend:** React
 - **Backend:** NextJs  
