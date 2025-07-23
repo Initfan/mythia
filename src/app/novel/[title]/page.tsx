@@ -3,7 +3,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import prisma from "@/lib/prisma";
-import { Dot, User2 } from "lucide-react";
+import { ChevronLeft, Dot, User2 } from "lucide-react";
 import Link from "next/link";
 import parser from "html-react-parser";
 import { notFound } from "next/navigation";
@@ -56,9 +56,14 @@ const page = async ({ params }: Props) => {
 	if (!novel) return notFound();
 
 	return (
-		<>
-			<div className="flex space-x-6">
-				<div className="w-[250px] relative h-[300px]">
+		<main className="py-5 space-y-7">
+			<Link href=".." className="block">
+				<Button variant="outline" size="icon">
+					<ChevronLeft />
+				</Button>
+			</Link>
+			<section className="flex flex-col md:flex-row space-x-6">
+				<div className="w-full md:w-[250px] relative h-[300px]">
 					<Image
 						src={novel.cover}
 						alt={novel.title}
@@ -118,19 +123,19 @@ const page = async ({ params }: Props) => {
 					<ButtonLibrary novelId={novel.id} />
 					<ButtonLike likedBy={novel.liked_by} novelId={novel.id} />
 				</div>
-			</div>
-			<div className="space-y-4">
+			</section>
+			<article className="space-y-4">
 				<h2 className="text-2xl font-semibold">Sinopsis</h2>
 				<div className="text-muted-foreground leading-relaxed">
 					{parser(novel.synopsis)}
 				</div>
-			</div>
+			</article>
 			<ReviewSection
 				review={novel.novel_review}
 				novelId={novel.id}
 				reviewedBy={novel.reviewd_by}
 			/>
-		</>
+		</main>
 	);
 };
 

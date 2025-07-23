@@ -5,7 +5,7 @@ import ChapterList from "@/components/novel/chapter-list";
 import { Button } from "@/components/ui/button";
 import prisma from "@/lib/prisma";
 import parser from "html-react-parser";
-import { Eye, MessageCircle } from "lucide-react";
+import { ChevronLeft, Eye, MessageCircle } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
 
@@ -67,10 +67,15 @@ const page = async ({ params }: Props) => {
 	if (!novel?.chapter) return null;
 
 	return (
-		<div className="space-y-8">
-			<div className="flex justify-between items-center">
+		<main className="space-y-7 py-5">
+			<Link href=".." className="block">
+				<Button variant="outline" size="icon">
+					<ChevronLeft />
+				</Button>
+			</Link>
+			<section className="flex flex-col space-y-1 md:flex-row justify-between md:items-center">
 				<BreadcrumbChapter title={title} id={id} />
-				<div className="space-x-3 flex">
+				<div className="space-x-3 md:flex hidden">
 					<p className="text-muted-foreground flex items-center space-x-1">
 						<Eye size={18} />
 						<span>{novel.chapter.at(0)?.views}</span>
@@ -89,13 +94,32 @@ const page = async ({ params }: Props) => {
 						</Link>
 					</p>
 				</div>
-			</div>
-			<div className="space-y-4">
-				<h1 className="text-5xl text-center">
+			</section>
+			<div className="space-y-8">
+				<h1 className="md:text-5xl text-3xl text-center">
 					{novel.chapter.at(0)?.title}
 				</h1>
-				<div className="leading-loose text-lg">
+				<article className="leading-loose md:text-lg">
 					{parser(novel.chapter.at(0)!.content)}
+				</article>
+				<div className="space-x-3 md:hidden flex">
+					<p className="text-muted-foreground flex items-center space-x-1">
+						<Eye size={18} />
+						<span>{novel.chapter.at(0)?.views}</span>
+					</p>
+					<p className="text-muted-foreground flex items-center space-x-1">
+						<MessageCircle size={18} />
+						<span>{novel.chapter.at(0)?.comment.length}</span>
+					</p>
+					<p>
+						Penulis{" "}
+						<Link
+							href={`/author/${novel.author.pen_name}`}
+							className="font-semibold hover:underline hover:text-blue-500"
+						>
+							{novel.author.pen_name}
+						</Link>
+					</p>
 				</div>
 				<div className="flex justify-center space-x-2">
 					<ChapterList novelId={novel.id} />
@@ -117,7 +141,7 @@ const page = async ({ params }: Props) => {
 				chapterId={novel.chapter.at(0)!.id}
 				comments={novel.chapter.at(0)!.comment}
 			/>
-		</div>
+		</main>
 	);
 };
 

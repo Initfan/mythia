@@ -2,8 +2,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 const Loading = () => {
 	return (
-		<>
-			<div className="flex space-x-6 relative">
+		<main className="space-y-7 py-5">
+			<div className="flex space-y-3 flex-col md:flex-row space-x-6 relative">
 				<Skeleton className="w-[250px] relative h-[300px]" />
 				<div className="flex flex-col space-y-6 flex-1 items-start">
 					<Skeleton className="h-12 w-1/3" />
@@ -22,7 +22,7 @@ const Loading = () => {
 				<Skeleton className="h-24" />
 				<Skeleton className="h-32" />
 			</div>
-		</>
+		</main>
 	);
 };
 

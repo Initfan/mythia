@@ -33,9 +33,15 @@ interface props {
 	children?: React.ReactNode;
 	noLink?: boolean;
 	noSearch?: boolean;
+	mobileHidden?: boolean;
 }
 
-const Navigation = ({ children, noLink = false, noSearch = false }: props) => {
+const Navigation = ({
+	children,
+	noLink = false,
+	noSearch = false,
+	mobileHidden = false,
+}: props) => {
 	const user = useContext(userContext);
 	const [genre, setGenre] = useState<genre[]>();
 
@@ -181,7 +187,7 @@ const Navigation = ({ children, noLink = false, noSearch = false }: props) => {
 				)}
 				{children}
 			</nav>
-			<MobileNavigation />
+			{!mobileHidden && <MobileNavigation />}
 		</>
 	);
 };

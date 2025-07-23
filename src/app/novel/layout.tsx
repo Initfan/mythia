@@ -7,11 +7,9 @@ const layout = async ({
 }>) => {
 	return (
 		<>
-			<Navigation />
+			<Navigation mobileHidden />
 			<div className="w-[90vw] mx-auto">
-				<main className="mx-auto w-3/4 space-y-6 pb-10">
-					{children}
-				</main>
+				<main className="mx-auto md:w-3/4 space-y-6">{children}</main>
 			</div>
 		</>
 	);
