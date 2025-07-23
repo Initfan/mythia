@@ -22,15 +22,16 @@ const page = () => {
 	const [pending, transition] = useTransition();
 
 	useEffect(() => {
-		transition(async () => {
-			const history = await getHistoryRead(user!.id);
-			setHistories(history);
-		});
-	}, []);
+		if (user)
+			transition(async () => {
+				const history = await getHistoryRead(user!.id);
+				setHistories(history);
+			});
+	}, [user]);
 
 	return (
-		<div className="space-y-4">
-			<h1 className="text-3xl font-semibold">Riwayat Bacaan</h1>
+		<main className="space-y-4 py-5">
+			<h1 className="text-3xl font-semibold">Riwayat baca</h1>
 			{pending && (
 				<div className="gap-4 grid grid-cols-3">
 					{Array.from({ length: 2 }).map((_, i) => (
@@ -42,7 +43,7 @@ const page = () => {
 				<p className="text-muted-foreground">Tidak ada riwayat</p>
 			)}
 			{!pending && histories && (
-				<div className="gap-3 grid grid-cols-3">
+				<div className="gap-3 grid md:grid-cols-3">
 					{histories.map((v) => (
 						<div
 							key={v.id}
@@ -83,7 +84,7 @@ const page = () => {
 					))}
 				</div>
 			)}
-		</div>
+		</main>
 	);
 };
 

@@ -29,11 +29,9 @@ const page = () => {
 		transition(() => setLibraries((p) => [...p!, library]));
 
 	return (
-		<div className="space-y-4">
+		<div className="space-y-4 py-5">
 			<div className="flex justify-between">
-				<h1 className="text-3xl font-semibold flex-1">
-					Perpustakaan Novel
-				</h1>
+				<h1 className="text-3xl font-semibold flex-1">Perpustakaan</h1>
 				{!pending && <CreateLibrary onAddLibrary={onAddLibrary} />}
 			</div>
 			{libraries &&

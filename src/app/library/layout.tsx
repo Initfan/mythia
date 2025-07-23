@@ -8,7 +8,7 @@ const layout = async ({
 	return (
 		<>
 			<Navigation />
-			<main className="w-[90vw] mx-auto flex-1 overflow-hidden">
+			<main className="w-[90vw] mx-auto flex-1 overflow-hidden pb-20">
 				{children}
 			</main>
 		</>
