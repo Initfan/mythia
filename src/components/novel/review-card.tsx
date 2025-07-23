@@ -3,7 +3,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Star, ThumbsUp } from "lucide-react";
 import { Button } from "../ui/button";
 import { Prisma } from "@/generated";
-import { useContext, useState, useTransition } from "react";
+import { useContext, useEffect, useState, useTransition } from "react";
 import { likeReview, unlikeReview } from "@/actions/review-action";
 import { userContext } from "@/context/user-context";
 
@@ -14,9 +14,13 @@ type userReview = Prisma.novel_reviewGetPayload<{
 const ReviewCard = ({ review }: { review: userReview }) => {
 	const user = useContext(userContext);
 	const [likes, setLikes] = useState(review.likes);
-	const [liked, setLiked] = useState(review.liked_by.includes(user!.id));
+	const [liked, setLiked] = useState<boolean>();
 
 	const [pending, transition] = useTransition();
+
+	useEffect(() => {
+		if (user) setLiked(review.liked_by.includes(user.id));
+	}, [review.liked_by, user]);
 
 	const likeHandler = () => {
 		transition(async () => {
@@ -66,19 +70,21 @@ const ReviewCard = ({ review }: { review: userReview }) => {
 					<p>{review.review}</p>
 				</div>
 			</div>
-			<div className="flex flex-col items-center">
-				<Button
-					variant="ghost"
-					onClick={liked ? unlikeHandler : likeHandler}
-					disabled={pending}
-				>
-					<ThumbsUp
-						fill={liked ? "white" : "none"}
-						stroke={liked ? "none" : "white"}
-					/>
-				</Button>
-				<p className="text-muted-foreground">{likes}</p>
-			</div>
+			{user && (
+				<div className="flex flex-col items-center">
+					<Button
+						variant="ghost"
+						onClick={liked ? unlikeHandler : likeHandler}
+						disabled={pending}
+					>
+						<ThumbsUp
+							fill={liked ? "white" : "none"}
+							stroke={liked ? "none" : "white"}
+						/>
+					</Button>
+					<p className="text-muted-foreground">{likes}</p>
+				</div>
+			)}
 		</div>
 	);
 };

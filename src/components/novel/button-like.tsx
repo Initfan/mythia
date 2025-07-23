@@ -19,20 +19,27 @@ const ButtonLike = ({
 	likedBy: number[];
 }) => {
 	const user = useContext(userContext);
+	console.log(user);
 	const [pending, startTransition] = useTransition();
-	const [liked, setLike] = useState(likedBy.includes(user!.id));
+	const [liked, setLike] = useState<boolean>();
 
 	const [state, action, isPending] = useActionState(
 		() =>
-			liked
+			!user
+				? null
+				: liked
 				? unlikeNovel(novelId, user!.id)
-				: likeNovel(novelId, user!.id),
-		{ message: "", novel: "", liked: likedBy.includes(user!.id) }
+				: likeNovel(novelId, user.id),
+		{ message: "", novel: "", liked: likedBy.includes(user?.id ?? 0) }
 	);
 
 	useEffect(() => {
-		setLike(state.liked!);
-	}, [state]);
+		if (user) {
+			setLike(likedBy.includes(user.id));
+			// action(() => liked ? unlikeNovel(novelId, user.id) : likeNovel())
+		}
+		// setLike(state.liked!);
+	}, [likedBy, user]);
 
 	if (!user) return;
 

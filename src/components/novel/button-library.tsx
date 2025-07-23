@@ -52,9 +52,10 @@ const ButtonLibrary = ({ novelId }: { novelId: number }) => {
 	}, [state]);
 
 	useEffect(() => {
-		startTransition(async () =>
-			userLibrary().then((res) => setLibrary(res))
-		);
+		user &&
+			startTransition(async () =>
+				userLibrary().then((res) => setLibrary(res))
+			);
 	}, [user]);
 
 	const addToLibrary = (v: libraryType) => {
