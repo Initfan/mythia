@@ -9,7 +9,7 @@ import { Avatar, AvatarFallback } from "../ui/avatar";
 import { Separator } from "../ui/separator";
 import { createComment } from "@/actions/novel-action";
 
-type userComment = Prisma.chapter_commentGetPayload<{
+type userComment = Prisma.ChapterCommentGetPayload<{
 	include: { user: true };
 }>;
 
