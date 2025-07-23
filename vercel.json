@@ -1,0 +1,12 @@
+{
+	"build": {
+		"env": {
+			"DATABASE_URL": "prisma+postgres://accelerate.prisma-data.net/?api_key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5IjoiZjZjZjUwYzUtMWU2MS00ZDBhLWE3OTktODNiYTk1NjE2YTEyIiwidGVuYW50X2lkIjoiZGJkYmIzYjY2N2VmNmVmOWQxNjFlMmJjMjdiNzA3MjU1YzBlYWI3NjYyNjZmMTVkYjdmYjM1MmY0YmYzMjhhZCIsImludGVybmFsX3NlY3JldCI6ImUzOWMzZjZiLWY1YjYtNGM2Yy1iMDY5LTllYWFlZmU3MWM0YiJ9.xge_576EPtXHmTB89FQOrXkHKkta-vDmIzsdDEVPvfg"
+		}
+	},
+	"functions": {
+		"api/**/*.ts": {
+			"includeFiles": "src/prisma/**"
+		}
+	}
+}
