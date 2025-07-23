@@ -18,12 +18,8 @@ const SearchNovel = () => {
 	const [, action, pending] = useActionState(handleSubmit, false);
 
 	return (
-		<form action={action} className="flex space-x-1">
-			<Input
-				placeholder="Cari novel..."
-				ref={ref}
-				className="w-[300px]"
-			/>
+		<form action={action} className="flex flex-1 space-x-1">
+			<Input placeholder="Cari novel..." ref={ref} className="w-full" />
 			<Button
 				variant="outline"
 				type="submit"

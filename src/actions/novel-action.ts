@@ -390,6 +390,19 @@ export const likeNovel = async (id: number, userId: number) => {
 	}
 };
 
+export const highlightNovel = async () => {
+	try {
+		const totalNovel = await prisma.novel.count();
+		const novel = await prisma.novel.findMany({
+			skip: Math.floor(Math.random() * totalNovel),
+			take: 3,
+		});
+		return novel;
+	} catch (error) {
+		console.log(error);
+	}
+};
+
 export const unlikeNovel = async (id: number, userId: number) => {
 	try {
 		const removeLike = await prisma.novel.findUnique({

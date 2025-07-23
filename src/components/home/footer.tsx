@@ -12,7 +12,7 @@ const Footer = () => {
 	const user = useContext(userContext);
 
 	return (
-		<div className="px-[5%] py-6 grid grid-cols-2 items-start gap-8">
+		<footer className="px-[5%] py-6 grid md:grid-cols-2 items-start space-y-5 pb-20">
 			<div className="space-y-4">
 				<Link href={"/"} className="flex items-center space-x-2">
 					<Image
@@ -24,7 +24,7 @@ const Footer = () => {
 					/>
 					<h3 className="text-xl font-semibold">Mythia</h3>
 				</Link>
-				<p className="text-sm text-muted-foreground w-1/2">
+				<p className="text-sm text-muted-foreground w-2/3">
 					Mythia adalah platform baca novel online yang menyediakan
 					berbagai genre dan cerita menarik untuk dinikmati.
 				</p>
@@ -43,10 +43,10 @@ const Footer = () => {
 					</Link>
 				</div>
 			</div>
-			<div className="flex space-x-10">
+			<div className="flex flex-col md:flex-row space-y-5 justify-between">
 				<div className="space-y-4">
 					<h2 className="text-xl font-semibold">Novel</h2>
-					<div className="space-y-1 flex flex-col text-sm">
+					<div className="space-y-2 flex flex-col text-sm">
 						{Array.from([
 							"Terpopuler",
 							"Terbaru",
@@ -66,7 +66,7 @@ const Footer = () => {
 				</div>
 				<div className="space-y-4">
 					<h2 className="text-xl font-semibold">Sumber</h2>
-					<div className="space-y-1 flex flex-col text-sm">
+					<div className="space-y-2 flex flex-col text-sm">
 						{Array.from([
 							"Profile",
 							"Pengaturan",
@@ -84,34 +84,25 @@ const Footer = () => {
 						))}
 					</div>
 				</div>
-				<div className="space-y-4 flex-1">
+				<div className="space-y-4">
 					<h2 className="text-xl font-semibold">Lainya</h2>
 					<div className="space-y-3">
-						{user && (
-							<div className="flex items-center space-x-2">
-								<Avatar>
-									{/* <AvatarImage>
-										{user.}
-									</AvatarImage> */}
-									<AvatarFallback>
-										{user.username.slice(0)[0]}
-									</AvatarFallback>
-								</Avatar>
-								<p>{user.username}</p>
-							</div>
-						)}
+						<div className="flex items-center space-x-2">
+							<Avatar>
+								<AvatarFallback>
+									{user?.username.slice(0)[0] ?? "U"}
+								</AvatarFallback>
+							</Avatar>
+							<p>{user ? user.username : "User"}</p>
+						</div>
 						<SearchNovel />
-						{user && (
-							<>
-								<Link href={"/write"}>
-									<Button>Tulis</Button>
-								</Link>
-							</>
-						)}
+						<Link href={"/write"}>
+							<Button>Tulis</Button>
+						</Link>
 					</div>
 				</div>
 			</div>
-		</div>
+		</footer>
 	);
 };
 

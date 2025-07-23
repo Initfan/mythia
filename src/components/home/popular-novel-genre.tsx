@@ -36,7 +36,7 @@ const PopularNovelGenre = () => {
 	return (
 		<div className="space-y-4">
 			<h1 className="text-3xl font-semibold">Teratas di Genre</h1>
-			<div className="flex space-x-2">
+			<div className="flex gap-3 flex-col lg:flex-row">
 				{genrePending ? (
 					<div className="flex-1 grid grid-cols-3 gap-2">
 						{Array.from({ length: 7 }).map((v, i) => (
@@ -62,18 +62,18 @@ const PopularNovelGenre = () => {
 					</div>
 				)}
 
-				<div className="w-2/3">
+				<div className="lg:w-2/3 w-full">
 					{!isPending && novel.length === 0 ? (
 						<p className="text-muted-foreground">
 							Novel bergenre {selectedGenre} tidak ada.
 						</p>
 					) : novel.length > 0 ? (
 						<Carousel opts={{ align: "start" }}>
-							<CarouselContent className="cursor-grabbing select-none">
+							<CarouselContent className="cursor-grabbing select-none pl-3">
 								{novel.map((v) => (
 									<CarouselItem
 										key={v.id}
-										className="lg:basis-1/2 basis-1 lg:w-1/2 w-full pl-4 -mr-4"
+										className="md:basis-1/2 md:w-1/2 w-full -ml-3"
 									>
 										<CardNovel v={v} />
 									</CarouselItem>
@@ -81,7 +81,7 @@ const PopularNovelGenre = () => {
 							</CarouselContent>
 						</Carousel>
 					) : (
-						<div className="grid grid-cols-2 gap-4">
+						<div className="grid md:grid-cols-2 gap-4">
 							<LoadingCardNovel />
 							<LoadingCardNovel />
 						</div>
