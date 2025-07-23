@@ -13,8 +13,24 @@ import ButtonLibrary from "@/components/novel/button-library";
 import Image from "next/image";
 import ChapterList from "@/components/novel/chapter-list";
 import ButtonLike from "@/components/novel/button-like";
+import { Metadata } from "next";
 
-const page = async ({ params }: { params: Promise<{ title: string }> }) => {
+type Props = { params: Promise<{ title: string }> };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+	const { title } = await params;
+	const novel = await prisma.novel.findFirst({
+		where: { title: title.replaceAll("-", " ") },
+	});
+
+	return {
+		title: `Mythia | ${novel?.title}`,
+		description: novel?.synopsis,
+		keywords: novel?.genre,
+	};
+}
+
+const page = async ({ params }: Props) => {
 	const { title } = await params;
 
 	const novel = await prisma.novel.findFirst({

@@ -6,13 +6,36 @@ import { Button } from "@/components/ui/button";
 import prisma from "@/lib/prisma";
 import parser from "html-react-parser";
 import { Eye, MessageCircle } from "lucide-react";
+import { Metadata } from "next";
 import Link from "next/link";
 
-const page = async ({
-	params,
-}: {
-	params: Promise<{ title: string; id: string }>;
-}) => {
+type Props = { params: Promise<{ title: string; id: string }> };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+	const { title, id } = await params;
+	const novel = await prisma.novel.findFirst({
+		where: { title: title.replaceAll("-", " ") },
+		include: {
+			author: true,
+			_count: true,
+			chapter: {
+				where: { chapter: parseInt(id) },
+				take: 1,
+				include: { comment: { include: { user: true } } },
+			},
+		},
+	});
+
+	return {
+		title: `${novel?.title} | ${
+			novel?.chapter.at(parseInt(id) - 1)?.title
+		}`,
+		description: novel?.synopsis,
+		keywords: novel?.genre,
+	};
+}
+
+const page = async ({ params }: Props) => {
 	const { title, id } = await params;
 
 	const novel = await prisma.novel.findFirst({
