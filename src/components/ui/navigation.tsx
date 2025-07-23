@@ -97,15 +97,15 @@ const Navigation = ({ children, noLink = false, noSearch = false }: props) => {
 							<Button variant="secondary">
 								<Link href={"/write"}>Tulis</Link>
 							</Button>
-							<Button>
-								<Link
-									href={"/coin/topup"}
-									className="flex items-center space-x-1"
-								>
+							<Link
+								href={"/coin/topup"}
+								className="flex items-center space-x-1"
+							>
+								<Button>
 									<Coins size={20} />{" "}
 									<span>{user.coin} Koin</span>
-								</Link>
-							</Button>
+								</Button>
+							</Link>
 							<DropdownMenu>
 								<DropdownMenuTrigger className="outline-none cursor-pointer">
 									<Avatar>

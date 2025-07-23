@@ -24,7 +24,12 @@ const SearchNovel = () => {
 				ref={ref}
 				className="w-[300px]"
 			/>
-			<Button variant="outline" type="submit" disabled={pending}>
+			<Button
+				variant="outline"
+				type="submit"
+				disabled={pending}
+				title="Search novel"
+			>
 				{pending ? <Loader2 className="animate-spin" /> : <Search />}
 			</Button>
 		</form>

@@ -29,10 +29,16 @@ const Footer = () => {
 					berbagai genre dan cerita menarik untuk dinikmati.
 				</p>
 				<div className="flex space-x-3">
-					<Link href="instagram.com/mythia.novel">
+					<Link
+						href="https://instagram.com/mythia.novel"
+						target="_blank"
+					>
 						<Instagram />
 					</Link>
-					<Link href=".twittercom/mythia.novel">
+					<Link
+						href="https://twitter.com/mythia.novel"
+						target="_blank"
+					>
 						<Twitter />
 					</Link>
 				</div>
