@@ -30,7 +30,7 @@ const NovelList = async ({ params }: { params: Promise<NewType> }) => {
 
 	return (
 		<div className="pb-8 space-y-6">
-			<div className="grid grid-cols-2 gap-4">
+			<div className="grid lg:grid-cols-2 gap-4">
 				{data.novel.map((v, i) => (
 					<CardNovel key={i} v={v} />
 				))}
@@ -46,7 +46,7 @@ const NovelList = async ({ params }: { params: Promise<NewType> }) => {
 
 export const Loading = () => {
 	return (
-		<div className="grid grid-cols-2 gap-4">
+		<div className="grid lg:grid-cols-2 gap-4">
 			{Array.from({ length: 10 }).map((_, i) => (
 				<LoadingCardNovel key={i} />
 			))}

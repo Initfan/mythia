@@ -6,7 +6,7 @@ const layout = async ({
 	children: React.ReactNode;
 }>) => {
 	return (
-		<div className="h-screen flex flex-col">
+		<div className="md:h-screen flex flex-col pb-12">
 			<Navigation />
 			<main className="w-[90vw] mx-auto flex-1 overflow-hidden">
 				{children}
