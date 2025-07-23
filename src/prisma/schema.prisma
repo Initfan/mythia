@@ -10,19 +10,18 @@ datasource db {
 }
 
 model user {
-  id              Int               @id @default(autoincrement())
-  email           String            @unique
+  id              Int              @id @default(autoincrement())
+  email           String           @unique
   username        String
   password        String
-  role            String            @default("reader")
+  role            String           @default("reader")
+  coin            Int              @default(0)
   image           String?
-  coin            Int               @default(0)
-  author          author?
   chapter_comment ChapterComment[]
+  author          author?
+  novel_history   novel_history[]
   novel_review    novel_review[]
   user_library    user_library[]
-
-  novel_history novel_history[]
 }
 
 model author {
@@ -57,10 +56,9 @@ model novel {
   library_detail  library_detail[]
   author          author           @relation(fields: [authorId], references: [id])
   chapter         novel_chapter[]
+  novel_history   novel_history[]
   novel_review    novel_review[]
   tag             tag_novel[]
-
-  novel_history novel_history[]
 }
 
 model user_library {
@@ -85,8 +83,8 @@ model novel_history {
   userId         Int
   novelChapterId Int
   novel_chapter  novel_chapter @relation(fields: [novelChapterId], references: [id])
-  user           user          @relation(fields: [userId], references: [id])
   novel          novel         @relation(fields: [novelId], references: [id])
+  user           user          @relation(fields: [userId], references: [id])
 }
 
 model novel_review {
@@ -103,19 +101,18 @@ model novel_review {
 }
 
 model novel_chapter {
-  id         Int               @id @default(autoincrement())
-  chapter    Int               @default(0)
-  title      String
-  content    String
-  novelId    Int
-  views      Int               @default(0)
-  isPaid     Boolean           @default(false)
-  paidAmount Int               @default(0)
-  createdAt  DateTime          @default(now())
-  updatedAt  DateTime          @default(now()) @updatedAt
-  comment    ChapterComment[]
-  novel      novel             @relation(fields: [novelId], references: [id])
-
+  id            Int              @id @default(autoincrement())
+  chapter       Int              @default(0)
+  title         String
+  content       String
+  novelId       Int
+  views         Int              @default(0)
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @default(now()) @updatedAt
+  isPaid        Boolean          @default(false)
+  paidAmount    Int              @default(0)
+  comment       ChapterComment[]
+  novel         novel            @relation(fields: [novelId], references: [id])
   novel_history novel_history[]
 }
 

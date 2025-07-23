@@ -1,8 +1,7 @@
 // prisma/seed.ts
 
+import prisma from "@/lib/prisma";
 import { fakerID_ID as faker } from "@faker-js/faker";
-import { PrismaClient } from "@prisma/client";
-const prisma = new PrismaClient();
 
 const GENRE = [
 	"Fantasi",
