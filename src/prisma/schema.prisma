@@ -18,7 +18,7 @@ model user {
   image           String?
   coin            Int               @default(0)
   author          author?
-  chapter_comment chapter_comment[]
+  chapter_comment ChapterComment[]
   novel_review    novel_review[]
   user_library    user_library[]
 
@@ -113,13 +113,13 @@ model novel_chapter {
   paidAmount Int               @default(0)
   createdAt  DateTime          @default(now())
   updatedAt  DateTime          @default(now()) @updatedAt
-  comment    chapter_comment[]
+  comment    ChapterComment[]
   novel      novel             @relation(fields: [novelId], references: [id])
 
   novel_history novel_history[]
 }
 
-model chapter_comment {
+model ChapterComment {
   id        Int           @id @default(autoincrement())
   comment   String
   chapterId Int

@@ -1,9 +1,8 @@
 "use server";
 
-import { novel, novel_chapter } from "@/generated";
+import { novel, novel_chapter, Prisma } from "@/generated";
 import { verifySession } from "@/lib/dal";
 import prisma from "@/lib/prisma";
-import { Prisma } from "@prisma/client";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
@@ -119,7 +118,11 @@ const commentSchema = z.object({
 	chapterId: z.number(),
 });
 
-type userComment = Prisma.chapter_commentGetPayload<{
+// type userComment = <{
+// 	include: { user: true };
+// }>;
+
+type userComment = Prisma.ChapterCommentGetPayload<{
 	include: { user: true };
 }>;
 
@@ -134,7 +137,7 @@ export const createComment = async (
 
 	if (!parsed.success) return { message: "Gagal memberikan komentar" };
 
-	const comment = await prisma.chapter_comment.create({
+	const comment = await prisma.chapterComment.create({
 		data: { ...parsed.data, userId: user.id },
 		include: { user: true },
 	});
