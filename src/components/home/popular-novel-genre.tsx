@@ -1,11 +1,10 @@
 "use client";
 import { useEffect, useState, useTransition } from "react";
-import { Prisma } from "@prisma/client";
 import CardNovel, { LoadingCardNovel } from "./card-novel";
 import { Carousel, CarouselContent, CarouselItem } from "../ui/carousel";
 import { getAllGenre, novelByGenre } from "@/actions/novel-action";
 import { Button } from "../ui/button";
-import { genre } from "@/generated";
+import { genre, Prisma } from "@/generated";
 import { Skeleton } from "../ui/skeleton";
 
 type NovelChapter = Prisma.novelGetPayload<{

@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 import { Checkbox } from "../ui/checkbox";
 import { Button } from "../ui/button";
 import { Skeleton } from "../ui/skeleton";
-import { genre } from "@prisma/client";
 import { getAllGenre } from "@/actions/novel-action";
 import { useRouter, useSearchParams } from "next/navigation";
+import { genre } from "@/generated";
 
 type sidebarType = {
 	title: "type" | "popular" | "created" | "status";

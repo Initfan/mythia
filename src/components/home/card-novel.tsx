@@ -1,11 +1,11 @@
 "use client";
 import { Dot } from "lucide-react";
 import Cover from "../cover";
-import { Prisma } from "@prisma/client";
 import { Badge } from "../ui/badge";
 import { Skeleton } from "../ui/skeleton";
 import parser from "html-react-parser";
 import Link from "next/link";
+import { Prisma } from "@/generated";
 
 type NovelChapter = Prisma.novelGetPayload<{
 	include: {
