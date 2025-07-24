@@ -14,6 +14,14 @@ export const metadata: Metadata = {
 		shortcut: "/mythia-logo.png",
 		apple: "/mythia-logo.png",
 	},
+	openGraph: {
+		url: "https://mythiavel.vercel.app",
+		images: "/images/mythia-mascot.png",
+		siteName: "Mythia Novel",
+		title: "Mythia | Discover and Share Original Novels, Myths & Fantasy Worlds",
+		description:
+			"Explore Mythia, the ultimate platform for writers and readers of original novels, myths, and fantasy stories. Create your world, publish your tales, and connect with a passionate storytelling community.",
+	},
 };
 
 export default async function RootLayout({

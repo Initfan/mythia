@@ -14,6 +14,7 @@ import Image from "next/image";
 import ChapterList from "@/components/novel/chapter-list";
 import ButtonLike from "@/components/novel/button-like";
 import { Metadata } from "next";
+import { headers } from "next/headers";
 
 type Props = { params: Promise<{ title: string }> };
 
@@ -27,6 +28,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 		title: `Mythia | ${novel?.title}`,
 		description: novel?.synopsis,
 		keywords: novel?.genre,
+		openGraph: {
+			url:
+				(await headers()).get("referer") ??
+				"https://mythiavel.vercel.app",
+			images: novel?.cover ?? "/images/mythia-mascot.png",
+			siteName: "Mythia Novel",
+			title:
+				novel?.title ??
+				"Mythia | Discover and Share Original Novels, Myths & Fantasy Worlds",
+			description:
+				novel?.synopsis ??
+				"Explore Mythia, the ultimate platform for writers and readers of original novels, myths, and fantasy stories. Create your world, publish your tales, and connect with a passionate storytelling community.",
+		},
 	};
 }
 
