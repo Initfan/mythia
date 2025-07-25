@@ -8,15 +8,16 @@ const PopularNovel = async () => {
 		include: { chapter: true },
 		take: 10,
 	});
+
 	return (
 		<div className="space-y-4">
-			<h1 className="text-3xl font-semibold">Terpopuler</h1>
+			<h1 className="text-3xl font-semibold">Novel terbaru</h1>
 			<Carousel opts={{ align: "start" }}>
 				<CarouselContent className="cursor-grabbing select-none pl-3">
 					{novel.map((v) => (
 						<CarouselItem
 							key={v.id}
-							className="md:basis-1/2 w-full md:w-1/2 -ml-3"
+							className="md:basis-1/2 lg:basis-1/3 -ml-3"
 						>
 							<CardNovel v={v} />
 						</CarouselItem>

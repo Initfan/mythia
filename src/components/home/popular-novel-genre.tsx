@@ -6,6 +6,7 @@ import { getAllGenre, novelByGenre } from "@/actions/novel-action";
 import { Button } from "../ui/button";
 import { genre, Prisma } from "@/generated";
 import { Skeleton } from "../ui/skeleton";
+import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 
 type NovelChapter = Prisma.novelGetPayload<{
 	include: {
@@ -44,22 +45,48 @@ const PopularNovelGenre = () => {
 						))}
 					</div>
 				) : (
-					<div className="flex-1 gap-2 flex flex-wrap">
-						{genre.map((v) => (
-							<Button
-								key={v.id}
-								variant={
-									selectedGenre == v.genre
-										? "default"
-										: "outline"
-								}
-								onClick={() => setSelectedGenre(v.genre)}
-								disabled={isPending}
-							>
-								{v.genre}
-							</Button>
-						))}
-					</div>
+					<>
+						<div className="flex-1 gap-2 hidden lg:flex flex-wrap">
+							{genre.map(
+								(v, i) =>
+									i <= 16 && (
+										<Button
+											key={v.id}
+											variant={
+												selectedGenre == v.genre
+													? "default"
+													: "outline"
+											}
+											className="float-left"
+											onClick={() =>
+												setSelectedGenre(v.genre)
+											}
+											disabled={isPending}
+										>
+											{v.genre}
+										</Button>
+									)
+							)}
+						</div>
+						<ScrollArea className="whitespace-nowrap flex lg:hidden">
+							{genre.map((v) => (
+								<Button
+									key={v.id}
+									variant={
+										selectedGenre == v.genre
+											? "default"
+											: "outline"
+									}
+									className="shrink-0 mr-2"
+									onClick={() => setSelectedGenre(v.genre)}
+									disabled={isPending}
+								>
+									{v.genre}
+								</Button>
+							))}
+							<ScrollBar orientation="horizontal" />
+						</ScrollArea>
+					</>
 				)}
 
 				<div className="lg:w-2/3 w-full">

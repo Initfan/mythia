@@ -41,7 +41,9 @@ export default async function RootLayout({
 					disableTransitionOnChange
 				>
 					<UserContext user={user!}>
-						<main>{children}</main>
+						<main className="mx-auto md:w-[80vw] w-[90vw]">
+							{children}
+						</main>
 					</UserContext>
 					<Toaster />
 				</ThemeProvider>
