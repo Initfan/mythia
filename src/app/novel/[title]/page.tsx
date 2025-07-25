@@ -15,6 +15,7 @@ import ChapterList from "@/components/novel/chapter-list";
 import ButtonLike from "@/components/novel/button-like";
 import { Metadata } from "next";
 import { headers } from "next/headers";
+import Cover from "@/components/cover";
 
 type Props = { params: Promise<{ title: string }> };
 
@@ -76,8 +77,8 @@ const page = async ({ params }: Props) => {
 					<ChevronLeft />
 				</Button>
 			</Link>
-			<section className="flex flex-col md:flex-row space-x-6">
-				<div className="w-full md:w-[250px] relative h-[300px]">
+			<section className="flex flex-col md:flex-row md:space-x-6 space-y-3">
+				<div className="w-full md:w-[300px] relative h-[350px]">
 					<Image
 						src={novel.cover}
 						alt={novel.title}
@@ -85,57 +86,66 @@ const page = async ({ params }: Props) => {
 						fill
 					/>
 				</div>
-				<div className="flex flex-col space-y-6 flex-1 items-start">
-					<h1 className="text-4xl font-semibold">{novel.title}</h1>
-					<div className="flex space-x-2">
-						<Badge>{novel.genre}</Badge>
-						<Dot />
-						<p>{novel.status}</p>
-					</div>
-					<div className="flex space-x-2 items-center group">
-						<Avatar>
-							<AvatarImage
-								src={novel.author.image!}
-								alt={novel.author.pen_name}
-							/>
-							<AvatarFallback>
-								<User2 />
-							</AvatarFallback>
-						</Avatar>
-						<Link
-							href={`/author/${novel.author.pen_name}`}
-							className="group-hover:underline"
-						>
-							{novel.author.pen_name}
-						</Link>
-					</div>
-					<div className="flex space-x-12">
-						<Rating novelReview={novel.novel_review} />
-						<div className="space-y-2 flex items-center flex-col">
-							<h1 className="text-4xl">{novel.chapter.length}</h1>
-							<p className="text-muted-foreground">Bab</p>
+				<div className="flex justify-between flex-col lg:flex-row space-y-3">
+					<div className="flex flex-col space-y-6 flex-1 items-start">
+						<h1 className="text-4xl font-semibold">
+							{novel.title}
+						</h1>
+						<div className="flex space-x-2">
+							<Badge>{novel.genre}</Badge>
+							<Dot />
+							<p>{novel.status}</p>
 						</div>
-						<div className="space-y-2 flex items-center flex-col">
-							<h1 className="text-4xl">{novel.views}</h1>
-							<p className="text-muted-foreground">Dibaca</p>
+						<div className="flex space-x-2 items-center group">
+							<Avatar>
+								<AvatarImage
+									src={novel.author.image!}
+									alt={novel.author.pen_name}
+								/>
+								<AvatarFallback>
+									<User2 />
+								</AvatarFallback>
+							</Avatar>
+							<Link
+								href={`/author/${novel.author.pen_name}`}
+								className="group-hover:underline"
+							>
+								{novel.author.pen_name}
+							</Link>
+						</div>
+						<div className="flex md:space-x-12 md:justify-baseline justify-between w-full md:w-auto">
+							<Rating novelReview={novel.novel_review} />
+							<div className="space-y-2 flex items-center flex-col">
+								<h1 className="text-4xl">
+									{novel.chapter.length}
+								</h1>
+								<p className="text-muted-foreground">Bab</p>
+							</div>
+							<div className="space-y-2 flex items-center flex-col">
+								<h1 className="text-4xl">{novel.views}</h1>
+								<p className="text-muted-foreground">Dibaca</p>
+							</div>
+						</div>
+						<div className="space-x-2 flex">
+							<Link
+								href={`/novel/${novel.title.replaceAll(
+									" ",
+									"-"
+								)}/chapter/1`}
+							>
+								<Button>Mulai Membaca</Button>
+							</Link>
+							<ChapterList novelId={novel.id} />
+							<Share />
 						</div>
 					</div>
-					<div className="space-x-2 flex">
-						<Link
-							href={`/novel/${novel.title.replaceAll(
-								" ",
-								"-"
-							)}/chapter/1`}
-						>
-							<Button>Mulai Membaca</Button>
-						</Link>
-						<ChapterList novelId={novel.id} />
-						<Share />
+					<div className="space-x-2">
+						<ButtonLibrary novelId={novel.id} />
+						<ButtonLike
+							likedBy={novel.liked_by}
+							novelId={novel.id}
+						/>
 					</div>
-				</div>
-				<div className="space-x-2">
-					<ButtonLibrary novelId={novel.id} />
-					<ButtonLike likedBy={novel.liked_by} novelId={novel.id} />
 				</div>
 			</section>
 			<article className="space-y-4">

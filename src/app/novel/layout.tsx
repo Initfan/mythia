@@ -8,9 +8,7 @@ const layout = async ({
 	return (
 		<>
 			<Navigation />
-			<div className="w-[90vw] mx-auto">
-				<main className="mx-auto md:w-3/4 space-y-6">{children}</main>
-			</div>
+			<section>{children}</section>
 		</>
 	);
 };

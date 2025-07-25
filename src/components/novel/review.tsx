@@ -4,6 +4,7 @@ import { Prisma } from "@/generated";
 import ReviewCard from "./review-card";
 import CreateReview from "./review-create";
 import { userContext } from "@/context/user-context";
+import { Card, CardContent } from "../ui/card";
 
 type userReview = Prisma.novel_reviewGetPayload<{
 	include: { user: true };
@@ -28,27 +29,29 @@ const ReviewSection = ({
 	};
 
 	return (
-		<div className="space-y-4">
-			<div className="flex justify-between items-center">
-				<h2 className="text-2xl font-semibold">Ulasan</h2>
-				{user && !reviewers.includes(user.id) && (
-					<CreateReview
-						novelId={novelId}
-						addedReview={handleAddedReview}
-					/>
+		<Card>
+			<CardContent className="space-y-4">
+				<div className="flex justify-between items-center">
+					<h2 className="text-2xl font-semibold">Ulasan</h2>
+					{user && !reviewers.includes(user.id) && (
+						<CreateReview
+							novelId={novelId}
+							addedReview={handleAddedReview}
+						/>
+					)}
+				</div>
+				{novelReview.length == 0 && (
+					<p className="text-muted-foreground">
+						Belum ada review untuk novel ini. Ayo jadi yang pertama
+						memberikan review!
+					</p>
 				)}
-			</div>
-			{novelReview.length == 0 && (
-				<p className="text-muted-foreground">
-					Belum ada review untuk novel ini. Ayo jadi yang pertama
-					memberikan review!
-				</p>
-			)}
-			{novelReview.length > 0 &&
-				novelReview.map((value) => (
-					<ReviewCard key={value.id} review={value} />
-				))}
-		</div>
+				{novelReview.length > 0 &&
+					novelReview.map((value) => (
+						<ReviewCard key={value.id} review={value} />
+					))}
+			</CardContent>
+		</Card>
 	);
 };
 
