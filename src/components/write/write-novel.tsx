@@ -105,7 +105,7 @@ const WriteNovel = ({
 				<div className="flex flex-col md:flex-row md:space-y-0 space-y-4 md:space-x-4 w-full mb-4">
 					<div className="space-y-4 flex flex-col">
 						<h1 className="text-xl font-semibold">Cover novel</h1>
-						<div className="h-[300px] w-[200px]">
+						<div className="h-[300px] md:w-[200px]">
 							<FileUploadThing onUpload={onUpload} />
 						</div>
 					</div>
@@ -128,13 +128,11 @@ const WriteNovel = ({
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>Sinopsis</FormLabel>
-									<div className="min-h-[200px] flex">
-										<Editor
-											{...field}
-											placeholder="Sinopsis cerita..."
-											setContent={(v) => setSinopsis(v)}
-										/>
-									</div>
+									<Editor
+										{...field}
+										placeholder="Sinopsis cerita..."
+										setContent={(v) => setSinopsis(v)}
+									/>
 									<FormMessage />
 								</FormItem>
 							)}

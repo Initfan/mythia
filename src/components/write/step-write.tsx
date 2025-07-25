@@ -4,7 +4,7 @@ import { Fragment } from "react";
 
 const StepWrite = ({ active, step }: { active: number; step: string[] }) => {
 	return (
-		<div className="lg:w-2/3 px-8 md:px-0 mx-auto flex items-center space-x-2 pb-6">
+		<div className="mx-auto flex items-center space-x-2">
 			{step.map((v, i) => (
 				<Fragment key={i}>
 					<Badge variant={active == i + 1 ? "default" : "outline"}>

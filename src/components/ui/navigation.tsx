@@ -2,7 +2,6 @@
 import Image from "next/image";
 import React, { useContext } from "react";
 import { Button } from "./button";
-import { BookText, Search } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
 import { userContext } from "@/context/user-context";
 import {
@@ -13,7 +12,15 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "./dropdown-menu";
-import { BookTextIcon, Coins, LogOut, Settings, User } from "lucide-react";
+import {
+	BookTextIcon,
+	Coins,
+	LogOut,
+	Settings,
+	User,
+	Search,
+	SquarePen,
+} from "lucide-react";
 import Link from "next/link";
 import { logout } from "@/actions/user-action";
 
@@ -59,7 +66,7 @@ const Navigation = () => {
 								<Link href="/dashboard/profile">Profile</Link>
 							</DropdownMenuItem>
 							<DropdownMenuItem>
-								<BookText />
+								<SquarePen />
 								<Link href="/write">Tulis Novel</Link>
 							</DropdownMenuItem>
 							{user.role == "author" && (

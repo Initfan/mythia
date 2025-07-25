@@ -22,7 +22,7 @@ const WriteChapter = ({
 	activePage?: (id: number) => void;
 	novelId: number | null;
 }) => {
-	const [paid, setPaid] = useState<boolean>();
+	const [paid, setPaid] = useState<boolean>(false);
 	const [pending, transition] = useTransition();
 	const [novel, setNovel] = useState<novelChapter>();
 	const [editorContent, setContent] = useState("");
@@ -47,8 +47,10 @@ const WriteChapter = ({
 			content: editorContent,
 			novelId: novelId!,
 			isPaid: paid,
-			paidAmount: Number(coinRef.current?.value),
+			paidAmount: Number(coinRef.current?.value ?? 0),
 		});
+
+		console.log(chapter);
 
 		if (chapter.error || !chapter.data) {
 			toast("Gagal menyimpan chapter novel");

@@ -7,6 +7,7 @@ import WriteNovel from "@/components/write/write-novel";
 import WriteChapter from "@/components/write/write-chapter";
 import { userContext } from "@/context/user-context";
 import { redirect } from "next/navigation";
+import Navigation from "@/components/ui/navigation";
 
 const page = () => {
 	const user = useContext(userContext);
@@ -24,11 +25,12 @@ const page = () => {
 
 	return (
 		<>
-			<StepWrite
-				active={active}
-				step={["Profile", "Buat Novel", "Tulis Cerita"]}
-			/>
-			<main className="space-x-8 flex lg:w-2/3 px-8 md:px-0 mx-auto">
+			<Navigation />
+			<section className="lg:w-2/3 mx-auto md:space-y-12 space-y-6 py-5">
+				<StepWrite
+					active={active}
+					step={["Profile", "Buat Novel", "Tulis Cerita"]}
+				/>
 				{active == 1 && <WriterProfile activePage={setActivePage} />}
 				{active == 2 && (
 					<WriteNovel
@@ -42,7 +44,7 @@ const page = () => {
 						activePage={setActivePage}
 					/>
 				)}
-			</main>
+			</section>
 		</>
 	);
 };

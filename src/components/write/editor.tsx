@@ -19,7 +19,9 @@ const Editor = ({
 
 	return (
 		<ReactEditor
-			containerProps={{ className: "flex-1 border-zinc-800!" }}
+			containerProps={{
+				className: "border-zinc-800!",
+			}}
 			value={value || html}
 			onChange={onChange}
 			placeholder={placeholder || "Tulis content cerita..."}

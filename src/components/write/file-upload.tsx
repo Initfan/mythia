@@ -36,7 +36,7 @@ export function FileUploadThing({
 	}, []);
 
 	return (
-		<div className="flex flex-col gap-6 h-full">
+		<div className="flex flex-col gap-6 h-[300px]">
 			<FileUpload
 				accept="image/*"
 				maxSize={4 * 1024 * 1024}
