@@ -51,18 +51,22 @@ const page = async ({ params }: Props) => {
 		},
 	});
 
-	await historyRead(Number(id), novel!.id);
+	try {
+		await historyRead(novel?.chapter[Number(id) - 1].id ?? 0, novel!.id);
 
-	await prisma.novel_chapter.update({
-		where: {
-			id: novel?.chapter.at(0)?.id,
-		},
-		data: {
-			views: {
-				increment: 1,
+		await prisma.novel_chapter.update({
+			where: {
+				id: novel?.chapter.at(0)?.id,
 			},
-		},
-	});
+			data: {
+				views: {
+					increment: 1,
+				},
+			},
+		});
+	} catch (error) {
+		console.log(error);
+	}
 
 	if (!novel?.chapter) return null;
 
