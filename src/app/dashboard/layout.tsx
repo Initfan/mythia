@@ -5,7 +5,6 @@ const layout = async ({
 	children,
 }: Readonly<{
 	children: React.ReactNode;
-	breadcrumb: React.ReactNode;
 }>) => {
 	return (
 		<>

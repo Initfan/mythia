@@ -30,8 +30,8 @@ const EventNovel = () => {
 			{pending && <Skeleton className="size-full" />}
 			{!pending && (
 				<Carousel
-					className="absolute inset-x-0 w-full group"
-					plugins={[Autoplay({ delay: 2000 })]}
+					className="relative w-full group"
+					plugins={[Autoplay({ delay: 4000 })]}
 				>
 					<CarouselPrevious className="hidden group-hover:flex absolute left-14 z-10 bg-primary!" />
 					<CarouselContent>
@@ -39,7 +39,7 @@ const EventNovel = () => {
 							novel &&
 							novel.map((v) => (
 								<CarouselItem
-									className="block h-[450px] relative bg-zinc-800/70 "
+									className="block h-[450px] relative bg-zinc-800/70 rounded"
 									key={v.id}
 								>
 									<Image
@@ -48,7 +48,7 @@ const EventNovel = () => {
 										className="flex-1 object-cover rounded mix-blend-multiply"
 										fill
 									/>
-									<div className="absolute w-[80vw] mx-auto inset-x-0 bottom-16 space-y-5">
+									<div className="absolute w-3/4 mx-auto inset-x-0 bottom-16 space-y-5">
 										<h1 className="text-4xl font-semibold">
 											{v.title}
 										</h1>
