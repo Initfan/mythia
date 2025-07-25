@@ -33,9 +33,9 @@ const DashboardNovelList = () => {
 				novel?.map((v) => (
 					<div key={v.id} className="relative">
 						<CardNovel key={v.id} v={v} />
-						<div className="flex space-x-2 absolute bottom-0 right-0">
+						<div className="flex space-x-2 absolute bottom-2 left-2 md:left-auto md:bottom-0 md:right-0">
 							<Link href={`novel/edit/${v.id}`}>
-								<Button variant="outline" size="sm">
+								<Button variant="secondary" size="sm">
 									<PenBox />
 								</Button>
 							</Link>
