@@ -1,20 +1,16 @@
-import DashboardNavigation from "@/components/dashboard/navigation";
 import React from "react";
+import Navigation from "@/components/ui/navigation";
 
 const layout = async ({
 	children,
-	breadcrumb,
 }: Readonly<{
 	children: React.ReactNode;
 	breadcrumb: React.ReactNode;
 }>) => {
 	return (
 		<>
-			<main className="w-[60vw] mx-auto flex-1">
-				<DashboardNavigation />
-				<div className="pb-3">{breadcrumb}</div>
-				{children}
-			</main>
+			<Navigation />
+			{children}
 		</>
 	);
 };
