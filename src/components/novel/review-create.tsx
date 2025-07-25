@@ -36,7 +36,7 @@ const CreateReview = ({
 		transition(async () => {
 			const review = await createReview({
 				novelId,
-				rating: rated,
+				rating: rated + 1,
 				review: reviewRef.current!.value,
 			});
 			if (review.status == 201) {
@@ -56,22 +56,18 @@ const CreateReview = ({
 				<DialogHeader>
 					<DialogTitle>Ulasan</DialogTitle>
 				</DialogHeader>
-				<div className="flex space-x-3">
-					<Label>Rating</Label>
-					<div className="space-x-2 flex">
-						{Array.from([1, 2, 3, 4, 5]).map((v) => (
-							<Star
-								key={v}
-								className="mr-2 cursor-pointer"
-								onClick={() => setRated(v)}
-								fill={rated >= v ? "yellow" : "none"}
-								stroke={rated >= v ? "none" : "white"}
-							/>
-						))}
-					</div>
+				<Textarea ref={reviewRef} placeholder="Ketik ulasan..." />
+				<div className="space-x-2 flex">
+					{Array.from([1, 2, 3, 4, 5]).map((v) => (
+						<Star
+							key={v}
+							className="mr-2 cursor-pointer"
+							onClick={() => setRated(v)}
+							fill={rated >= v ? "yellow" : "none"}
+							stroke={rated >= v ? "none" : "white"}
+						/>
+					))}
 				</div>
-				<Label>Tulis Ulasan</Label>
-				<Textarea ref={reviewRef} />
 				<DialogFooter>
 					<Button onClick={handleSubmit} disabled={pending}>
 						{pending && <Loader2 className="animate-spin" />} Kirim
