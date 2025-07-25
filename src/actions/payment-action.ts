@@ -24,8 +24,6 @@ export const eWallatetCharge = async (
 ): Promise<transaction> => {
 	const parsed = customerSchema.safeParse(data);
 
-	console.log(parsed.error);
-
 	if (!parsed.success) throw new Error("Invalid credentials");
 
 	if (
@@ -52,8 +50,6 @@ export const eWallatetCharge = async (
 	});
 
 	const res = await charge.json();
-
-	console.log(res);
 
 	return {
 		id: res.id,

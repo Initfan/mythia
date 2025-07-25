@@ -11,16 +11,16 @@ export async function POST(req: NextRequest) {
 	try {
 		const body = await req.json();
 
-		console.log("🔔 Xendit Webhook Received:", body);
+		// console.log("🔔 Xendit Webhook Received:", body);
 
 		if (body.event === "ewallet.charge.success") {
 			const data = body.data;
 			// Handle successful charge (e.g., update DB)
-			console.log(`✅ Payment succeeded: ${data.reference_id}`);
+			// console.log(`✅ Payment succeeded: ${data.reference_id}`);
 		}
 
 		if (body.event === "ewallet.charge.failed") {
-			console.log(`❌ Payment failed: ${body.data.reference_id}`);
+			// console.log(`❌ Payment failed: ${body.data.reference_id}`);
 		}
 
 		return new Response(JSON.stringify({ received: true }), {

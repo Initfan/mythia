@@ -50,8 +50,6 @@ const WriteChapter = ({
 			paidAmount: Number(coinRef.current?.value ?? 0),
 		});
 
-		console.log(chapter);
-
 		if (chapter.error || !chapter.data) {
 			toast("Gagal menyimpan chapter novel");
 			return;

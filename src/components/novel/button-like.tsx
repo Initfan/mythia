@@ -19,7 +19,6 @@ const ButtonLike = ({
 	likedBy: number[];
 }) => {
 	const user = useContext(userContext);
-	console.log(user);
 	const [pending, startTransition] = useTransition();
 	const [liked, setLike] = useState<boolean>();
 

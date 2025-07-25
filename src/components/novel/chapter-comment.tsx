@@ -33,8 +33,6 @@ const ChapterComment = ({
 				comment: inputRef.current!.value,
 			});
 
-			console.log(data);
-
 			if (data.data) {
 				toast(data.message);
 				inputRef.current!.value = "";

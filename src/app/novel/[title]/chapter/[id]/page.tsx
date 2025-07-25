@@ -65,7 +65,7 @@ const page = async ({ params }: Props) => {
 			},
 		});
 	} catch (error) {
-		console.log(error);
+		throw new Error("Server error, try again");
 	}
 
 	if (!novel?.chapter) return null;

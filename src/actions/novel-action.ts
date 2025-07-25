@@ -3,6 +3,7 @@
 import { novel, novel_chapter, Prisma } from "@/generated";
 import { verifySession } from "@/lib/dal";
 import prisma from "@/lib/prisma";
+import { MessageSquareWarning } from "lucide-react";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
@@ -97,7 +98,6 @@ export async function createChapter(
 			status: 201,
 		};
 	} catch (error) {
-		console.log(error);
 		return {
 			message: "Server error, try again later",
 			error: JSON.stringify(error),
@@ -213,7 +213,6 @@ export async function createNovel(
 			status: 201,
 		};
 	} catch (error) {
-		console.log(error);
 		return {
 			message: "Server error, try again later",
 			error: JSON.stringify(error),
@@ -398,8 +397,8 @@ export const highlightNovel = async () => {
 			take: 3,
 		});
 		return novel;
-	} catch (error) {
-		console.log(error);
+	} catch {
+		throw new Error("Server error, try again");
 	}
 };
 
