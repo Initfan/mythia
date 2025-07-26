@@ -6,12 +6,10 @@ const layout = async ({
 	children: React.ReactNode;
 }>) => {
 	return (
-		<div className="md:h-screen flex flex-col pb-12">
+		<section className="md:h-screen flex flex-col">
 			<Navigation />
-			<main className="w-[90vw] mx-auto flex-1 overflow-hidden">
-				{children}
-			</main>
-		</div>
+			{children}
+		</section>
 	);
 };
 

@@ -14,7 +14,7 @@ const page = async ({ searchParams }: { searchParams: Promise<NewType> }) => {
 	const title = (await searchParams).title;
 
 	return (
-		<main className="space-y-4">
+		<div className="space-y-4 py-5">
 			<nav className="md:hidden flex gap-4 mb-0 w-full py-3 items-center">
 				<Image
 					src="/mythia-logo.png"
@@ -42,7 +42,7 @@ const page = async ({ searchParams }: { searchParams: Promise<NewType> }) => {
 					</ScrollArea>
 				</article>
 			</div>
-		</main>
+		</div>
 	);
 };
 
